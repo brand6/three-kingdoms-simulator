@@ -1,0 +1,222 @@
+{
+  "version": 1,
+  "updated_at": "2026-04-04",
+  "root": "design",
+  "entrypoints": {
+    "human": "design/Agent.md",
+    "machine": "design/machine_index.json",
+    "changelog": "design/CHANGELOG.md",
+    "ai_workflow": "design/AI_WORKFLOW.md"
+  },
+  "directories": [
+    {
+      "path": "design/总纲",
+      "category": "overview",
+      "description": "项目总纲、GDD 与整体设计入口"
+    },
+    {
+      "path": "design/系统设计",
+      "category": "systems",
+      "description": "核心系统与特色系统专项设计"
+    },
+    {
+      "path": "design/数值",
+      "category": "balance",
+      "description": "主循环、资源、数值规则"
+    },
+    {
+      "path": "design/数据",
+      "category": "data",
+      "description": "Godot 原型数据结构与字段设计"
+    },
+    {
+      "path": "design/原型与实现",
+      "category": "implementation",
+      "description": "原型开发拆解、模块划分、任务清单"
+    },
+    {
+      "path": "design/UIUX",
+      "category": "uiux",
+      "description": "界面结构与交互流程"
+    },
+    {
+      "path": "design/剧情与样本",
+      "category": "scenario_samples",
+      "description": "剧本样本、人物样本、事件样本"
+    }
+  ],
+  "files": [
+    {
+      "path": "design/AI_WORKFLOW.md",
+      "title": "AI_WORKFLOW",
+      "category": "meta",
+      "summary": "给开发 AI 使用的 design 文档创建、修改与索引同步超短操作清单。",
+      "keywords": ["AI workflow", "文档创建", "索引同步", "操作清单", "SOP"],
+      "recommended_for": ["新增文档", "修改文档", "移动文档", "开发 AI"],
+      "priority": 0,
+      "legacy_path": "design/文档创建规范.md"
+    },
+    {
+      "path": "design/总纲/GDD 框架 v1.md",
+      "title": "GDD 框架 v1",
+      "category": "overview",
+      "summary": "项目总入口、GDD 结构与阅读顺序。",
+      "keywords": ["GDD", "总纲", "入口", "项目结构", "阅读顺序"],
+      "recommended_for": ["项目初读", "全局理解", "检索入口"],
+      "priority": 1,
+      "legacy_path": "design/GDD 框架 v1.md"
+    },
+    {
+      "path": "design/总纲/项目总设计方案 v1.md",
+      "title": "项目总设计方案 v1",
+      "category": "overview",
+      "summary": "项目定位、核心玩法与整体设计方案。",
+      "keywords": ["项目定位", "核心玩法", "设计方案", "产品方向"],
+      "recommended_for": ["产品定义", "范围确认"],
+      "priority": 2,
+      "legacy_path": "design/项目总设计方案 v1.md"
+    },
+    {
+      "path": "design/系统设计/核心系统详细设计 v1.md",
+      "title": "核心系统详细设计 v1",
+      "category": "systems",
+      "summary": "角色、势力、时间、事件等核心系统细化。",
+      "keywords": ["核心系统", "角色", "势力", "时间推进", "事件"],
+      "recommended_for": ["系统实现", "模块边界", "规则查阅"],
+      "priority": 3,
+      "legacy_path": "design/核心系统详细设计 v1.md"
+    },
+    {
+      "path": "design/系统设计/士族门阀系统专项设计 v2.md",
+      "title": "士族门阀系统专项设计 v2",
+      "category": "systems",
+      "summary": "士族与门阀特色系统专项规则。",
+      "keywords": ["士族", "门阀", "联姻", "举荐", "出身"],
+      "recommended_for": ["特色系统实现", "关系与身份系统"],
+      "priority": 4,
+      "legacy_path": "design/士族门阀系统专项设计 v2.md"
+    },
+    {
+      "path": "design/数值/主循环与数值骨架 v1.md",
+      "title": "主循环与数值骨架 v1",
+      "category": "balance",
+      "summary": "主循环与核心资源关系。",
+      "keywords": ["主循环", "数值", "资源", "成长", "结算"],
+      "recommended_for": ["数值实现", "行动循环", "回合结算"],
+      "priority": 5,
+      "legacy_path": "design/主循环与数值骨架 v1.md"
+    },
+    {
+      "path": "design/数值/精力-压力-AP 三资源设计方案 v1.md",
+      "title": "精力-压力-AP 三资源设计方案 v1",
+      "category": "balance",
+      "summary": "三资源职责、消耗、恢复与联动规则。",
+      "keywords": ["精力", "压力", "AP", "资源消耗", "恢复"],
+      "recommended_for": ["资源系统实现", "行动消耗", "状态规则"],
+      "priority": 6,
+      "legacy_path": "design/精力-压力-AP 三资源设计方案 v1.md"
+    },
+    {
+      "path": "design/数据/Godot 数据结构草案 v1.md",
+      "title": "Godot 数据结构草案 v1",
+      "category": "data",
+      "summary": "Godot 原型期的数据结构与字段草案。",
+      "keywords": ["Godot", "数据结构", "Resource", "JSON", "字段"],
+      "recommended_for": ["数据定义", "存档结构", "字段设计"],
+      "priority": 7,
+      "legacy_path": "design/Godot 数据结构草案 v1.md"
+    },
+    {
+      "path": "design/原型与实现/Godot 原型开发拆解 v1.md",
+      "title": "Godot 原型开发拆解 v1",
+      "category": "implementation",
+      "summary": "Godot 原型开发顺序与阶段拆解。",
+      "keywords": ["Godot", "原型", "开发顺序", "阶段拆解"],
+      "recommended_for": ["原型搭建", "技术排期"],
+      "priority": 8,
+      "legacy_path": "design/Godot 原型开发拆解 v1.md"
+    },
+    {
+      "path": "design/原型与实现/Godot 系统模块拆分清单 v1.md",
+      "title": "Godot 系统模块拆分清单 v1",
+      "category": "implementation",
+      "summary": "模块职责、接口边界、测试点。",
+      "keywords": ["模块拆分", "接口", "测试点", "并行开发"],
+      "recommended_for": ["模块设计", "任务分派", "验收"],
+      "priority": 9,
+      "legacy_path": "design/Godot 系统模块拆分清单 v1.md"
+    },
+    {
+      "path": "design/原型与实现/原型任务拆解清单 v1.md",
+      "title": "原型任务拆解清单 v1",
+      "category": "implementation",
+      "summary": "可直接执行的任务包与验收标准。",
+      "keywords": ["任务拆解", "验收标准", "T01", "原型任务"],
+      "recommended_for": ["开发执行", "AI 任务下发", "排期"],
+      "priority": 10,
+      "legacy_path": "design/原型任务拆解清单 v1.md"
+    },
+    {
+      "path": "design/UIUX/原型 UI 流程图 v1.md",
+      "title": "原型 UI 流程图 v1",
+      "category": "uiux",
+      "summary": "UI 信息架构与交互流程。",
+      "keywords": ["UI", "UX", "流程图", "交互", "界面"],
+      "recommended_for": ["界面实现", "交互流程"],
+      "priority": 11,
+      "legacy_path": "design/原型 UI 流程图 v1.md"
+    },
+    {
+      "path": "design/剧情与样本/190 剧本原型人物-势力样本表 v1.md",
+      "title": "190 剧本原型人物-势力样本表 v1",
+      "category": "scenario_samples",
+      "summary": "人物、势力、城市等原型样本数据。",
+      "keywords": ["190", "剧本", "人物", "势力", "样本"],
+      "recommended_for": ["样本录入", "ScenarioData", "测试数据"],
+      "priority": 12,
+      "legacy_path": "design/190 剧本原型人物-势力样本表 v1.md"
+    },
+    {
+      "path": "design/剧情与样本/190 剧本原型事件样本表 v1.md",
+      "title": "190 剧本原型事件样本表 v1",
+      "category": "scenario_samples",
+      "summary": "事件样本模板与优先事件列表。",
+      "keywords": ["190", "剧本", "事件", "样本", "事件模板"],
+      "recommended_for": ["事件录入", "事件验证", "测试事件"],
+      "priority": 13,
+      "legacy_path": "design/190 剧本原型事件样本表 v1.md"
+    }
+  ],
+  "lookup_routes": {
+    "doc_creation_and_update": [
+      "design/AI_WORKFLOW.md",
+      "design/Agent.md",
+      "design/machine_index.json",
+      "design/CHANGELOG.md"
+    ],
+    "project_entry": [
+      "design/总纲/GDD 框架 v1.md",
+      "design/总纲/项目总设计方案 v1.md",
+      "design/系统设计/核心系统详细设计 v1.md"
+    ],
+    "system_implementation": [
+      "design/系统设计/核心系统详细设计 v1.md",
+      "design/数据/Godot 数据结构草案 v1.md",
+      "design/原型与实现/原型任务拆解清单 v1.md"
+    ],
+    "balance_implementation": [
+      "design/数值/主循环与数值骨架 v1.md",
+      "design/数值/精力-压力-AP 三资源设计方案 v1.md",
+      "design/系统设计/核心系统详细设计 v1.md"
+    ],
+    "ui_implementation": [
+      "design/UIUX/原型 UI 流程图 v1.md",
+      "design/原型与实现/Godot 原型开发拆解 v1.md"
+    ],
+    "scenario_data_entry": [
+      "design/剧情与样本/190 剧本原型人物-势力样本表 v1.md",
+      "design/剧情与样本/190 剧本原型事件样本表 v1.md",
+      "design/数据/Godot 数据结构草案 v1.md"
+    ]
+  }
+}
