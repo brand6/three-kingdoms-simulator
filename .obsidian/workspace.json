@@ -178,6 +178,12 @@
   },
   "active": "c64d371af0158b57",
   "lastOpenFiles": [
+    "agents/game_designer.md",
+    "agents/programmer.md",
+    "agents/git.md",
+    "agents/document.md",
+    "agents",
+    "opencode.jsonc",
     "design/AI_WORKFLOW.md",
     "design/文档创建规范.md",
     "design/machine_index.json",
@@ -208,12 +214,6 @@
     "design/原型任务拆解清单 v1.md",
     "design/Godot 系统模块拆分清单 v1.md",
     "design/Godot 数据结构草案 v1.md",
-    "design/主循环与数值骨架 v1.md",
-    "design/原型 UI 流程图 v1.md",
-    "design/士族门阀系统专项设计 v2.md",
-    "design/精力-压力-AP 三资源设计方案 v1.md",
-    "agents/image/git/1775226793896.png",
-    "agents/image/git",
-    "agents/image"
+    "agents/image/git/1775226793896.png"
   ]
 }
