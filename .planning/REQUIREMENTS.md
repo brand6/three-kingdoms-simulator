@@ -140,63 +140,63 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CORE-01 | Phase TBD | Pending |
-| CORE-02 | Phase TBD | Pending |
-| CORE-03 | Phase TBD | Pending |
-| CORE-04 | Phase TBD | Pending |
-| CORE-05 | Phase TBD | Pending |
-| DATA-01 | Phase TBD | Pending |
-| DATA-02 | Phase TBD | Pending |
-| DATA-03 | Phase TBD | Pending |
-| DATA-04 | Phase TBD | Pending |
-| CHAR-01 | Phase TBD | Pending |
-| CHAR-02 | Phase TBD | Pending |
-| CHAR-03 | Phase TBD | Pending |
-| CHAR-04 | Phase TBD | Pending |
-| ACTN-01 | Phase TBD | Pending |
-| ACTN-02 | Phase TBD | Pending |
-| ACTN-03 | Phase TBD | Pending |
-| ACTN-04 | Phase TBD | Pending |
-| ACTN-05 | Phase TBD | Pending |
-| RELA-01 | Phase TBD | Pending |
-| RELA-02 | Phase TBD | Pending |
-| RELA-03 | Phase TBD | Pending |
-| RELA-04 | Phase TBD | Pending |
-| CARE-01 | Phase TBD | Pending |
-| CARE-02 | Phase TBD | Pending |
-| CARE-03 | Phase TBD | Pending |
-| CARE-04 | Phase TBD | Pending |
-| CARE-05 | Phase TBD | Pending |
-| FACT-01 | Phase TBD | Pending |
-| FACT-02 | Phase TBD | Pending |
-| FACT-03 | Phase TBD | Pending |
-| CLAN-01 | Phase TBD | Pending |
-| CLAN-02 | Phase TBD | Pending |
-| CLAN-03 | Phase TBD | Pending |
-| POLI-01 | Phase TBD | Pending |
-| POLI-02 | Phase TBD | Pending |
-| POLI-03 | Phase TBD | Pending |
-| MARR-01 | Phase TBD | Pending |
-| MARR-02 | Phase TBD | Pending |
-| MARR-03 | Phase TBD | Pending |
-| EVNT-01 | Phase TBD | Pending |
-| EVNT-02 | Phase TBD | Pending |
-| EVNT-03 | Phase TBD | Pending |
-| EVNT-04 | Phase TBD | Pending |
-| WAR-01 | Phase TBD | Pending |
-| WAR-02 | Phase TBD | Pending |
-| UI-01 | Phase TBD | Pending |
-| UI-02 | Phase TBD | Pending |
-| UI-03 | Phase TBD | Pending |
-| UI-04 | Phase TBD | Pending |
-| PERS-01 | Phase TBD | Pending |
-| PERS-02 | Phase TBD | Pending |
-| PERS-03 | Phase TBD | Pending |
+| CORE-01 | Phase 1 | Pending |
+| CORE-02 | Phase 1 | Pending |
+| CORE-03 | Phase 2 | Pending |
+| CORE-04 | Phase 2 | Pending |
+| CORE-05 | Phase 2 | Pending |
+| DATA-01 | Phase 1 | Pending |
+| DATA-02 | Phase 1 | Pending |
+| DATA-03 | Phase 1 | Pending |
+| DATA-04 | Phase 1 | Pending |
+| CHAR-01 | Phase 1 | Pending |
+| CHAR-02 | Phase 1 | Pending |
+| CHAR-03 | Phase 2 | Pending |
+| CHAR-04 | Phase 1 | Pending |
+| ACTN-01 | Phase 2 | Pending |
+| ACTN-02 | Phase 2 | Pending |
+| ACTN-03 | Phase 2 | Pending |
+| ACTN-04 | Phase 2 | Pending |
+| ACTN-05 | Phase 2 | Pending |
+| RELA-01 | Phase 2 | Pending |
+| RELA-02 | Phase 2 | Pending |
+| RELA-03 | Phase 2 | Pending |
+| RELA-04 | Phase 3 | Pending |
+| CARE-01 | Phase 3 | Pending |
+| CARE-02 | Phase 3 | Pending |
+| CARE-03 | Phase 3 | Pending |
+| CARE-04 | Phase 3 | Pending |
+| CARE-05 | Phase 3 | Pending |
+| FACT-01 | Phase 3 | Pending |
+| FACT-02 | Phase 3 | Pending |
+| FACT-03 | Phase 3 | Pending |
+| CLAN-01 | Phase 4 | Pending |
+| CLAN-02 | Phase 4 | Pending |
+| CLAN-03 | Phase 4 | Pending |
+| POLI-01 | Phase 3 | Pending |
+| POLI-02 | Phase 3 | Pending |
+| POLI-03 | Phase 3 | Pending |
+| MARR-01 | Phase 4 | Pending |
+| MARR-02 | Phase 4 | Pending |
+| MARR-03 | Phase 4 | Pending |
+| EVNT-01 | Phase 4 | Pending |
+| EVNT-02 | Phase 4 | Pending |
+| EVNT-03 | Phase 4 | Pending |
+| EVNT-04 | Phase 4 | Pending |
+| WAR-01 | Phase 5 | Pending |
+| WAR-02 | Phase 5 | Pending |
+| UI-01 | Phase 2 | Pending |
+| UI-02 | Phase 2 | Pending |
+| UI-03 | Phase 4 | Pending |
+| UI-04 | Phase 2 | Pending |
+| PERS-01 | Phase 5 | Pending |
+| PERS-02 | Phase 5 | Pending |
+| PERS-03 | Phase 5 | Pending |
 
 **Coverage:**
-- v1 requirements: 51 total
-- Mapped to phases: 0
-- Unmapped: 51 ⚠️
+- v1 requirements: 52 total
+- Mapped to phases: 52
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-04-04*
