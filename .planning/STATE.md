@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: complete
-stopped_at: Completed 01-190-04-PLAN.md
-last_updated: "2026-04-05T04:49:11.019Z"
+status: verifying
+stopped_at: Completed 01-190-05-PLAN.md
+last_updated: "2026-04-05T06:23:58.307Z"
 last_activity: 2026-04-05
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 4
-  completed_plans: 4
-  percent: 25
+  total_plans: 5
+  completed_plans: 5
+  percent: 100
 ---
 
 # Project State
@@ -27,8 +27,8 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 Phase: 1 of 5 (190样本数据骨架与单角色入口)
 Plan: 4 of 4 in current phase
-Status: Complete
-Last activity: 2026-04-05 — Completed Phase 1 (01-190)
+Status: Phase complete — ready for verification
+Last activity: 2026-04-05
 
 Progress: [██████████] 100% for Phase 1 / 25% overall
 
@@ -51,6 +51,8 @@ Progress: [██████████] 100% for Phase 1 / 25% overall
 - Last 5 plans: 01-190-01 (389s), 01-190-02 (455s), 01-190-03 (455s), 01-190-04 (455s)
 - Trend: Stable
 
+| Phase 01-190 P05 | 240 | 2 tasks | 3 files |
+
 ## Accumulated Context
 
 ### Decisions
@@ -68,6 +70,8 @@ Recent decisions affecting current work:
 - [Phase 01-190]: Made the workbook the formal Phase 1 authoring source and mirrored critical IDs in a plain-text manifest for reviewability.
 - [Phase 01-190]: Used RefCounted typed models for definitions and runtime state to keep data lightweight and independent from scene ownership.
 - [Phase 01-190]: Boot flow remains fixed to scenario_190_smoke plus cao_cao with no selection UI in Phase 1.
+- [Phase 01-190]: TimeLabel remains always visible but now renders as a value-only field instead of a label-value pair.
+- [Phase 01-190]: Merged the duplicated-time UAT reports into one headless cold-start regression that asserts the full top bar.
 
 ### Pending Todos
 
@@ -80,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-05T04:49:10.477Z
-Stopped at: Completed Phase 1 (01-190)
-Resume file: None — next work should begin from Phase 2 planning/execution
+Last session: 2026-04-05T06:23:58.303Z
+Stopped at: Completed 01-190-05-PLAN.md
+Resume file: None
