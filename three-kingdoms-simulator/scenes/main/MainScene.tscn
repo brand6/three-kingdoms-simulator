@@ -1,0 +1,255 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Theme" path="res://themes/PrototypeTheme.tres" id="1_theme"]
+
+[node name="MainScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_theme")
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="TopBar" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+
+[node name="TopBarContent" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TopBar"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="TimeLabel" type="Label" parent="MarginContainer/VBoxContainer/TopBar/TopBarContent"]
+layout_mode = 2
+theme_type_variation = &"StatusLabel"
+text = "190年 / 月 / 旬"
+
+[node name="CityLabel" type="Label" parent="MarginContainer/VBoxContainer/TopBar/TopBarContent"]
+layout_mode = 2
+theme_type_variation = &"StatusLabel"
+text = "当前城市：—"
+
+[node name="IdentityLabel" type="Label" parent="MarginContainer/VBoxContainer/TopBar/TopBarContent"]
+layout_mode = 2
+theme_type_variation = &"StatusLabel"
+text = "当前身份：—"
+
+[node name="FactionLabel" type="Label" parent="MarginContainer/VBoxContainer/TopBar/TopBarContent"]
+layout_mode = 2
+theme_type_variation = &"StatusLabel"
+text = "所属势力：—"
+
+[node name="OfficeLabel" type="Label" parent="MarginContainer/VBoxContainer/TopBar/TopBarContent"]
+layout_mode = 2
+theme_type_variation = &"StatusLabel"
+text = "当前官职：—"
+
+[node name="MiddleBody" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 32
+
+[node name="LeftOverview" type="PanelContainer" parent="MarginContainer/VBoxContainer/MiddleBody"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+
+[node name="LeftOverviewContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MiddleBody/LeftOverview"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="LeftHeading" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/LeftOverview/LeftOverviewContent"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "人物总览"
+
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/LeftOverview/LeftOverviewContent"]
+layout_mode = 2
+theme_type_variation = &"DisplayLabel"
+text = "姓名：—"
+
+[node name="PortraitPlaceholder" type="PanelContainer" parent="MarginContainer/VBoxContainer/MiddleBody/LeftOverview/LeftOverviewContent"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="PortraitLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/LeftOverview/LeftOverviewContent/PortraitPlaceholder"]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "头像占位"
+
+[node name="APLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/LeftOverview/LeftOverviewContent"]
+layout_mode = 2
+text = "AP：—"
+
+[node name="EnergyLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/LeftOverview/LeftOverviewContent"]
+layout_mode = 2
+text = "精力：—"
+
+[node name="StressLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/LeftOverview/LeftOverviewContent"]
+layout_mode = 2
+text = "压力：—"
+
+[node name="FameLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/LeftOverview/LeftOverviewContent"]
+layout_mode = 2
+text = "名望：—"
+
+[node name="MeritLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/LeftOverview/LeftOverviewContent"]
+layout_mode = 2
+text = "功绩：—"
+
+[node name="CenterSummary" type="PanelContainer" parent="MarginContainer/VBoxContainer/MiddleBody"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CenterSummaryContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MiddleBody/CenterSummary"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="CenterHeading" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/CenterSummary/CenterSummaryContent"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "190 样本总览"
+
+[node name="CenterCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/MiddleBody/CenterSummary/CenterSummaryContent"]
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+
+[node name="CenterCardContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MiddleBody/CenterSummary/CenterSummaryContent/CenterCard"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="SummaryLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/CenterSummary/CenterSummaryContent/CenterCard/CenterCardContent"]
+layout_mode = 2
+theme_type_variation = &"DisplayLabel"
+text = "已进入 190 样本"
+
+[node name="SummaryBody" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/CenterSummary/CenterSummaryContent/CenterCard/CenterCardContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "当前阶段先锁定入口、HUD 骨架与管理器契约。后续计划会在同一主界面内逐步接入时间、人物与政治系统。"
+
+[node name="SuccessHint" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/CenterSummary/CenterSummaryContent/CenterCard/CenterCardContent"]
+layout_mode = 2
+theme_type_variation = &"StatusLabel"
+text = "正在加载 190 样本…"
+
+[node name="RightContext" type="PanelContainer" parent="MarginContainer/VBoxContainer/MiddleBody"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+
+[node name="RightContextContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MiddleBody/RightContext"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TaskHeading" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/RightContext/RightContextContent"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "当前任务"
+
+[node name="TaskBody" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/RightContext/RightContextContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "暂无当前任务"
+
+[node name="EventHeading" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/RightContext/RightContextContent"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "最近事件"
+
+[node name="EventBody" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/RightContext/RightContextContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "当前阶段只验证入口与状态总览。请先查看人物、时间与基础数值，后续阶段将开放行动与任务。"
+
+[node name="NoticeHeading" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/RightContext/RightContextContent"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "重要提示"
+
+[node name="NoticeBody" type="Label" parent="MarginContainer/VBoxContainer/MiddleBody/RightContext/RightContextContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "后续阶段开放"
+
+[node name="BottomBar" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+
+[node name="BottomBarContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BottomBar"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ExplanationLabel" type="Label" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent"]
+layout_mode = 2
+theme_type_variation = &"StatusLabel"
+text = "灰色入口将在后续阶段开放"
+
+[node name="NavigationRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ActionButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Phase 2 开放行动循环"
+disabled = true
+text = "行动"
+
+[node name="CharacterButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "后续阶段开放"
+disabled = true
+text = "角色"
+
+[node name="RelationButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Phase 2 开放关系页"
+disabled = true
+text = "关系"
+
+[node name="FactionButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Phase 3 开放势力页"
+disabled = true
+text = "势力"
+
+[node name="ClanButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Phase 4 开放家族/士族页"
+disabled = true
+text = "家族/士族"
+
+[node name="LogButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "后续阶段开放"
+disabled = true
+text = "日志"
