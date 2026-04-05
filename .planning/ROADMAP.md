@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Different starting identities enter the same single-character time/action framework, with differences expressed through permissions or available actions instead of separate game modes.
 **Plans**: 4 plans
 Plans:
-- [ ] 01-190-01-PLAN.md — 建立 Godot 入口壳、HUD 骨架与管理器契约
+- [x] 01-190-01-PLAN.md — 建立 Godot 入口壳、HUD 骨架与管理器契约
 - [ ] 01-190-02-PLAN.md — 建立 Excel→Luban→JSON 烟雾样本数据管线
 - [ ] 01-190-03-PLAN.md — 实现定义加载、ID 查询与 Definition/Runtime 分离
 - [ ] 01-190-04-PLAN.md — 接通默认主角开局与主 HUD 实时绑定
@@ -96,7 +96,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. 190样本数据骨架与单角色入口 | 0/TBD | Not started | - |
+| 1. 190样本数据骨架与单角色入口 | 1/4 | In Progress | 01-190-01 |
 | 2. 旬内行动—关系闭环 | 0/TBD | Not started | - |
 | 3. 仕途、势力与可解释政治 | 0/TBD | Not started | - |
 | 4. 家族门阀、婚姻与历史分歧 | 0/TBD | Not started | - |
