@@ -29,7 +29,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Main HUD shows current time, city, identity, faction, office, AP, energy, stress, fame, and merit without extra setup steps.
   3. Sample characters, factions, cities, clans, families, actions, and events load from data-driven definitions, while runtime play state stays separate from source definitions.
   4. Different starting identities enter the same single-character time/action framework, with differences expressed through permissions or available actions instead of separate game modes.
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 01-190-01-PLAN.md — 建立 Godot 入口壳、HUD 骨架与管理器契约
+- [ ] 01-190-02-PLAN.md — 建立 Excel→Luban→JSON 烟雾样本数据管线
+- [ ] 01-190-03-PLAN.md — 实现定义加载、ID 查询与 Definition/Runtime 分离
+- [ ] 01-190-04-PLAN.md — 接通默认主角开局与主 HUD 实时绑定
 **Canonical refs**: `.planning/PROJECT.md`; `design/总纲/GDD 框架 v1.md` §§8-12; `design/原型与实现/Godot 原型开发拆解 v1.md` §§4-7; `design/数据/Godot 数据结构草案 v1.md` §§2-16
 **UI hint**: yes
 
