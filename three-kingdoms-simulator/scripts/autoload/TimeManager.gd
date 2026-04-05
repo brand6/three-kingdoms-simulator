@@ -15,4 +15,4 @@ func initialize(start_year: int, start_month: int, start_xun: int) -> void:
 func get_current_label() -> String:
 	if _current_year <= 0 or _current_month <= 0 or _current_xun <= 0:
 		return "—"
-	return "%d年 %d月 第%d旬" % [_current_year, _current_month, _current_xun]
+	return "%d年 / %d月 / 第%d旬" % [_current_year, _current_month, _current_xun]
