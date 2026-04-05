@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definition>
+  <table name="Faction" bean="FactionRecord">
+    <field name="id" type="string" />
+    <field name="name" type="string" />
+    <field name="ruler_id" type="string" />
+    <field name="capital_city_id" type="string" />
+    <field name="city_ids" type="string[]" />
+    <field name="officer_ids" type="string[]" />
+    <field name="resources" type="string" />
+  </table>
+</definition>

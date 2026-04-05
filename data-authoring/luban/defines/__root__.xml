@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../LubanDefines.xsd">
+  <enum name="IdentityType">
+    <option name="ruler" value="1" />
+    <option name="civil_official" value="2" />
+    <option name="military_officer" value="3" />
+    <option name="free_agent" value="4" />
+  </enum>
+
+  <bean name="ScenarioRecord">
+    <var name="id" type="string" />
+    <var name="name" type="string" />
+    <var name="start_year" type="int" />
+    <var name="start_month" type="int" />
+    <var name="start_xun" type="int" />
+    <var name="title" type="string" />
+    <var name="description" type="string" />
+    <var name="city_ids" type="string[]" />
+    <var name="faction_ids" type="string[]" />
+    <var name="character_ids" type="string[]" />
+  </bean>
+
+  <bean name="CharacterRecord">
+    <var name="id" type="string" />
+    <var name="name" type="string" />
+    <var name="courtesy_name" type="string" />
+    <var name="identity_type" type="string" />
+    <var name="faction_id" type="string" />
+    <var name="city_id" type="string" />
+    <var name="office_id" type="string" />
+    <var name="family_id" type="string" />
+    <var name="clan_id" type="string" />
+    <var name="personality_tags" type="string[]" />
+    <var name="permission_tags" type="string[]" />
+    <var name="stats" type="string" />
+    <var name="status_values" type="string" />
+    <var name="reputation_values" type="string" />
+  </bean>
+
+  <bean name="FactionRecord">
+    <var name="id" type="string" />
+    <var name="name" type="string" />
+    <var name="ruler_id" type="string" />
+    <var name="capital_city_id" type="string" />
+    <var name="city_ids" type="string[]" />
+    <var name="officer_ids" type="string[]" />
+    <var name="resources" type="string" />
+  </bean>
+
+  <bean name="CityRecord">
+    <var name="id" type="string" />
+    <var name="name" type="string" />
+    <var name="region" type="string" />
+    <var name="owner_faction_id" type="string" />
+    <var name="governor_id" type="string" />
+    <var name="character_ids" type="string[]" />
+    <var name="values" type="string" />
+  </bean>
+
+  <table name="Scenario" value="ScenarioRecord" input="Scenario@190_smoke_sample.xlsx" />
+  <table name="Character" value="CharacterRecord" input="Character@190_smoke_sample.xlsx" />
+  <table name="Faction" value="FactionRecord" input="Faction@190_smoke_sample.xlsx" />
+  <table name="City" value="CityRecord" input="City@190_smoke_sample.xlsx" />
+
+  <include file="scenario.xml" />
+  <include file="character.xml" />
+  <include file="faction.xml" />
+  <include file="city.xml" />
+</module>

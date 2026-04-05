@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definition>
+  <table name="Scenario" bean="ScenarioRecord">
+    <field name="id" type="string" />
+    <field name="name" type="string" />
+    <field name="start_year" type="int" />
+    <field name="start_month" type="int" />
+    <field name="start_xun" type="int" />
+    <field name="title" type="string" />
+    <field name="description" type="string" />
+    <field name="city_ids" type="string[]" />
+    <field name="faction_ids" type="string[]" />
+    <field name="character_ids" type="string[]" />
+  </table>
+</definition>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definition>
+  <table name="Character" bean="CharacterRecord">
+    <field name="id" type="string" />
+    <field name="name" type="string" />
+    <field name="courtesy_name" type="string" />
+    <field name="identity_type" type="string" />
+    <field name="faction_id" type="string" />
+    <field name="city_id" type="string" />
+    <field name="office_id" type="string" />
+    <field name="family_id" type="string" />
+    <field name="clan_id" type="string" />
+    <field name="personality_tags" type="string[]" />
+    <field name="permission_tags" type="string[]" />
+    <field name="stats" type="string" />
+    <field name="status_values" type="string" />
+    <field name="reputation_values" type="string" />
+  </table>
+</definition>

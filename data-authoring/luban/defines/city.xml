@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definition>
+  <table name="City" bean="CityRecord">
+    <field name="id" type="string" />
+    <field name="name" type="string" />
+    <field name="region" type="string" />
+    <field name="owner_faction_id" type="string" />
+    <field name="governor_id" type="string" />
+    <field name="character_ids" type="string[]" />
+    <field name="values" type="string" />
+  </table>
+</definition>
