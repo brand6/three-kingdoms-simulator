@@ -32,9 +32,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 4 plans
 Plans:
 - [x] 01-190-01-PLAN.md — 建立 Godot 入口壳、HUD 骨架与管理器契约
-- [ ] 01-190-02-PLAN.md — 建立 Excel→Luban→JSON 烟雾样本数据管线
-- [ ] 01-190-03-PLAN.md — 实现定义加载、ID 查询与 Definition/Runtime 分离
-- [ ] 01-190-04-PLAN.md — 接通默认主角开局与主 HUD 实时绑定
+- [x] 01-190-02-PLAN.md — 建立 Excel→Luban→JSON 烟雾样本数据管线
+- [x] 01-190-03-PLAN.md — 实现定义加载、ID 查询与 Definition/Runtime 分离
+- [x] 01-190-04-PLAN.md — 接通默认主角开局与主 HUD 实时绑定
 **Canonical refs**: `.planning/PROJECT.md`; `design/总纲/GDD 框架 v1.md` §§8-12; `design/原型与实现/Godot 原型开发拆解 v1.md` §§4-7; `design/数据/Godot 数据结构草案 v1.md` §§2-16
 **UI hint**: yes
 
@@ -96,7 +96,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. 190样本数据骨架与单角色入口 | 1/4 | In Progress | 01-190-01 |
+| 1. 190样本数据骨架与单角色入口 | 4/4 | Complete | 01-190-01, 01-190-02, 01-190-03, 01-190-04 |
 | 2. 旬内行动—关系闭环 | 0/TBD | Not started | - |
 | 3. 仕途、势力与可解释政治 | 0/TBD | Not started | - |
 | 4. 家族门阀、婚姻与历史分歧 | 0/TBD | Not started | - |
