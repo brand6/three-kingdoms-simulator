@@ -1,0 +1,8 @@
+{
+  "scenario_190_smoke": {
+    "scenario": "scenario_190_smoke.json",
+    "characters": "characters.json",
+    "factions": "factions.json",
+    "cities": "cities.json"
+  }
+}

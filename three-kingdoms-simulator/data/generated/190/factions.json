@@ -1,0 +1,29 @@
+[
+  {
+    "id": "cao_cao_faction",
+    "name": "曹操集团",
+    "ruler_id": "cao_cao",
+    "capital_city_id": "chenliu",
+    "city_ids": ["chenliu", "puyang"],
+    "officer_ids": ["cao_cao", "xun_yu", "le_jin"],
+    "resources": {"gold": 1800, "food": 24000, "troops": 28000, "morale": 78, "stability": 72}
+  },
+  {
+    "id": "yuan_shao_faction",
+    "name": "袁绍集团",
+    "ruler_id": "yuan_shao",
+    "capital_city_id": "xuchang",
+    "city_ids": ["xuchang"],
+    "officer_ids": ["yuan_shao"],
+    "resources": {"gold": 2200, "food": 26000, "troops": 32000, "morale": 70, "stability": 68}
+  },
+  {
+    "id": "neutral_local_faction",
+    "name": "中立地方势力",
+    "ruler_id": "chen_gong",
+    "capital_city_id": "chenliu",
+    "city_ids": [],
+    "officer_ids": ["chen_gong"],
+    "resources": {"gold": 300, "food": 1800, "troops": 400, "morale": 45, "stability": 40}
+  }
+]

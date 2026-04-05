@@ -1,0 +1,26 @@
+{
+  "id": "scenario_190_smoke",
+  "name": "190 群雄割据烟雾样本",
+  "start_year": 190,
+  "start_month": 1,
+  "start_xun": 1,
+  "title": "190 样本",
+  "description": "用于 Phase 1 入口、装载与 HUD 绑定验证的最小 190 年局部剧本。",
+  "city_ids": [
+    "chenliu",
+    "puyang",
+    "xuchang"
+  ],
+  "faction_ids": [
+    "cao_cao_faction",
+    "yuan_shao_faction",
+    "neutral_local_faction"
+  ],
+  "character_ids": [
+    "cao_cao",
+    "xun_yu",
+    "le_jin",
+    "yuan_shao",
+    "chen_gong"
+  ]
+}

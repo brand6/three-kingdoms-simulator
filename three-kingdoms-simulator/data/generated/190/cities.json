@@ -1,0 +1,29 @@
+[
+  {
+    "id": "chenliu",
+    "name": "陈留",
+    "region": "中原",
+    "owner_faction_id": "cao_cao_faction",
+    "governor_id": "cao_cao",
+    "character_ids": ["cao_cao", "chen_gong"],
+    "values": {"gold": 900, "food": 12000, "troops": 12000, "order": 68, "public_support": 62, "commerce": 70, "agriculture": 66, "defense": 58}
+  },
+  {
+    "id": "puyang",
+    "name": "濮阳",
+    "region": "中原前线",
+    "owner_faction_id": "cao_cao_faction",
+    "governor_id": "le_jin",
+    "character_ids": ["le_jin"],
+    "values": {"gold": 540, "food": 7400, "troops": 8600, "order": 54, "public_support": 52, "commerce": 45, "agriculture": 57, "defense": 74}
+  },
+  {
+    "id": "xuchang",
+    "name": "许县",
+    "region": "豫州",
+    "owner_faction_id": "yuan_shao_faction",
+    "governor_id": "yuan_shao",
+    "character_ids": ["xun_yu", "yuan_shao"],
+    "values": {"gold": 1120, "food": 9800, "troops": 10100, "order": 64, "public_support": 59, "commerce": 73, "agriculture": 69, "defense": 61}
+  }
+]
