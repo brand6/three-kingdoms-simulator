@@ -1,19 +1,17 @@
 extends Control
 class_name MainHUD
 
-const LOADING_DECISION_TITLE := "推荐行动：先查看城中局势"
-const LOADING_DECISION_BODY := "阶段目标：先确认本旬可投入的 AP 与关键人物，再决定是巡察、拜访还是休整。"
-const LOADING_GOAL_BODY := "可接任务：巡察陈留、拜访重臣、回府安抚家族。"
-const LOADING_FOCUS_BODY := "本旬重点：找出最值得争取的支持者，并为结束本旬保留推进空间。"
-const LOADING_HINT := "正在整理本旬建议…"
 const ERROR_TEXT := "190 样本加载失败。请检查 Luban JSON 导出文件、默认主角 ID 与数据路径配置，然后重新启动项目。"
-const EMPTY_TASK_BODY := "暂无硬性任务时，请优先选择一项能带来关系、功绩或压力缓解的行动。"
-const EMPTY_EVENT_BODY := "若暂未触发事件，系统会继续根据你的所在地、势力位置与关键人物关系给出方向。"
-const EMPTY_NOTICE_BODY := "结束本旬前请确认 AP 是否用尽，并留意是否还有值得拜访的对象。"
-const EXPLANATION_TEXT := "先点行动安排本旬事务；准备完毕后可直接结束本旬。"
+const EMPTY_TASK_TITLE := "当前暂无正式任务"
+const EMPTY_TASK_BODY := "从行动中选择拜访、巡察或探亲来创造新机会"
+const EMPTY_EVENT_BODY := "- 暂无新事件\n- 系统会继续根据你的所在地、势力位置与关键人物关系刷新近期动向"
+const LOADING_RELATION_SUMMARY := "关键关系摘要：正在整理主公、亲近者与高戒备对象的短句摘要。"
+const LOADING_FACTION_SUMMARY := "势力/派系摘要：正在汇总所属势力的支持态势、派系位置与当前风险。"
+const LOADING_CLAN_SUMMARY := "家族/士族摘要：正在读取家族声望、门第期待与当前家门诉求。"
 const END_TURN_TEXT := "结束本旬：确认后将立即结算本旬变化并推进到下一旬。"
 const ACTION_MENU_EMPTY_HEADING := "当前暂无可显示行动"
 const ACTION_MENU_EMPTY_BODY := "请确认会话是否已正确载入，再尝试打开行动菜单。"
+const CATEGORY_EMPTY_BODY := "当前分类下暂无二级动作。后续可在此扩展更多原型行动。"
 const ACTION_LABEL_NAME := "动作名称"
 const ACTION_LABEL_CATEGORY := "行动标签"
 const ACTION_LABEL_AP := "AP"
@@ -35,35 +33,31 @@ const XUN_SUMMARY_ACTIONS := "本旬行动摘要"
 const XUN_SUMMARY_STATS := "主要数值变化"
 const XUN_SUMMARY_RELATIONS := "关系变化摘要"
 const XUN_SUMMARY_PROMPTS := "新提示"
-const ACTION_POPUP_SIZE := Vector2i(760, 360)
+const ACTION_POPUP_SIZE := Vector2i(860, 420)
 const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 
 @onready var _time_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/TimeLabel")
 @onready var _city_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/CityLabel")
 @onready var _identity_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/IdentityLabel")
 @onready var _faction_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/FactionLabel")
-@onready var _office_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/OfficeLabel")
-@onready var _name_label: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent/NameLabel")
-@onready var _ap_label: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent/APLabel")
-@onready var _energy_label: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent/EnergyLabel")
-@onready var _stress_label: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent/StressLabel")
-@onready var _fame_label: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent/FameLabel")
-@onready var _merit_label: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent/MeritLabel")
-@onready var _summary_label: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary/CenterSummaryContent/CenterCard/CenterCardContent/SummaryLabel")
-@onready var _summary_body: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary/CenterSummaryContent/CenterCard/CenterCardContent/SummaryBody")
-@onready var _goal_body: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary/CenterSummaryContent/CenterCard/CenterCardContent/GoalBody")
-@onready var _focus_body: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary/CenterSummaryContent/CenterCard/CenterCardContent/FocusBody")
-@onready var _success_hint: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary/CenterSummaryContent/CenterCard/CenterCardContent/SuccessHint")
-@onready var _task_body: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/RightContext/RightContextContent/TaskBody")
-@onready var _event_body: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/RightContext/RightContextContent/EventBody")
-@onready var _notice_body: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/RightContext/RightContextContent/NoticeBody")
-@onready var _relation_summary_body: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow/RelationSummaryCard/RelationSummaryContent/RelationSummaryBody")
-@onready var _faction_summary_body: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow/FactionSummaryCard/FactionSummaryContent/FactionSummaryBody")
-@onready var _clan_summary_body: Label = get_node("MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow/ClanSummaryCard/ClanSummaryContent/ClanSummaryBody")
-@onready var _explanation_label: Label = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/ExplanationLabel")
-@onready var _action_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow/ActionButton")
-@onready var _relation_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow/RelationButton")
-@onready var _end_turn_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow/EndTurnButton")
+@onready var _clan_family_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/ClanFamilyLabel")
+@onready var _name_label: Label = get_node("MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent/NameLabel")
+@onready var _ap_label: Label = get_node("MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent/APLabel")
+@onready var _energy_label: Label = get_node("MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent/EnergyLabel")
+@onready var _stress_label: Label = get_node("MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent/StressLabel")
+@onready var _fame_label: Label = get_node("MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent/FameLabel")
+@onready var _merit_label: Label = get_node("MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent/MeritLabel")
+@onready var _office_info_label: Label = get_node("MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent/OfficeInfoLabel")
+@onready var _status_info_label: Label = get_node("MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent/StatusInfoLabel")
+@onready var _health_info_label: Label = get_node("MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent/HealthInfoLabel")
+@onready var _task_list: Label = get_node("MarginContainer/VBoxContainer/MainContent/RightContext/TaskPanel/TaskPanelContent/TaskListScroll/TaskList")
+@onready var _event_list: Label = get_node("MarginContainer/VBoxContainer/MainContent/RightContext/EventPanel/EventPanelContent/EventListScroll/EventList")
+@onready var _relation_summary_body: Label = get_node("MarginContainer/VBoxContainer/MainContent/CenterSummary/RelationSummaryCard/RelationSummaryContent/RelationSummaryBody")
+@onready var _faction_summary_body: Label = get_node("MarginContainer/VBoxContainer/MainContent/CenterSummary/FactionSummaryCard/FactionSummaryContent/FactionSummaryBody")
+@onready var _clan_summary_body: Label = get_node("MarginContainer/VBoxContainer/MainContent/CenterSummary/ClanSummaryCard/ClanSummaryContent/ClanSummaryBody")
+@onready var _action_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/ActionButton")
+@onready var _relation_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/RelationButton")
+@onready var _end_turn_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/EndTurnButton")
 @onready var _action_menu_popup: PopupPanel = get_node("ActionMenuPopup")
 @onready var _category_heading: Label = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/CategoryPanel/CategoryContent/CategoryHeading")
 @onready var _category_list: VBoxContainer = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/CategoryPanel/CategoryContent/CategoryList")
@@ -72,7 +66,6 @@ const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 @onready var _action_empty_state: Label = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/ActionPanel/ActionContent/ActionEmptyState")
 @onready var _target_picker_dialog: ConfirmationDialog = get_node("TargetPickerDialog")
 @onready var _target_list: VBoxContainer = get_node("TargetPickerDialog/TargetPickerMargin/TargetPickerContent/TargetListScroll/TargetList")
-@onready var _relation_popup: PopupPanel = get_node("RelationPopup")
 @onready var _relation_list: VBoxContainer = get_node("RelationPopup/RelationMargin/RelationContent/RelationListScroll/RelationList")
 @onready var _character_selector_dialog: ConfirmationDialog = get_node("CharacterSelectorDialog")
 @onready var _character_profile_panel: PopupPanel = get_node("CharacterProfilePanel")
@@ -83,6 +76,7 @@ const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 @onready var _xun_summary_body: Label = get_node("XunSummaryDialog/XunSummaryMargin/XunSummaryBody")
 
 var _selected_action_id: String = "train"
+var _selected_action_category: String = "成长"
 
 
 func _game_root() -> Node:
@@ -118,14 +112,11 @@ func _bootstrap_default_entry() -> void:
 
 
 func show_loading_state() -> void:
-	_render_decision_panel(LOADING_DECISION_TITLE, LOADING_DECISION_BODY, LOADING_GOAL_BODY, LOADING_FOCUS_BODY, LOADING_HINT)
-	_task_body.text = _fallback_recommendations_text()
-	_event_body.text = EMPTY_EVENT_BODY
-	_notice_body.text = "重要提示：%s" % EMPTY_NOTICE_BODY
-	_relation_summary_body.text = "关键关系摘要：正在整理主公、亲近者与高戒备对象的名单。"
-	_faction_summary_body.text = "派系摘要：正在汇总所属势力的支持态势与当前政治风险。"
-	_clan_summary_body.text = "家族/士族摘要：正在读取家族声望、士族背书与当前家务诉求。"
-	_explanation_label.text = EXPLANATION_TEXT
+	_task_list.text = _empty_task_text()
+	_event_list.text = EMPTY_EVENT_BODY
+	_relation_summary_body.text = LOADING_RELATION_SUMMARY
+	_faction_summary_body.text = LOADING_FACTION_SUMMARY
+	_clan_summary_body.text = LOADING_CLAN_SUMMARY
 	_render_empty_fields()
 
 
@@ -143,61 +134,38 @@ func show_success_state(session: GameSession) -> void:
 	var clan_text := _localized_clan(protagonist.clan_id if protagonist != null else "")
 	var family_text := _localized_family(protagonist.family_id if protagonist != null else "")
 	var ap_value := _metric_value(runtime_state, &"ap")
-	var stress_value := _metric_value(runtime_state, &"stress")
 	var merit_value := _metric_value(runtime_state, &"merit")
 
-	_render_decision_panel(
-		"推荐行动：先以巡察稳住%s，再择机拜访重臣" % city_name,
-		"阶段目标：用有限 AP 换取可见政治收益，先稳住城内观感，再为下一旬铺路。",
-		"可接任务：巡察%s、拜访关键文臣、回府处理家族来信。" % city_name,
-		"本旬重点：观察%s内部支持度，确认谁愿意为%s背书，并决定何时结束本旬。" % [faction_name, protagonist_name],
-		"结束本旬前，建议至少完成一次能带来关系或功绩反馈的行动。"
-	)
-
-	_task_body.text = "当前任务：先用 %s 点 AP 稳住%s局势，再决定是否转向拜访与休整。\n- 推荐行动 1：巡察，换取可见功绩\n- 推荐行动 2：拜访，争取关键支持\n- 推荐行动 3：休整，避免压力失控" % [ap_value, city_name]
-	_event_body.text = "最近事件：%s的官员与宗族都在观察你本旬的第一步。若先巡察，可快速建立秩序；若先拜访，则更利于后续关系推进。" % city_name
-	_notice_body.text = "重要提示：%s势力当前仍在整合阶段，若本旬功绩不足，下一旬可用的政治筹码会偏少。" % faction_name
-	_relation_summary_body.text = "关键关系摘要：当前最该争取的人物是%s阵营中的核心文臣；亲近者可提供背书，高戒备者会放大你的失误。" % faction_name
-	_faction_summary_body.text = "派系摘要：你正处于%s的核心视线中。当前态度偏支持，但仍需用巡察与拜访证明你能稳住地方。" % faction_name
-	_clan_summary_body.text = "家族/士族摘要：家族 %s、士族 %s 正在等待你拿出可见成果；若长期忽视家门诉求，后续举荐与联姻机会会减弱。" % [family_text, clan_text]
-	_explanation_label.text = "%s 当前主操作：行动 → 反馈 → 结束本旬。" % END_TURN_TEXT
+	_task_list.text = _build_task_list(city_name, faction_name, ap_value)
+	_event_list.text = _build_event_list(city_name, faction_name, protagonist_name)
+	_relation_summary_body.text = _build_relation_summary(faction_name, merit_value)
+	_faction_summary_body.text = _build_faction_summary(faction_name, city_name)
+	_clan_summary_body.text = _build_clan_summary(family_text, clan_text)
 
 	_time_label.text = _time_text(session)
 	_city_label.text = "地点：%s" % city_name
 	_identity_label.text = "身份：%s" % identity_text
 	_faction_label.text = "势力：%s" % faction_name
-	_office_label.text = "官职：%s" % office_text
+	_clan_family_label.text = "士族/家族：%s / %s" % [clan_text, family_text]
 	_name_label.text = _pair_text("姓名", protagonist_name)
 	_ap_label.text = _metric_text("AP", runtime_state, &"ap")
 	_energy_label.text = _metric_text("精力", runtime_state, &"energy")
 	_stress_label.text = _metric_text("压力", runtime_state, &"stress")
 	_fame_label.text = _metric_text("名望", runtime_state, &"fame")
 	_merit_label.text = _metric_text("功绩", runtime_state, &"merit")
-
-	if stress_value != "—":
-		_notice_body.text += " 当前压力：%s。" % stress_value
-	if merit_value != "—":
-		_relation_summary_body.text += " 当前功绩：%s。" % merit_value
+	_office_info_label.text = "官职：%s" % office_text
+	_status_info_label.text = "状态：%s" % _status_text(runtime_state)
+	_health_info_label.text = "健康：%s" % _health_text(runtime_state)
 	_end_turn_button.disabled = false
 	_refresh_overlay_data()
 
 
 func show_error_state(message: String) -> void:
-	_render_decision_panel(
-		"推荐行动：先修复入口数据",
-		"阶段目标：恢复 190 样本载入后，再继续验证 HUD 的推荐行动与旬推进结构。",
-		"可接任务：检查数据文件、确认默认主角、重新启动项目。",
-		"本旬重点：先解决阻塞问题，再考虑关系、派系与家族摘要。",
-		"错误详情已写入主面板，请修复后重新进入。"
-	)
-	_summary_body.text = "%s\n%s" % [ERROR_TEXT, _display_value(message)]
-	_task_body.text = _fallback_recommendations_text()
-	_event_body.text = EMPTY_EVENT_BODY
-	_notice_body.text = "重要提示：请修复数据后重新启动，再执行行动或结束本旬。"
+	_task_list.text = "- 入口异常\n- 检查数据文件、确认默认主角，并在修复后重新启动项目"
+	_event_list.text = "- 启动失败\n- %s\n- %s" % [ERROR_TEXT, _display_value(message)]
 	_relation_summary_body.text = "关键关系摘要：数据尚未载入，无法生成可信关系提示。"
-	_faction_summary_body.text = "派系摘要：数据尚未载入，无法判断当前政治环境。"
+	_faction_summary_body.text = "势力/派系摘要：数据尚未载入，无法判断当前政治环境。"
 	_clan_summary_body.text = "家族/士族摘要：数据尚未载入，无法提供家门与士族背景提示。"
-	_explanation_label.text = EXPLANATION_TEXT
 	_render_empty_fields()
 
 
@@ -206,25 +174,65 @@ func _render_empty_fields() -> void:
 	_city_label.text = "地点：—"
 	_identity_label.text = "身份：—"
 	_faction_label.text = "势力：—"
-	_office_label.text = "官职：—"
+	_clan_family_label.text = "士族/家族：—"
 	_name_label.text = _pair_text("姓名", "")
 	_ap_label.text = _pair_text("AP", null)
 	_energy_label.text = _pair_text("精力", null)
 	_stress_label.text = _pair_text("压力", null)
 	_fame_label.text = _pair_text("名望", null)
 	_merit_label.text = _pair_text("功绩", null)
+	_office_info_label.text = "官职：—"
+	_status_info_label.text = "状态：待命"
+	_health_info_label.text = "健康：稳定"
 
 
-func _render_decision_panel(title: String, body: String, goal_body: String, focus_body: String, hint: String) -> void:
-	_summary_label.text = title
-	_summary_body.text = body
-	_goal_body.text = goal_body
-	_focus_body.text = focus_body
-	_success_hint.text = hint
+func _empty_task_text() -> String:
+	return "- %s\n- %s" % [EMPTY_TASK_TITLE, EMPTY_TASK_BODY]
 
 
-func _fallback_recommendations_text() -> String:
-	return "当前任务：%s\n- 推荐行动 1：拜访关键人物，提前铺路\n- 推荐行动 2：巡察当前城市，换取秩序与功绩\n- 推荐行动 3：回府休整，缓解压力后再结束本旬" % EMPTY_TASK_BODY
+func _build_task_list(city_name: String, faction_name: String, ap_value: String) -> String:
+	return "- 巡察 %s｜来源：主循环｜进度：待执行｜影响：秩序与功绩\n- 拜访关键人物｜来源：行动｜进度：可开始｜影响：争取%s支持\n- 保留 %s 点 AP 给旬末推进｜来源：节奏控制｜进度：自行判断｜影响：确保%s仍有后续操作空间" % [city_name, faction_name, ap_value, city_name]
+
+
+func _build_event_list(city_name: String, faction_name: String, protagonist_name: String) -> String:
+	return "- %s城内官员正在观察%s本旬的第一步\n- %s仍处整合期，功绩与关系反馈会被放大\n- 若先巡察，可快速建立秩序；若先拜访，更利于后续政治推进" % [city_name, protagonist_name, faction_name]
+
+
+func _build_relation_summary(faction_name: String, merit_value: String) -> String:
+	var text := "关键关系摘要：优先争取%s阵营中的核心文臣；亲近者提供背书，高戒备者会放大你的失误。" % faction_name
+	if merit_value != "—":
+		text += " 当前功绩 %s。" % merit_value
+	return text
+
+
+func _build_faction_summary(faction_name: String, city_name: String) -> String:
+	return "势力/派系摘要：你正处于%s的核心视线中；当前态度偏支持，但仍需先稳住%s并证明你能持续产出成果。" % [faction_name, city_name]
+
+
+func _build_clan_summary(family_text: String, clan_text: String) -> String:
+	return "家族/士族摘要：家族 %s、士族 %s 正在等待可见成果；若长期忽视家门诉求，后续举荐与联姻机会会减弱。" % [family_text, clan_text]
+
+
+func _status_text(runtime_state: RuntimeCharacterState) -> String:
+	if runtime_state == null:
+		return "待命"
+	if runtime_state.stress >= 70:
+		return "承压"
+	if runtime_state.energy <= 30:
+		return "疲惫"
+	if runtime_state.ap <= 0:
+		return "本旬已尽力"
+	return "在城待命"
+
+
+func _health_text(runtime_state: RuntimeCharacterState) -> String:
+	if runtime_state == null:
+		return "稳定"
+	if runtime_state.energy <= 20:
+		return "欠佳"
+	if runtime_state.stress >= 80:
+		return "需要休整"
+	return "稳定"
 
 
 func _time_text(session: GameSession) -> String:
@@ -334,66 +342,92 @@ func _refresh_overlay_data() -> void:
 
 
 func _refresh_action_menu() -> void:
-	_category_heading.text = "基础行动"
-	_action_heading.text = "行动详情"
+	_category_heading.text = "一级分类"
 	_clear_children(_category_list)
 	_clear_children(_action_list)
+	var categories: Array = _game_root().call("get_phase2_action_categories")
 	var actions: Array = _game_root().call("get_available_phase2_actions")
-	if actions.is_empty():
+	if categories.is_empty() and actions.is_empty():
 		_action_empty_state.visible = true
 		_action_empty_state.text = "%s\n%s" % [ACTION_MENU_EMPTY_HEADING, ACTION_MENU_EMPTY_BODY]
 		return
-	var action_ids := _action_ids(actions)
-	if not action_ids.has(_selected_action_id):
-		_selected_action_id = str(actions[0].id)
-	for spec in actions:
+	if categories.is_empty():
+		categories = ["成长", "关系", "政务", "军事", "家族", "移动"]
+	if not categories.has(_selected_action_category):
+		_selected_action_category = str(categories[0])
+	for category in categories:
 		var button := Button.new()
-		button.text = str(spec.display_name)
+		button.text = str(category)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.theme_type_variation = &"PrimaryButton" if str(spec.id) == _selected_action_id else &"Button"
-		button.tooltip_text = _format_action_row(spec)
-		button.pressed.connect(func() -> void:
-			_select_action(str(spec.id))
-			_refresh_action_menu()
-		)
+		button.theme_type_variation = &"PrimaryButton" if str(category) == _selected_action_category else &"Button"
+		button.pressed.connect(_on_action_category_pressed.bind(str(category)))
 		_category_list.add_child(button)
+	var category_actions := _filter_actions_by_category(actions, _selected_action_category)
+	_action_heading.text = "二级动作：%s" % _selected_action_category
+	if not category_actions.is_empty():
+		var action_ids := _action_ids(category_actions)
+		if not action_ids.has(_selected_action_id):
+			_selected_action_id = str(category_actions[0].id)
+	else:
+		_selected_action_id = ""
 	_action_empty_state.visible = false
-	var selected_spec = _find_action_spec(actions, _selected_action_id)
-	if selected_spec != null:
-		_render_action_detail(selected_spec)
+	_render_action_entries(category_actions)
 
 
-func _render_action_detail(spec: Variant) -> void:
-	_action_heading.text = "行动详情：%s" % spec.display_name
-	for line in [
-		"%s：%s" % [ACTION_LABEL_NAME, spec.display_name],
-		"%s：%s" % [ACTION_LABEL_CATEGORY, spec.category_id],
-		"%s：%d" % [ACTION_LABEL_AP, spec.ap_cost],
-		"%s：%s" % [ACTION_LABEL_ENERGY, _signed_value(spec.energy_delta)],
-		"%s：%s" % [ACTION_LABEL_TARGET, _localized_target_type(spec.target_type)],
-		"%s：%s" % [ACTION_LABEL_EFFECT, spec.effect_summary],
-	]:
-		var label := Label.new()
-		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		label.text = line
-		_action_list.add_child(label)
-	var disabled_reason := str(spec.disabled_reason)
-	var reason_label := Label.new()
-	reason_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	reason_label.text = "%s：%s" % [ACTION_LABEL_DISABLED, disabled_reason if not disabled_reason.is_empty() else "可执行"]
-	_action_list.add_child(reason_label)
-	var button := Button.new()
-	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	button.disabled = not disabled_reason.is_empty()
-	button.text = "选择目标" if str(spec.target_type) == "character" else "执行行动"
-	button.pressed.connect(func() -> void:
-		_handle_action_selected(spec)
-	)
-	_action_list.add_child(button)
+func _render_action_entries(actions: Array) -> void:
+	if actions.is_empty():
+		_action_empty_state.visible = true
+		_action_empty_state.text = CATEGORY_EMPTY_BODY
+		return
+	for spec in actions:
+		var card := PanelContainer.new()
+		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var content := VBoxContainer.new()
+		content.add_theme_constant_override("separation", 6)
+		card.add_child(content)
+		var title := Label.new()
+		title.text = "%s%s" % [spec.display_name, "（当前选中）" if str(spec.id) == _selected_action_id else ""]
+		title.theme_type_variation = &"HeadingLabel"
+		content.add_child(title)
+		for line in [
+			"%s：%d｜%s：%s｜%s：%s" % [ACTION_LABEL_AP, spec.ap_cost, ACTION_LABEL_ENERGY, _signed_value(spec.energy_delta), ACTION_LABEL_TARGET, _localized_target_type(spec.target_type)],
+			"%s：%s" % [ACTION_LABEL_EFFECT, spec.effect_summary],
+		]:
+			var label := Label.new()
+			label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			label.text = line
+			content.add_child(label)
+		var disabled_reason := str(spec.disabled_reason)
+		var reason_label := Label.new()
+		reason_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		reason_label.text = "%s：%s" % [ACTION_LABEL_DISABLED, disabled_reason if not disabled_reason.is_empty() else "可执行"]
+		content.add_child(reason_label)
+		var button := Button.new()
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.disabled = not disabled_reason.is_empty()
+		button.theme_type_variation = &"PrimaryButton" if str(spec.id) == _selected_action_id else &"Button"
+		button.text = "选择目标" if str(spec.target_type) == "character" else "执行行动"
+		button.pressed.connect(_on_action_entry_pressed.bind(spec))
+		content.add_child(button)
+		_action_list.add_child(card)
 
 
 func _select_action(action_id: String) -> void:
 	_selected_action_id = action_id
+
+
+func _select_action_category(category_id: String) -> void:
+	_selected_action_category = category_id
+
+
+func _on_action_category_pressed(category_id: String) -> void:
+	_select_action_category(category_id)
+	_refresh_action_menu()
+
+
+func _on_action_entry_pressed(spec: Variant) -> void:
+	_select_action(str(spec.id))
+	_handle_action_selected(spec)
 
 
 func _action_ids(actions: Array) -> Array:
@@ -410,10 +444,18 @@ func _find_action_spec(actions: Array, action_id: String) -> Variant:
 	return null
 
 
+func _filter_actions_by_category(actions: Array, category_id: String) -> Array:
+	var filtered: Array = []
+	for spec in actions:
+		if str(spec.category_id) == category_id:
+			filtered.append(spec)
+	return filtered
+
+
 func _popup_action_menu() -> void:
 	_action_menu_popup.reset_size()
 	var button_rect := _action_button.get_global_rect()
-	var popup_position := Vector2i(button_rect.position.x, max(24.0, button_rect.position.y - float(ACTION_POPUP_SIZE.y) - 12.0))
+	var popup_position := Vector2i(int(button_rect.position.x), int(max(24.0, button_rect.position.y - float(ACTION_POPUP_SIZE.y) - 12.0)))
 	_action_menu_popup.popup(Rect2i(popup_position, ACTION_POPUP_SIZE))
 
 
@@ -448,8 +490,10 @@ func _handle_action_selected(spec: Variant) -> void:
 	if not str(spec.disabled_reason).is_empty():
 		return
 	if spec.id == "visit":
+		_action_menu_popup.hide()
 		_open_character_selector("visit")
 		return
+	_action_menu_popup.hide()
 	var result = _game_root().call("execute_phase2_action", spec.id, "")
 	_show_action_result(result)
 	show_success_state(_game_root().current_session)
@@ -567,8 +611,8 @@ func _show_action_result(result: Variant) -> void:
 		clue_text if not clue_text.is_empty() else "无"
 	]
 	_action_result_dialog.popup_centered_ratio(0.45)
-	_task_body.text = "最近行动：%s\n%s：%s" % [result.title, RESULT_LABEL_REASON, result.reason_text]
-	_event_body.text = "结果反馈：%s\n%s：%s" % [result.summary_line, RESULT_LABEL_STATS, _format_stat_delta_text(result.stat_deltas)]
+	_task_list.text = "- 最近行动：%s\n- %s：%s\n- 下一步：继续从行动中巩固关系或秩序收益" % [result.title, RESULT_LABEL_REASON, result.reason_text]
+	_event_list.text = "- 结果反馈：%s\n- %s：%s\n- %s：%s" % [result.summary_line, RESULT_LABEL_STATS, _format_stat_delta_text(result.stat_deltas), RESULT_LABEL_RELATIONS, relation_text]
 	_relation_summary_body.text = "关键关系摘要：%s" % relation_text
 
 
@@ -600,8 +644,8 @@ func _show_xun_summary(summary: Variant) -> void:
 		"\n".join(summary.prompt_lines),
 	]
 	_xun_summary_dialog.popup_centered_ratio(0.5)
-	_success_hint.text = summary.prompt_lines[0] if not summary.prompt_lines.is_empty() else "新提示：下旬请继续规划关键行动。"
-	_notice_body.text = summary.prompt_lines[0] if not summary.prompt_lines.is_empty() else "新提示：下旬请继续规划关键行动。"
+	_task_list.text = "- 本旬已结束\n- 下旬建议：%s" % (summary.prompt_lines[0] if not summary.prompt_lines.is_empty() else "继续规划关键行动")
+	_event_list.text = "- 旬末总结已生成\n- %s" % (summary.action_lines[0] if not summary.action_lines.is_empty() else END_TURN_TEXT)
 
 
 func _format_summary_dict(values: Dictionary) -> String:
