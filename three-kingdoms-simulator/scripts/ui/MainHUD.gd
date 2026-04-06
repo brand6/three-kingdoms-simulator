@@ -30,6 +30,10 @@ const RESULT_LABEL_REASON := "原因说明"
 const RESULT_LABEL_STATS := "数值变化"
 const RESULT_LABEL_RELATIONS := "关系变化"
 const RESULT_LABEL_CLUE := "新线索"
+const XUN_SUMMARY_ACTIONS := "本旬行动摘要"
+const XUN_SUMMARY_STATS := "主要数值变化"
+const XUN_SUMMARY_RELATIONS := "关系变化摘要"
+const XUN_SUMMARY_PROMPTS := "新提示"
 
 @onready var _time_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/TimeLabel")
 @onready var _city_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/CityLabel")
@@ -56,6 +60,7 @@ const RESULT_LABEL_CLUE := "新线索"
 @onready var _explanation_label: Label = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/ExplanationLabel")
 @onready var _action_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow/ActionButton")
 @onready var _relation_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow/RelationButton")
+@onready var _end_turn_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow/EndTurnButton")
 @onready var _action_menu_popup: PopupPanel = get_node("ActionMenuPopup")
 @onready var _category_list: VBoxContainer = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/CategoryPanel/CategoryContent/CategoryList")
 @onready var _action_list: VBoxContainer = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/ActionPanel/ActionContent/ActionListScroll/ActionList")
@@ -66,6 +71,9 @@ const RESULT_LABEL_CLUE := "新线索"
 @onready var _relation_list: VBoxContainer = get_node("RelationPopup/RelationMargin/RelationContent/RelationListScroll/RelationList")
 @onready var _action_result_dialog: AcceptDialog = get_node("ActionResultDialog")
 @onready var _action_result_body: Label = get_node("ActionResultDialog/ActionResultMargin/ActionResultBody")
+@onready var _end_xun_dialog: ConfirmationDialog = get_node("EndXunDialog")
+@onready var _xun_summary_dialog: AcceptDialog = get_node("XunSummaryDialog")
+@onready var _xun_summary_body: Label = get_node("XunSummaryDialog/XunSummaryMargin/XunSummaryBody")
 
 var _selected_category: String = "成长"
 var _pending_target_action_id: String = ""
@@ -87,7 +95,9 @@ func _ready() -> void:
 	show_loading_state()
 	_action_button.pressed.connect(_on_action_button_pressed)
 	_relation_button.pressed.connect(_on_relation_button_pressed)
+	_end_turn_button.pressed.connect(_on_end_turn_button_pressed)
 	_target_picker_dialog.confirmed.connect(_on_target_picker_confirmed)
+	_end_xun_dialog.confirmed.connect(_on_end_xun_confirmed)
 	if Engine.is_editor_hint():
 		return
 	call_deferred("_bootstrap_default_entry")
@@ -159,6 +169,7 @@ func show_success_state(session: GameSession) -> void:
 		_notice_body.text += " 当前压力：%s。" % stress_value
 	if merit_value != "—":
 		_relation_summary_body.text += " 当前功绩：%s。" % merit_value
+	_end_turn_button.disabled = false
 	_refresh_overlay_data()
 
 
@@ -494,6 +505,44 @@ func _show_action_result(result: Variant) -> void:
 	_task_body.text = "最近行动：%s\n%s：%s" % [result.title, RESULT_LABEL_REASON, result.reason_text]
 	_event_body.text = "结果反馈：%s\n%s：%s" % [result.summary_line, RESULT_LABEL_STATS, _format_stat_delta_text(result.stat_deltas)]
 	_relation_summary_body.text = "关键关系摘要：%s" % relation_text
+
+
+func _on_end_turn_button_pressed() -> void:
+	_end_xun_dialog.popup_centered_ratio(0.35)
+
+
+func _on_end_xun_confirmed() -> void:
+	_end_xun_dialog.hide()
+	var summary = _game_root().call("end_current_xun")
+	show_success_state(_game_root().current_session)
+	_show_xun_summary(summary)
+
+
+func _show_xun_summary(summary: Variant) -> void:
+	if summary == null:
+		return
+	_xun_summary_body.text = "%s\n%s\n\n%s\n%s\n\n%s\n%s\n\n%s\n%s" % [
+		XUN_SUMMARY_ACTIONS,
+		"\n".join(summary.action_lines),
+		XUN_SUMMARY_STATS,
+		_format_summary_dict(summary.stat_delta_totals),
+		XUN_SUMMARY_RELATIONS,
+		"\n".join(summary.relation_change_lines),
+		XUN_SUMMARY_PROMPTS,
+		"\n".join(summary.prompt_lines),
+	]
+	_xun_summary_dialog.popup_centered_ratio(0.5)
+	_success_hint.text = summary.prompt_lines[0] if not summary.prompt_lines.is_empty() else "新提示：下旬请继续规划关键行动。"
+	_notice_body.text = summary.prompt_lines[0] if not summary.prompt_lines.is_empty() else "新提示：下旬请继续规划关键行动。"
+
+
+func _format_summary_dict(values: Dictionary) -> String:
+	if values.is_empty():
+		return "无"
+	var parts: Array[String] = []
+	for key in values.keys():
+		parts.append("%s %s" % [key, _signed_value(int(values[key]))])
+	return "，".join(parts)
 
 
 func _format_stat_delta_text(stat_deltas: Dictionary) -> String:

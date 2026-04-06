@@ -520,3 +520,44 @@ layout_mode = 2
 autowrap_mode = 3
 vertical_alignment = 1
 text = "行动名\n成败结论\n原因说明\n数值变化\n关系变化 / 新线索"
+
+[node name="EndXunDialog" type="ConfirmationDialog" parent="."]
+title = "结束本旬"
+size = Vector2i(480, 220)
+
+[node name="EndXunMargin" type="MarginContainer" parent="EndXunDialog"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="EndXunBody" type="Label" parent="EndXunDialog/EndXunMargin"]
+layout_mode = 2
+autowrap_mode = 3
+text = "结束本旬：确认后将立即结算本旬变化并推进到下一旬。"
+
+[node name="XunSummaryDialog" type="AcceptDialog" parent="."]
+title = "旬末总结"
+size = Vector2i(620, 420)
+
+[node name="XunSummaryMargin" type="MarginContainer" parent="XunSummaryDialog"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="XunSummaryBody" type="Label" parent="XunSummaryDialog/XunSummaryMargin"]
+layout_mode = 2
+autowrap_mode = 3
+vertical_alignment = 1
+text = "本旬行动摘要\n主要数值变化\n关系变化摘要\n新提示"

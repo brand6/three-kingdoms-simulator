@@ -53,6 +53,8 @@ func _run() -> void:
 		var summary_text: String = hud._xun_summary_body.text
 		if not summary_text.contains("本旬行动摘要") or not summary_text.contains("主要数值变化") or not summary_text.contains("关系变化摘要"):
 			_fail("Summary dialog omitted required sections: %s" % summary_text)
+		hud._xun_summary_dialog.hide()
+		await process_frame
 
 	main_scene.queue_free()
 	await process_frame
