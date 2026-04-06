@@ -111,8 +111,8 @@ func _render_rows() -> void:
 func _sorted_rows() -> Array:
 	var sorted_rows: Array = _rows.duplicate()
 	sorted_rows.sort_custom(func(a: Variant, b: Variant) -> bool:
-		var left := a.get(_sort_key)
-		var right := b.get(_sort_key)
+		var left: Variant = a.get(_sort_key)
+		var right: Variant = b.get(_sort_key)
 		if typeof(left) == TYPE_STRING:
 			var left_text := str(left)
 			var right_text := str(right)

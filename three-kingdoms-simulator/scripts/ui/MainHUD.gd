@@ -12,14 +12,15 @@ const EMPTY_EVENT_BODY := "若暂未触发事件，系统会继续根据你的�
 const EMPTY_NOTICE_BODY := "结束本旬前请确认 AP 是否用尽，并留意是否还有值得拜访的对象。"
 const EXPLANATION_TEXT := "先点行动安排本旬事务；准备完毕后可直接结束本旬。"
 const END_TURN_TEXT := "结束本旬：确认后将立即结算本旬变化并推进到下一旬。"
-const PHASE2_CATEGORIES := ["成长", "关系", "政务", "军事", "家族"]
-const ACTION_MENU_EMPTY_HEADING := "当前分类暂无可执行行动"
-const ACTION_MENU_EMPTY_BODY := "请切换其他分类，或等待 AP、精力、地点与目标条件满足后再试。"
+const ACTION_MENU_EMPTY_HEADING := "当前暂无可显示行动"
+const ACTION_MENU_EMPTY_BODY := "请确认会话是否已正确载入，再尝试打开行动菜单。"
 const ACTION_LABEL_NAME := "动作名称"
+const ACTION_LABEL_CATEGORY := "行动标签"
 const ACTION_LABEL_AP := "AP"
 const ACTION_LABEL_ENERGY := "精力"
 const ACTION_LABEL_TARGET := "目标类型"
 const ACTION_LABEL_EFFECT := "效果摘要"
+const ACTION_LABEL_DISABLED := "禁用原因"
 const REASON_NO_AP := "AP 不足"
 const REASON_NO_ENERGY := "精力不足"
 const REASON_WRONG_LOCATION := "当前地点不可执行"
@@ -34,6 +35,8 @@ const XUN_SUMMARY_ACTIONS := "本旬行动摘要"
 const XUN_SUMMARY_STATS := "主要数值变化"
 const XUN_SUMMARY_RELATIONS := "关系变化摘要"
 const XUN_SUMMARY_PROMPTS := "新提示"
+const ACTION_POPUP_SIZE := Vector2i(760, 360)
+const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 
 @onready var _time_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/TimeLabel")
 @onready var _city_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/CityLabel")
@@ -62,21 +65,24 @@ const XUN_SUMMARY_PROMPTS := "新提示"
 @onready var _relation_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow/RelationButton")
 @onready var _end_turn_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow/EndTurnButton")
 @onready var _action_menu_popup: PopupPanel = get_node("ActionMenuPopup")
+@onready var _category_heading: Label = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/CategoryPanel/CategoryContent/CategoryHeading")
 @onready var _category_list: VBoxContainer = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/CategoryPanel/CategoryContent/CategoryList")
+@onready var _action_heading: Label = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/ActionPanel/ActionContent/ActionHeading")
 @onready var _action_list: VBoxContainer = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/ActionPanel/ActionContent/ActionListScroll/ActionList")
 @onready var _action_empty_state: Label = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/ActionPanel/ActionContent/ActionEmptyState")
 @onready var _target_picker_dialog: ConfirmationDialog = get_node("TargetPickerDialog")
 @onready var _target_list: VBoxContainer = get_node("TargetPickerDialog/TargetPickerMargin/TargetPickerContent/TargetListScroll/TargetList")
 @onready var _relation_popup: PopupPanel = get_node("RelationPopup")
 @onready var _relation_list: VBoxContainer = get_node("RelationPopup/RelationMargin/RelationContent/RelationListScroll/RelationList")
+@onready var _character_selector_dialog: ConfirmationDialog = get_node("CharacterSelectorDialog")
+@onready var _character_profile_panel: PopupPanel = get_node("CharacterProfilePanel")
 @onready var _action_result_dialog: AcceptDialog = get_node("ActionResultDialog")
 @onready var _action_result_body: Label = get_node("ActionResultDialog/ActionResultMargin/ActionResultBody")
 @onready var _end_xun_dialog: ConfirmationDialog = get_node("EndXunDialog")
 @onready var _xun_summary_dialog: AcceptDialog = get_node("XunSummaryDialog")
 @onready var _xun_summary_body: Label = get_node("XunSummaryDialog/XunSummaryMargin/XunSummaryBody")
 
-var _selected_category: String = "成长"
-var _pending_target_action_id: String = ""
+var _selected_action_id: String = "train"
 
 
 func _game_root() -> Node:
@@ -97,7 +103,10 @@ func _ready() -> void:
 	_relation_button.pressed.connect(_on_relation_button_pressed)
 	_end_turn_button.pressed.connect(_on_end_turn_button_pressed)
 	_target_picker_dialog.confirmed.connect(_on_target_picker_confirmed)
+	_character_selector_dialog.row_chosen.connect(_on_character_selector_row_chosen)
 	_end_xun_dialog.confirmed.connect(_on_end_xun_confirmed)
+	_end_xun_dialog.get_ok_button().text = "确认"
+	_end_xun_dialog.get_cancel_button().text = "取消"
 	if Engine.is_editor_hint():
 		return
 	call_deferred("_bootstrap_default_entry")
@@ -312,54 +321,100 @@ func _display_value(value: Variant) -> String:
 
 
 func _on_action_button_pressed() -> void:
-	_selected_category = PHASE2_CATEGORIES[0]
 	_refresh_action_menu()
-	_action_menu_popup.popup_centered_ratio(0.6)
+	_popup_action_menu()
 
 
 func _on_relation_button_pressed() -> void:
-	_refresh_relation_popup()
-	_relation_popup.popup_centered_ratio(0.7)
+	_open_character_selector("relation")
 
 
 func _refresh_overlay_data() -> void:
 	_refresh_action_menu()
-	_refresh_relation_popup()
 
 
 func _refresh_action_menu() -> void:
+	_category_heading.text = "基础行动"
+	_action_heading.text = "行动详情"
 	_clear_children(_category_list)
 	_clear_children(_action_list)
-	for category in PHASE2_CATEGORIES:
+	var actions: Array = _game_root().call("get_available_phase2_actions")
+	if actions.is_empty():
+		_action_empty_state.visible = true
+		_action_empty_state.text = "%s\n%s" % [ACTION_MENU_EMPTY_HEADING, ACTION_MENU_EMPTY_BODY]
+		return
+	var action_ids := _action_ids(actions)
+	if not action_ids.has(_selected_action_id):
+		_selected_action_id = str(actions[0].id)
+	for spec in actions:
 		var button := Button.new()
-		button.text = category
+		button.text = str(spec.display_name)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.theme_type_variation = &"PrimaryButton" if category == _selected_category else &"Button"
+		button.theme_type_variation = &"PrimaryButton" if str(spec.id) == _selected_action_id else &"Button"
+		button.tooltip_text = _format_action_row(spec)
 		button.pressed.connect(func() -> void:
-			_selected_category = category
+			_select_action(str(spec.id))
 			_refresh_action_menu()
 		)
 		_category_list.add_child(button)
+	_action_empty_state.visible = false
+	var selected_spec = _find_action_spec(actions, _selected_action_id)
+	if selected_spec != null:
+		_render_action_detail(selected_spec)
 
-	var actions: Array = _game_root().call("get_available_phase2_actions")
-	var shown_count := 0
+
+func _render_action_detail(spec: Variant) -> void:
+	_action_heading.text = "行动详情：%s" % spec.display_name
+	for line in [
+		"%s：%s" % [ACTION_LABEL_NAME, spec.display_name],
+		"%s：%s" % [ACTION_LABEL_CATEGORY, spec.category_id],
+		"%s：%d" % [ACTION_LABEL_AP, spec.ap_cost],
+		"%s：%s" % [ACTION_LABEL_ENERGY, _signed_value(spec.energy_delta)],
+		"%s：%s" % [ACTION_LABEL_TARGET, _localized_target_type(spec.target_type)],
+		"%s：%s" % [ACTION_LABEL_EFFECT, spec.effect_summary],
+	]:
+		var label := Label.new()
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		label.text = line
+		_action_list.add_child(label)
+	var disabled_reason := str(spec.disabled_reason)
+	var reason_label := Label.new()
+	reason_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	reason_label.text = "%s：%s" % [ACTION_LABEL_DISABLED, disabled_reason if not disabled_reason.is_empty() else "可执行"]
+	_action_list.add_child(reason_label)
+	var button := Button.new()
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.disabled = not disabled_reason.is_empty()
+	button.text = "选择目标" if str(spec.target_type) == "character" else "执行行动"
+	button.pressed.connect(func() -> void:
+		_handle_action_selected(spec)
+	)
+	_action_list.add_child(button)
+
+
+func _select_action(action_id: String) -> void:
+	_selected_action_id = action_id
+
+
+func _action_ids(actions: Array) -> Array:
+	var ids: Array = []
 	for spec in actions:
-		if spec.category_id != _selected_category:
-			continue
-		shown_count += 1
-		var button := Button.new()
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		button.disabled = not str(spec.disabled_reason).is_empty()
-		button.text = _format_action_row(spec)
-		button.tooltip_text = _format_action_row(spec)
-		button.pressed.connect(func() -> void:
-			_handle_action_selected(spec)
-		)
-		_action_list.add_child(button)
-	_action_empty_state.visible = shown_count == 0
-	_action_empty_state.text = "%s\n%s" % [ACTION_MENU_EMPTY_HEADING, ACTION_MENU_EMPTY_BODY]
+		ids.append(str(spec.id))
+	return ids
+
+
+func _find_action_spec(actions: Array, action_id: String) -> Variant:
+	for spec in actions:
+		if str(spec.id) == action_id:
+			return spec
+	return null
+
+
+func _popup_action_menu() -> void:
+	_action_menu_popup.reset_size()
+	var button_rect := _action_button.get_global_rect()
+	var popup_position := Vector2i(button_rect.position.x, max(24.0, button_rect.position.y - float(ACTION_POPUP_SIZE.y) - 12.0))
+	_action_menu_popup.popup(Rect2i(popup_position, ACTION_POPUP_SIZE))
 
 
 func _format_action_row(spec: Variant) -> String:
@@ -393,13 +448,32 @@ func _handle_action_selected(spec: Variant) -> void:
 	if not str(spec.disabled_reason).is_empty():
 		return
 	if spec.id == "visit":
-		_pending_target_action_id = spec.id
-		_refresh_target_picker()
-		_target_picker_dialog.popup_centered_ratio(0.5)
+		_open_character_selector("visit")
 		return
 	var result = _game_root().call("execute_phase2_action", spec.id, "")
 	_show_action_result(result)
 	show_success_state(_game_root().current_session)
+	_refresh_action_menu()
+
+
+func _open_character_selector(context_id: String) -> void:
+	var rows: Array = _game_root().call("get_character_selector_rows", context_id)
+	var heading := "选择拜访目标" if context_id == "visit" else "选择关系对象"
+	var hint := "点击表头可排序；确认后才执行后续动作。"
+	_character_selector_dialog.configure(context_id, rows, heading, hint)
+	_character_selector_dialog.reset_size()
+	_character_selector_dialog.popup_centered(Vector2i(880, 420))
+
+
+func _on_character_selector_row_chosen(character_id: String, context_id: String) -> void:
+	if context_id == "visit":
+		var result = _game_root().call("execute_phase2_action", "visit", character_id)
+		_show_action_result(result)
+		show_success_state(_game_root().current_session)
+		_refresh_action_menu()
+		return
+	var view_data = _game_root().call("get_character_profile_view_data", character_id)
+	_character_profile_panel.show_profile(view_data)
 
 
 func _refresh_target_picker() -> void:
@@ -435,16 +509,7 @@ func _format_target_row(target: CharacterDefinition, relations: Array) -> String
 
 
 func _on_target_picker_confirmed() -> void:
-	var selected_target_id := ""
-	for child in _target_list.get_children():
-		if child is Button and child.button_pressed:
-			selected_target_id = str(child.get_meta("target_id", ""))
-			break
-	if selected_target_id.is_empty():
-		return
-	var result = _game_root().call("execute_phase2_action", _pending_target_action_id, selected_target_id)
-	_show_action_result(result)
-	show_success_state(_game_root().current_session)
+	return
 
 
 func _refresh_relation_popup() -> void:
@@ -508,7 +573,8 @@ func _show_action_result(result: Variant) -> void:
 
 
 func _on_end_turn_button_pressed() -> void:
-	_end_xun_dialog.popup_centered_ratio(0.35)
+	_end_xun_dialog.reset_size()
+	_end_xun_dialog.popup_centered(END_XUN_DIALOG_SIZE)
 
 
 func _on_end_xun_confirmed() -> void:
