@@ -47,12 +47,15 @@ Plans:
   2. Each action clearly shows cost, target type, and expected effect, and both successful and failed actions produce visible consequences instead of silent rejection.
   3. Visit, train, study, inspect, and rest create readable changes to character stats, status, or relationships, and those changes are surfaced through result dialogs and summaries.
   4. Player can inspect character and relationship context from the main flow, finish at least three stable xun transitions, and receive a xun-end summary that explains what changed.
-**Plans**: 4 plans
+**Plans**: 7 plans
 Plans:
 - [x] 02-01-PLAN.md — 建立 Phase 2 行动 / 关系 / 旬总结运行时契约与 session 存储
 - [x] 02-02-PLAN.md — 实现五个基础行动目录、结算规则与 GameRoot 接口
 - [x] 02-03-PLAN.md — 在 MainHUD 内接通行动浮层、目标弹窗、结果反馈与关系页
 - [x] 02-04-PLAN.md — 实现结束本旬、旬末总结与三次稳定推进回归
+- [ ] 02-05-PLAN.md — 修复配置化行动可见性并补通用角色选择/详情后端契约
+- [ ] 02-06-PLAN.md — 重建上浮五行动菜单并把拜访/关系接到通用排序选择器
+- [ ] 02-07-PLAN.md — 修复结束本旬确认框首开尺寸与按钮可见性回归
 **Canonical refs**: `design/系统设计/核心系统详细设计 v1.md` §§2-3; `design/原型与实现/Godot 原型开发拆解 v1.md` §§3-6; `design/原型与实现/原型任务拆解清单 v1.md` T06-T08; `design/UIUX/原型 UI 流程图 v1.md` §§4-7, 11-13
 **UI hint**: yes
 
@@ -102,7 +105,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. 190样本数据骨架与单角色入口 | 4/4 | Complete | 01-190-01, 01-190-02, 01-190-03, 01-190-04 |
-| 2. 旬内行动—关系闭环 | 4/4 | Complete | 02-01, 02-02, 02-03, 02-04 |
+| 2. 旬内行动—关系闭环 | 4/7 | Gap closure planned | 02-01, 02-02, 02-03, 02-04 |
 | 3. 仕途、势力与可解释政治 | 0/TBD | Not started | - |
 | 4. 家族门阀、婚姻与历史分歧 | 0/TBD | Not started | - |
 | 5. 持久验证与战争接入口 | 0/TBD | Not started | - |
