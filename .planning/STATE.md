@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-04-06T00:31:14.526Z"
+status: executing
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-04-06T00:41:24.072Z"
 last_activity: 2026-04-06
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 9
-  completed_plans: 6
-  percent: 67
+  completed_plans: 7
+  percent: 78
 ---
 
 # Project State
@@ -26,34 +26,35 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 2 of 5 (旬内行动—关系闭环)
-Plan: 1 of 4 in current phase
-Status: In progress — 02-01 complete
-Last activity: 2026-04-06 - Completed 02-01 runtime contracts and session storage
+Plan: 2 of 4 in current phase
+Status: In progress — 02-02 complete
+Last activity: 2026-04-06 - Completed 02-02 action catalog and resolver backend
 
-Progress: [███████░░░] 67% overall
+Progress: [████████░░] 78% overall
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 5
-- Average duration: 6.4 min
-- Total execution time: 0.5 hours
+- Total plans completed: 6
+- Average duration: 6.6 min
+- Total execution time: 0.6 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-190 | 4 | 1754s | 438.5s |
-| 02-旬内行动—关系闭环 | 1 | 167s | 167s |
+| 02-旬内行动—关系闭环 | 2 | 640s | 320s |
 
 **Recent Trend:**
 
-- Last 5 plans: 01-190-02 (455s), 01-190-03 (455s), 01-190-04 (455s), 01-190 P05 (240s), 02-01 (167s)
-- Trend: Faster recent plan execution
+- Last 5 plans: 01-190-03 (455s), 01-190-04 (455s), 01-190 P05 (240s), 02-01 (167s), 02-02 (473s)
+- Trend: Stable with Phase 2 backend complexity increase
 
 | Phase 01-190 P05 | 240 | 2 tasks | 3 files |
 | Phase 02-旬内行动—关系闭环 P01 | 167 | 2 tasks | 6 files |
+| Phase 02-旬内行动—关系闭环 P02 | 473 | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,8 @@ Recent decisions affecting current work:
 - [Phase 01-190]: Merged the duplicated-time UAT reports into one headless cold-start regression that asserts the full top bar.
 - [Phase 02-旬内行动—关系闭环]: Phase 2 shared contracts are explicit typed RefCounted DTOs instead of dictionary conventions.
 - [Phase 02-旬内行动—关系闭环]: Directional relation seeds live in GameSession bootstrap runtime state, not static definition JSON.
+- [Phase 02-旬内行动—关系闭环]: Phase 2 action availability is split into a static catalog plus GameRoot-target-aware filtering instead of embedding UI rules in MainHUD.
+- [Phase 02-旬内行动—关系闭环]: Deterministic settlement flows through a dedicated resolver and appends structured ActionResolution objects into session history for later xun summaries.
 
 ### Pending Todos
 
@@ -94,6 +97,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T00:31:14.523Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-04-06T00:41:24.069Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None

@@ -9,7 +9,7 @@
 
 - [x] **CORE-01**: Player can start a 190 scenario sample and enter the main gameplay screen as a single historical character.
 - [x] **CORE-02**: Player can view the current year, month, xun, city, identity, faction, office, AP, energy, stress, fame, and merit from the main HUD.
-- [ ] **CORE-03**: Player can spend a xun by selecting multiple actions until AP or action availability is exhausted.
+- [x] **CORE-03**: Player can spend a xun by selecting multiple actions until AP or action availability is exhausted.
 - [ ] **CORE-04**: Player can end the current xun and advance time through at least three stable xun transitions.
 - [ ] **CORE-05**: Player receives a xun-end summary that explains the major state and relationship changes caused by that xun.
 
@@ -31,15 +31,15 @@
 
 - [ ] **ACTN-01**: Player can open an action menu grouped by categories such as growth, relationships, governance, military, and family.
 - [ ] **ACTN-02**: Action list shows action name, category, AP cost, energy impact, target type, and expected effect summary.
-- [ ] **ACTN-03**: Game supports at least five foundational actions for the prototype sample: visit, train, study, inspect, and rest.
+- [x] **ACTN-03**: Game supports at least five foundational actions for the prototype sample: visit, train, study, inspect, and rest.
 - [x] **ACTN-04**: Action execution checks identity, conditions, resources, and target validity before applying results.
-- [ ] **ACTN-05**: Failed actions still produce limited feedback such as partial progress, relationship movement, pressure change, or new information.
+- [x] **ACTN-05**: Failed actions still produce limited feedback such as partial progress, relationship movement, pressure change, or new information.
 
 ### Relationships
 
 - [x] **RELA-01**: Game stores directional relationship values between characters including favor, trust, respect, vigilance, and obligation.
 - [ ] **RELA-02**: Player can view a relationship screen listing key characters, relationship tags, major values, faction, and available interactions.
-- [ ] **RELA-03**: Visit-style interactions can change relationship values in ways visible to the player.
+- [x] **RELA-03**: Visit-style interactions can change relationship values in ways visible to the player.
 - [ ] **RELA-04**: Relationship values influence later gameplay outcomes such as action success, recommendation chance, task opportunities, or appointment results.
 
 ### Career
@@ -142,7 +142,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | CORE-01 | Phase 1 | Complete |
 | CORE-02 | Phase 1 | Complete |
-| CORE-03 | Phase 2 | Pending |
+| CORE-03 | Phase 2 | Complete |
 | CORE-04 | Phase 2 | Pending |
 | CORE-05 | Phase 2 | Pending |
 | DATA-01 | Phase 1 | Complete |
@@ -155,12 +155,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CHAR-04 | Phase 1 | Complete |
 | ACTN-01 | Phase 2 | Pending |
 | ACTN-02 | Phase 2 | Pending |
-| ACTN-03 | Phase 2 | Pending |
+| ACTN-03 | Phase 2 | Complete |
 | ACTN-04 | Phase 2 | Complete |
-| ACTN-05 | Phase 2 | Pending |
+| ACTN-05 | Phase 2 | Complete |
 | RELA-01 | Phase 2 | Complete |
 | RELA-02 | Phase 2 | Pending |
-| RELA-03 | Phase 2 | Pending |
+| RELA-03 | Phase 2 | Complete |
 | RELA-04 | Phase 3 | Pending |
 | CARE-01 | Phase 3 | Pending |
 | CARE-02 | Phase 3 | Pending |
