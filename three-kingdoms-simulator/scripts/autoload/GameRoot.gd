@@ -3,11 +3,13 @@ extends Node
 const DEFAULT_SCENARIO_ID := "scenario_190_smoke"
 const DEFAULT_PROTAGONIST_ID := "cao_cao"
 const PHASE2_ACTION_CATALOG_SCRIPT := preload("res://scripts/systems/Phase2ActionCatalog.gd")
+const PHASE2_ACTION_RESOLVER_SCRIPT := preload("res://scripts/systems/Phase2ActionResolver.gd")
 
 var current_session: GameSession
 var last_boot_error: String = ""
 var _hud: MainHUD
 var _phase2_action_catalog: Variant = PHASE2_ACTION_CATALOG_SCRIPT.new()
+var _phase2_action_resolver: Variant = PHASE2_ACTION_RESOLVER_SCRIPT.new()
 var _latest_action_resolution: Variant = null
 
 
@@ -64,6 +66,22 @@ func get_relation_overview() -> Array:
 		if relation != null:
 			relations.append(relation)
 	return relations
+
+
+func execute_phase2_action(action_id: String, target_character_id: String = "") -> Variant:
+	if current_session == null:
+		return null
+	var protagonist := _data_repository().call("get_character", current_session.protagonist_id) as CharacterDefinition
+	var target_character: Variant = null
+	if not target_character_id.is_empty():
+		target_character = _data_repository().call("get_character", target_character_id) as CharacterDefinition
+	_latest_action_resolution = _phase2_action_resolver.execute(action_id, current_session, protagonist, target_character)
+	current_session.append_action_resolution(_latest_action_resolution)
+	return _latest_action_resolution
+
+
+func get_latest_action_resolution() -> Variant:
+	return _latest_action_resolution
 
 
 func _get_visit_targets(protagonist: CharacterDefinition, runtime_state: RuntimeCharacterState) -> Array[CharacterDefinition]:

@@ -12,6 +12,9 @@ var honor: int = 0
 var infamy: int = 0
 var current_city_id: String = ""
 var flags: Array[String] = []
+var martial_exp: int = 0
+var strategy_exp: int = 0
+var governance_exp: int = 0
 
 
 static func from_definition(character_id_value: String, city_id: String, status_values: Dictionary, reputation_values: Dictionary) -> RuntimeCharacterState:
@@ -26,4 +29,7 @@ static func from_definition(character_id_value: String, city_id: String, status_
 	state.honor = int(reputation_values.get("honor", 0))
 	state.infamy = int(reputation_values.get("infamy", 0))
 	state.current_city_id = city_id
+	state.martial_exp = 0
+	state.strategy_exp = 0
+	state.governance_exp = 0
 	return state
