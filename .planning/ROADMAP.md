@@ -47,7 +47,12 @@ Plans:
   2. Each action clearly shows cost, target type, and expected effect, and both successful and failed actions produce visible consequences instead of silent rejection.
   3. Visit, train, study, inspect, and rest create readable changes to character stats, status, or relationships, and those changes are surfaced through result dialogs and summaries.
   4. Player can inspect character and relationship context from the main flow, finish at least three stable xun transitions, and receive a xun-end summary that explains what changed.
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 02-01-PLAN.md — 建立 Phase 2 行动 / 关系 / 旬总结运行时契约与 session 存储
+- [ ] 02-02-PLAN.md — 实现五个基础行动目录、结算规则与 GameRoot 接口
+- [ ] 02-03-PLAN.md — 在 MainHUD 内接通行动浮层、目标弹窗、结果反馈与关系页
+- [ ] 02-04-PLAN.md — 实现结束本旬、旬末总结与三次稳定推进回归
 **Canonical refs**: `design/系统设计/核心系统详细设计 v1.md` §§2-3; `design/原型与实现/Godot 原型开发拆解 v1.md` §§3-6; `design/原型与实现/原型任务拆解清单 v1.md` T06-T08; `design/UIUX/原型 UI 流程图 v1.md` §§4-7, 11-13
 **UI hint**: yes
 
