@@ -5,6 +5,8 @@ const DEFAULT_PROTAGONIST_ID := "cao_cao"
 const PHASE2_ACTION_CATALOG_SCRIPT := preload("res://scripts/systems/Phase2ActionCatalog.gd")
 const PHASE2_ACTION_RESOLVER_SCRIPT := preload("res://scripts/systems/Phase2ActionResolver.gd")
 const XUN_SUMMARY_DATA_SCRIPT := preload("res://scripts/runtime/XunSummaryData.gd")
+const CHARACTER_SELECTOR_ROW_SCRIPT := preload("res://scripts/runtime/CharacterSelectorRow.gd")
+const CHARACTER_PROFILE_VIEW_DATA_SCRIPT := preload("res://scripts/runtime/CharacterProfileViewData.gd")
 
 var current_session: GameSession
 var last_boot_error: String = ""
@@ -69,6 +71,74 @@ func get_relation_overview() -> Array:
 	return relations
 
 
+func get_character_selector_rows(context_id: String) -> Array:
+	var rows: Array = []
+	if current_session == null:
+		return rows
+	var protagonist := _data_repository().call("get_character", current_session.protagonist_id) as CharacterDefinition
+	var runtime_state := current_session.get_character_state(current_session.protagonist_id)
+	for character in _get_selector_characters():
+		if character == null:
+			continue
+		if protagonist != null and character.id == protagonist.id:
+			continue
+		var relation = current_session.get_relation_state("%s->%s" % [current_session.protagonist_id, character.id])
+		var faction = _data_repository().call("get_faction", character.faction_id)
+		var city = _data_repository().call("get_city", character.city_id)
+		var disabled_reason := ""
+		var interaction_status := "可查看"
+		var selectable := true
+		if context_id == "visit":
+			if runtime_state == null or character.city_id != runtime_state.current_city_id:
+				disabled_reason = "当前不在同地"
+				interaction_status = "不可拜访"
+				selectable = false
+			else:
+				interaction_status = "可拜访"
+		rows.append(CHARACTER_SELECTOR_ROW_SCRIPT.create(
+			character.id,
+			character.name,
+			str(faction.name if faction != null else "—"),
+			str(city.name if city != null else "—"),
+			int(relation.favor if relation != null else 0),
+			int(relation.trust if relation != null else 0),
+			int(relation.respect if relation != null else 0),
+			int(relation.vigilance if relation != null else 0),
+			interaction_status,
+			selectable,
+			disabled_reason
+		))
+	return rows
+
+
+func get_character_profile_view_data(character_id: String) -> Variant:
+	if current_session == null:
+		return null
+	var character := _data_repository().call("get_character", character_id) as CharacterDefinition
+	if character == null:
+		return null
+	var relation = current_session.get_relation_state("%s->%s" % [current_session.protagonist_id, character.id])
+	var faction = _data_repository().call("get_faction", character.faction_id)
+	var city = _data_repository().call("get_city", character.city_id)
+	var notes: Array[String] = []
+	notes.append("当前所在地：%s" % str(city.name if city != null else "未知"))
+	notes.append("与主角关系可直接用于拜访、观察与后续政治判断。")
+	return CHARACTER_PROFILE_VIEW_DATA_SCRIPT.create(
+		character.id,
+		character.name,
+		_localized_identity(character.identity_type),
+		str(faction.name if faction != null else "—"),
+		str(city.name if city != null else "—"),
+		_localized_office(character.office_id),
+		int(relation.favor if relation != null else 0),
+		int(relation.trust if relation != null else 0),
+		int(relation.respect if relation != null else 0),
+		int(relation.vigilance if relation != null else 0),
+		int(relation.obligation if relation != null else 0),
+		notes
+	)
+
+
 func execute_phase2_action(action_id: String, target_character_id: String = "") -> Variant:
 	if current_session == null:
 		return null
@@ -88,8 +158,8 @@ func get_latest_action_resolution() -> Variant:
 func end_current_xun() -> Variant:
 	if current_session == null:
 		return null
-	var finishing_label := _time_manager().call("get_xun_label", current_session.current_year, current_session.current_month, current_session.current_xun)
-	var summary := _build_xun_summary(finishing_label)
+	var finishing_label: String = str(_time_manager().call("get_xun_label", current_session.current_year, current_session.current_month, current_session.current_xun))
+	var summary: Variant = _build_xun_summary(finishing_label)
 	current_session.latest_xun_summary = summary
 	_reset_protagonist_ap()
 	current_session.clear_xun_action_history()
@@ -117,6 +187,50 @@ func _get_visit_targets(protagonist: CharacterDefinition, runtime_state: Runtime
 			continue
 		targets.append(character)
 	return targets
+
+
+func _get_selector_characters() -> Array:
+	var characters: Array = []
+	if current_session == null:
+		return characters
+	var scenario = _data_repository().call("get_scenario", current_session.scenario_id)
+	if scenario == null:
+		return characters
+	for character_id in scenario.character_ids:
+		var character = _data_repository().call("get_character", str(character_id))
+		if character != null:
+			characters.append(character)
+	return characters
+
+
+func _localized_identity(value: String) -> String:
+	match value:
+		"ruler":
+			return "君主"
+		"civil_official":
+			return "文官"
+		"military_officer":
+			return "武官"
+		"free_agent":
+			return "游士"
+		_:
+			return value if not value.is_empty() else "—"
+
+
+func _localized_office(value: String) -> String:
+	match value:
+		"lord":
+			return "领主"
+		"chief_advisor":
+			return "首席谋臣"
+		"frontline_commander":
+			return "前线统兵"
+		"hegemon_claimant":
+			return "盟主争衡者"
+		"":
+			return "无官职"
+		_:
+			return value
 
 
 func _build_xun_summary(finishing_label: String) -> Variant:

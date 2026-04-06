@@ -18,6 +18,7 @@ func _init() -> void:
 func _run() -> void:
 	_test_catalog_metadata_for_cao_cao()
 	_test_hidden_and_disabled_rules()
+	_test_character_selector_and_profile_apis()
 	_test_action_resolution_behaviors()
 	quit()
 
@@ -39,6 +40,7 @@ func _test_catalog_metadata_for_cao_cao() -> void:
 	var actions: Array = game_root.get_available_phase2_actions()
 	if actions.size() != EXPECTED_ACTIONS.size():
 		_fail("Expected %d visible actions for Cao Cao but found %d." % [EXPECTED_ACTIONS.size(), actions.size()])
+	_assert_equal(_action_ids(actions), ["train", "study", "rest", "visit", "inspect"], "menu order")
 
 	for action_id in EXPECTED_ACTIONS.keys():
 		var spec = _find_action(actions, action_id)
@@ -60,8 +62,10 @@ func _test_hidden_and_disabled_rules() -> void:
 
 	game_root.current_session = repository.bootstrap_session(game_root.DEFAULT_SCENARIO_ID, "xun_yu")
 	var xun_yu_actions: Array = game_root.get_available_phase2_actions()
-	if _find_action(xun_yu_actions, "inspect") != null:
-		_fail("Inspect should be hidden for characters lacking inspect/lead permission.")
+	var xun_yu_inspect = _find_action(xun_yu_actions, "inspect")
+	if xun_yu_inspect == null:
+		_fail("Inspect should stay visible for characters lacking the required identity.")
+	_assert_equal(xun_yu_inspect.disabled_reason, "当前身份不可执行", "inspect identity disabled reason")
 
 	game_root.current_session = repository.bootstrap_session(game_root.DEFAULT_SCENARIO_ID, "le_jin")
 	var le_jin_actions: Array = game_root.get_available_phase2_actions()
@@ -88,8 +92,9 @@ func _test_hidden_and_disabled_rules() -> void:
 	game_root.current_session = repository.bootstrap_session(game_root.DEFAULT_SCENARIO_ID, "xun_yu")
 	xun_yu_actions = game_root.get_available_phase2_actions()
 	var inspect_visible: Variant = _find_action(xun_yu_actions, "inspect")
-	if inspect_visible != null:
-		_fail("Inspect should still be hidden for xun_yu.")
+	if inspect_visible == null:
+		_fail("Inspect should stay visible for xun_yu.")
+	_assert_equal(inspect_visible.disabled_reason, "当前身份不可执行", "inspect identity reason remains visible")
 
 	game_root.current_session = repository.bootstrap_session(game_root.DEFAULT_SCENARIO_ID, "cao_cao")
 	var protagonist: RuntimeCharacterState = game_root.current_session.get_character_state("cao_cao")
@@ -99,6 +104,44 @@ func _test_hidden_and_disabled_rules() -> void:
 	if inspect_spec == null:
 		_fail("Inspect should remain visible for Cao Cao when blocked by location.")
 	_assert_equal(inspect_spec.disabled_reason, "当前地点不可执行", "inspect location disabled reason")
+
+
+func _test_character_selector_and_profile_apis() -> void:
+	var game_root: Node = _game_root()
+	var repository: Node = _data_repository()
+	game_root.current_session = repository.bootstrap_session(game_root.DEFAULT_SCENARIO_ID, "cao_cao")
+
+	if not game_root.has_method("get_character_selector_rows"):
+		_fail("GameRoot is missing get_character_selector_rows().")
+	if not game_root.has_method("get_character_profile_view_data"):
+		_fail("GameRoot is missing get_character_profile_view_data().")
+
+	var visit_rows: Array = game_root.get_character_selector_rows("visit")
+	var relation_rows: Array = game_root.get_character_selector_rows("relation")
+	if visit_rows.is_empty() or relation_rows.is_empty():
+		_fail("Character selector rows should be available for visit and relation contexts.")
+	if _find_row(visit_rows, "cao_cao") != null or _find_row(relation_rows, "cao_cao") != null:
+		_fail("Selector rows must not include the protagonist.")
+
+	var chen_gong_row = _find_row(visit_rows, "chen_gong")
+	if chen_gong_row == null:
+		_fail("Visit selector should include Chen Gong.")
+	_assert_equal(chen_gong_row.selectable, true, "chen_gong visit selectable")
+	_assert_equal(chen_gong_row.faction_name, "中立地方势力", "chen_gong faction name")
+	_assert_equal(chen_gong_row.city_name, "陈留", "chen_gong city name")
+
+	var chen_gong_profile = game_root.get_character_profile_view_data("chen_gong")
+	if chen_gong_profile == null:
+		_fail("Character profile view data should exist for chen_gong.")
+	_assert_equal(chen_gong_profile.identity_label, "游士", "chen_gong identity label")
+	_assert_equal(chen_gong_profile.faction_label, "中立地方势力", "chen_gong faction label")
+	_assert_equal(chen_gong_profile.city_label, "陈留", "chen_gong city label")
+	_assert_equal(chen_gong_profile.office_label, "无官职", "chen_gong office label")
+	_assert_equal(chen_gong_profile.favor, 44, "chen_gong favor")
+	_assert_equal(chen_gong_profile.trust, 30, "chen_gong trust")
+	_assert_equal(chen_gong_profile.respect, 53, "chen_gong respect")
+	_assert_equal(chen_gong_profile.vigilance, 18, "chen_gong vigilance")
+	_assert_equal(chen_gong_profile.obligation, 14, "chen_gong obligation")
 
 
 func _test_action_resolution_behaviors() -> void:
@@ -170,6 +213,20 @@ func _find_action(actions: Array, action_id: String):
 		if action.id == action_id:
 			return action
 	return null
+
+
+func _find_row(rows: Array, character_id: String):
+	for row in rows:
+		if row.character_id == character_id:
+			return row
+	return null
+
+
+func _action_ids(actions: Array) -> Array:
+	var ids: Array = []
+	for action in actions:
+		ids.append(str(action.id))
+	return ids
 
 
 func _assert_equal(actual: Variant, expected: Variant, label: String) -> void:

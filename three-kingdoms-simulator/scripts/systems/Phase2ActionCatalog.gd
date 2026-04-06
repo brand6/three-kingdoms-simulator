@@ -2,6 +2,7 @@ extends RefCounted
 class_name Phase2ActionCatalog
 
 const PHASE2_ACTION_SPEC_SCRIPT := preload("res://scripts/runtime/Phase2ActionSpec.gd")
+const PHASE2_ACTION_MENU_CONFIG := preload("res://data/config/phase2_action_menu_config.tres")
 
 const CATEGORY_GROWTH := "成长"
 const CATEGORY_RELATION := "关系"
@@ -13,6 +14,7 @@ const REASON_NO_AP := "AP 不足"
 const REASON_NO_ENERGY := "精力不足"
 const REASON_WRONG_LOCATION := "当前地点不可执行"
 const REASON_NO_VISIT_TARGET := "暂无可拜访对象"
+const REASON_IDENTITY_LOCKED := "当前身份不可执行"
 
 const CATEGORIES := [
 	CATEGORY_GROWTH,
@@ -33,9 +35,12 @@ func get_available_actions(
 	visit_targets: Array[CharacterDefinition]
 ) -> Array:
 	var actions: Array = []
-	for base_spec in _build_base_specs():
-		if _is_permission_locked(base_spec, protagonist):
+	var base_specs := _build_base_specs_by_id()
+	for rule in _get_menu_rules():
+		var action_id := str(rule.get("action_id", ""))
+		if not base_specs.has(action_id):
 			continue
+		var base_spec = base_specs[action_id]
 		var spec = PHASE2_ACTION_SPEC_SCRIPT.create(
 			base_spec.id,
 			base_spec.display_name,
@@ -46,40 +51,47 @@ func get_available_actions(
 			base_spec.effect_summary,
 			base_spec.required_permission_tags,
 			"",
-			base_spec.hidden_when_locked
+			false
 		)
-		spec.disabled_reason = _get_disabled_reason(spec, protagonist, runtime_state, visit_targets)
+		spec.disabled_reason = _get_disabled_reason(spec, protagonist, runtime_state, visit_targets, rule)
 		actions.append(spec)
 	return actions
 
 
-func _build_base_specs() -> Array:
-	var specs: Array = []
-	specs.append(PHASE2_ACTION_SPEC_SCRIPT.create("train", "训练", CATEGORY_GROWTH, 1, -10, "none", "效果: 武艺历练 +6，压力 +3，功绩 +1"))
-	specs.append(PHASE2_ACTION_SPEC_SCRIPT.create("study", "读书", CATEGORY_GROWTH, 1, -8, "none", "效果: 智略历练 +6，压力 +2，名望 +1"))
-	specs.append(PHASE2_ACTION_SPEC_SCRIPT.create("rest", "休整", CATEGORY_GROWTH, 1, 20, "none", "效果: 精力 +20，压力 -12"))
-	specs.append(PHASE2_ACTION_SPEC_SCRIPT.create("visit", "拜访", CATEGORY_RELATION, 1, -8, "character", "效果: 好感 +10，信任 +6，敬重 +2，戒备 -4"))
-	specs.append(PHASE2_ACTION_SPEC_SCRIPT.create("inspect", "巡察", CATEGORY_GOVERNANCE, 1, -10, "none", "效果: 功绩 +5，政务历练 +4，压力 +4", ["inspect", "lead"], "", true))
+func _build_base_specs_by_id() -> Dictionary:
+	var specs := {}
+	specs["train"] = PHASE2_ACTION_SPEC_SCRIPT.create("train", "训练", CATEGORY_GROWTH, 1, -10, "none", "效果: 武艺历练 +6，压力 +3，功绩 +1")
+	specs["study"] = PHASE2_ACTION_SPEC_SCRIPT.create("study", "读书", CATEGORY_GROWTH, 1, -8, "none", "效果: 智略历练 +6，压力 +2，名望 +1")
+	specs["rest"] = PHASE2_ACTION_SPEC_SCRIPT.create("rest", "休整", CATEGORY_GROWTH, 1, 20, "none", "效果: 精力 +20，压力 -12")
+	specs["visit"] = PHASE2_ACTION_SPEC_SCRIPT.create("visit", "拜访", CATEGORY_RELATION, 1, -8, "character", "效果: 好感 +10，信任 +6，敬重 +2，戒备 -4")
+	specs["inspect"] = PHASE2_ACTION_SPEC_SCRIPT.create("inspect", "巡察", CATEGORY_GOVERNANCE, 1, -10, "none", "效果: 功绩 +5，政务历练 +4，压力 +4")
 	return specs
 
 
-func _is_permission_locked(spec: Variant, protagonist: CharacterDefinition) -> bool:
+func _get_menu_rules() -> Array:
+	if PHASE2_ACTION_MENU_CONFIG != null and PHASE2_ACTION_MENU_CONFIG.has_method("get_sorted_rules"):
+		return PHASE2_ACTION_MENU_CONFIG.get_sorted_rules()
+	return []
+
+
+func _is_identity_locked(rule: Dictionary, protagonist: CharacterDefinition) -> bool:
 	if protagonist == null:
-		return spec.hidden_when_locked
-	if spec.required_permission_tags.is_empty():
+		return true
+	var allowed_identities: PackedStringArray = PackedStringArray(rule.get("allowed_identity_types", PackedStringArray()))
+	if allowed_identities.is_empty():
 		return false
-	for tag in spec.required_permission_tags:
-		if protagonist.permission_tags.has(tag):
-			return false
-	return spec.hidden_when_locked
+	return not allowed_identities.has(protagonist.identity_type)
 
 
 func _get_disabled_reason(
 	spec: Variant,
 	protagonist: CharacterDefinition,
 	runtime_state: RuntimeCharacterState,
-	visit_targets: Array[CharacterDefinition]
+	visit_targets: Array[CharacterDefinition],
+	rule: Dictionary
 ) -> String:
+	if _is_identity_locked(rule, protagonist):
+		return str(rule.get("locked_reason", REASON_IDENTITY_LOCKED))
 	if runtime_state == null:
 		return REASON_NO_AP
 	if runtime_state.ap < spec.ap_cost:
