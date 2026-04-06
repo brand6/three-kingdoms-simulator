@@ -1,5 +1,7 @@
 extends Node
-class_name DataRepository
+
+const RUNTIME_RELATION_STATE_SCRIPT := preload("res://scripts/runtime/RuntimeRelationState.gd")
+const GAME_SESSION_SCRIPT := preload("res://scripts/runtime/GameSession.gd")
 
 const PHASE1_SCENARIO_ID := "scenario_190_smoke"
 
@@ -72,7 +74,7 @@ func bootstrap_session(scenario_id: String, protagonist_id: String) -> GameSessi
 		push_error("Unable to bootstrap session for scenario=%s protagonist=%s" % [scenario_id, protagonist_id])
 		return null
 
-	var session := GameSession.new()
+	var session: GameSession = GAME_SESSION_SCRIPT.new()
 	session.scenario_id = scenario.id
 	session.current_year = scenario.start_year
 	session.current_month = scenario.start_month
@@ -128,7 +130,7 @@ func _seed_phase2_relations(session: GameSession) -> void:
 	]
 
 	for row in seed_rows:
-		var relation_state := RuntimeRelationState.create(
+		var relation_state = RUNTIME_RELATION_STATE_SCRIPT.create(
 			str(row.get("source", "")),
 			str(row.get("target", "")),
 			int(row.get("favor", 0)),
@@ -137,7 +139,7 @@ func _seed_phase2_relations(session: GameSession) -> void:
 			int(row.get("vigilance", 0)),
 			int(row.get("obligation", 0))
 		)
-		session.set_relation_state(_build_relation_key(relation_state.source_character_id, relation_state.target_character_id), relation_state)
+		session.call("set_relation_state", _build_relation_key(relation_state.source_character_id, relation_state.target_character_id), relation_state)
 
 
 func _build_relation_key(source_character_id: String, target_character_id: String) -> String:

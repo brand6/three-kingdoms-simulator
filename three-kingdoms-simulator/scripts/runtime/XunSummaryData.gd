@@ -14,8 +14,8 @@ static func create(
 	stat_totals: Dictionary = {},
 	relation_lines: Array[String] = [],
 	prompts: Array[String] = []
-) -> XunSummaryData:
-	var summary := XunSummaryData.new()
+) -> Variant:
+	var summary := new()
 	summary.xun_label = label
 	summary.action_lines = actions.duplicate()
 	summary.stat_delta_totals = stat_totals.duplicate(true)

@@ -22,8 +22,8 @@ static func create(
 	relations: Dictionary = {},
 	clue: String = "",
 	summary: String = ""
-) -> ActionResolution:
-	var resolution := ActionResolution.new()
+) -> Variant:
+	var resolution := new()
 	resolution.action_id = resolved_action_id
 	resolution.title = resolved_title
 	resolution.success = was_successful

@@ -24,8 +24,8 @@ static func create(
 	permission_tags: Array[String] = [],
 	reason: String = "",
 	hide_when_locked: bool = false
-) -> Phase2ActionSpec:
-	var spec := Phase2ActionSpec.new()
+) -> Variant:
+	var spec := new()
 	spec.id = action_id
 	spec.display_name = action_display_name
 	spec.category_id = category

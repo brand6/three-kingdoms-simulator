@@ -18,8 +18,8 @@ static func create(
 	respect_value: int,
 	vigilance_value: int,
 	obligation_value: int
-) -> RuntimeRelationState:
-	var state := RuntimeRelationState.new()
+) -> Variant:
+	var state := new()
 	state.source_character_id = source_id
 	state.target_character_id = target_id
 	state.favor = favor_value

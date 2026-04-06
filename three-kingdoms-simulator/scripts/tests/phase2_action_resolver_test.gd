@@ -1,5 +1,6 @@
 extends SceneTree
 
+const PHASE2_ACTION_CATALOG_SCRIPT := preload("res://scripts/systems/Phase2ActionCatalog.gd")
 const EXPECTED_CATEGORIES := ["成长", "关系", "政务", "军事", "家族"]
 const EXPECTED_ACTIONS := {
 	"train": {"display_name": "训练", "category_id": "成长", "ap_cost": 1, "energy_delta": -10, "target_type": "none", "effect_summary": "效果: 武艺历练 +6，压力 +3，功绩 +1"},
@@ -27,7 +28,7 @@ func _test_catalog_metadata_for_cao_cao() -> void:
 	if not game_root.has_method("get_available_phase2_actions"):
 		_fail("GameRoot is missing get_available_phase2_actions().")
 
-	var catalog: Node = preload("res://scripts/systems/Phase2ActionCatalog.gd").new()
+	var catalog = PHASE2_ACTION_CATALOG_SCRIPT.new()
 	if not catalog.has_method("get_categories"):
 		_fail("Phase2ActionCatalog is missing get_categories().")
 	var categories: Array = catalog.get_categories()
