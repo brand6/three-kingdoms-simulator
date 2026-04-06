@@ -29,8 +29,8 @@
 
 ### Actions
 
-- [ ] **ACTN-01**: Player can open an action menu grouped by categories such as growth, relationships, governance, military, and family.
-- [ ] **ACTN-02**: Action list shows action name, category, AP cost, energy impact, target type, and expected effect summary.
+- [x] **ACTN-01**: Player can open an action menu grouped by categories such as growth, relationships, governance, military, and family.
+- [x] **ACTN-02**: Action list shows action name, category, AP cost, energy impact, target type, and expected effect summary.
 - [x] **ACTN-03**: Game supports at least five foundational actions for the prototype sample: visit, train, study, inspect, and rest.
 - [x] **ACTN-04**: Action execution checks identity, conditions, resources, and target validity before applying results.
 - [x] **ACTN-05**: Failed actions still produce limited feedback such as partial progress, relationship movement, pressure change, or new information.
@@ -38,7 +38,7 @@
 ### Relationships
 
 - [x] **RELA-01**: Game stores directional relationship values between characters including favor, trust, respect, vigilance, and obligation.
-- [ ] **RELA-02**: Player can view a relationship screen listing key characters, relationship tags, major values, faction, and available interactions.
+- [x] **RELA-02**: Player can view a relationship screen listing key characters, relationship tags, major values, faction, and available interactions.
 - [x] **RELA-03**: Visit-style interactions can change relationship values in ways visible to the player.
 - [ ] **RELA-04**: Relationship values influence later gameplay outcomes such as action success, recommendation chance, task opportunities, or appointment results.
 
@@ -88,10 +88,10 @@
 
 ### UI Feedback
 
-- [ ] **UI-01**: Main gameplay flow can be completed through HUD, action panel, detail panels, result dialogs, and summary panels without requiring map-first exploration.
-- [ ] **UI-02**: Key actions are reachable within three clicks from the main HUD.
+- [x] **UI-01**: Main gameplay flow can be completed through HUD, action panel, detail panels, result dialogs, and summary panels without requiring map-first exploration.
+- [x] **UI-02**: Key actions are reachable within three clicks from the main HUD.
 - [ ] **UI-03**: Event, xun-end, and month-end screens explain the main causes behind important changes or decisions.
-- [ ] **UI-04**: Player can inspect character, relationship, faction, and family or clan context needed to plan the next xun.
+- [x] **UI-04**: Player can inspect character, relationship, faction, and family or clan context needed to plan the next xun.
 
 ### Persistence And Debug
 
@@ -153,13 +153,13 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CHAR-02 | Phase 1 | Complete |
 | CHAR-03 | Phase 2 | Complete |
 | CHAR-04 | Phase 1 | Complete |
-| ACTN-01 | Phase 2 | Pending |
-| ACTN-02 | Phase 2 | Pending |
+| ACTN-01 | Phase 2 | Complete |
+| ACTN-02 | Phase 2 | Complete |
 | ACTN-03 | Phase 2 | Complete |
 | ACTN-04 | Phase 2 | Complete |
 | ACTN-05 | Phase 2 | Complete |
 | RELA-01 | Phase 2 | Complete |
-| RELA-02 | Phase 2 | Pending |
+| RELA-02 | Phase 2 | Complete |
 | RELA-03 | Phase 2 | Complete |
 | RELA-04 | Phase 3 | Pending |
 | CARE-01 | Phase 3 | Pending |
@@ -185,10 +185,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EVNT-04 | Phase 4 | Pending |
 | WAR-01 | Phase 5 | Pending |
 | WAR-02 | Phase 5 | Pending |
-| UI-01 | Phase 2 | Pending |
-| UI-02 | Phase 2 | Pending |
+| UI-01 | Phase 2 | Complete |
+| UI-02 | Phase 2 | Complete |
 | UI-03 | Phase 4 | Pending |
-| UI-04 | Phase 2 | Pending |
+| UI-04 | Phase 2 | Complete |
 | PERS-01 | Phase 5 | Pending |
 | PERS-02 | Phase 5 | Pending |
 | PERS-03 | Phase 5 | Pending |

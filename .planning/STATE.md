@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-02-PLAN.md
-last_updated: "2026-04-06T00:41:24.072Z"
+stopped_at: Completed 02-03-PLAN.md
+last_updated: "2026-04-06T00:46:13.946Z"
 last_activity: 2026-04-06
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 9
-  completed_plans: 7
-  percent: 78
+  completed_plans: 8
+  percent: 89
 ---
 
 # Project State
@@ -26,35 +26,36 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 2 of 5 (旬内行动—关系闭环)
-Plan: 2 of 4 in current phase
-Status: In progress — 02-02 complete
-Last activity: 2026-04-06 - Completed 02-02 action catalog and resolver backend
+Plan: 3 of 4 in current phase
+Status: In progress — 02-03 complete
+Last activity: 2026-04-06 - Completed 02-03 HUD action and relation UI wiring
 
-Progress: [████████░░] 78% overall
+Progress: [█████████░] 89% overall
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 6
-- Average duration: 6.6 min
-- Total execution time: 0.6 hours
+- Total plans completed: 7
+- Average duration: 6.2 min
+- Total execution time: 0.7 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-190 | 4 | 1754s | 438.5s |
-| 02-旬内行动—关系闭环 | 2 | 640s | 320s |
+| 02-旬内行动—关系闭环 | 3 | 940s | 313.3s |
 
 **Recent Trend:**
 
-- Last 5 plans: 01-190-03 (455s), 01-190-04 (455s), 01-190 P05 (240s), 02-01 (167s), 02-02 (473s)
-- Trend: Stable with Phase 2 backend complexity increase
+- Last 5 plans: 01-190-04 (455s), 01-190 P05 (240s), 02-01 (167s), 02-02 (473s), 02-03 (300s)
+- Trend: Stable across backend and UI phase work
 
 | Phase 01-190 P05 | 240 | 2 tasks | 3 files |
 | Phase 02-旬内行动—关系闭环 P01 | 167 | 2 tasks | 6 files |
 | Phase 02-旬内行动—关系闭环 P02 | 473 | 2 tasks | 10 files |
+| Phase 02-旬内行动—关系闭环 P03 | 300 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -79,6 +80,8 @@ Recent decisions affecting current work:
 - [Phase 02-旬内行动—关系闭环]: Directional relation seeds live in GameSession bootstrap runtime state, not static definition JSON.
 - [Phase 02-旬内行动—关系闭环]: Phase 2 action availability is split into a static catalog plus GameRoot-target-aware filtering instead of embedding UI rules in MainHUD.
 - [Phase 02-旬内行动—关系闭环]: Deterministic settlement flows through a dedicated resolver and appends structured ActionResolution objects into session history for later xun summaries.
+- [Phase 02-旬内行动—关系闭环]: Phase 2 HUD interaction stays fully inside MainScene using PopupPanel and dialog overlays instead of scene changes.
+- [Phase 02-旬内行动—关系闭环]: MainHUD renders action and relation details directly from GameRoot APIs, keeping UI state derived from runtime data rather than duplicated local models.
 
 ### Pending Todos
 
@@ -97,6 +100,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T00:41:24.069Z
-Stopped at: Completed 02-02-PLAN.md
+Last session: 2026-04-06T00:46:13.942Z
+Stopped at: Completed 02-03-PLAN.md
 Resume file: None
