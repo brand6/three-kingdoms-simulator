@@ -393,12 +393,11 @@ func _handle_action_selected(spec: Variant) -> void:
 
 func _refresh_target_picker() -> void:
 	_clear_children(_target_list)
-	var relations := _game_root().call("get_relation_overview")
-	var protagonist_id := _game_root().current_session.protagonist_id if _game_root().current_session != null else ""
-	for action in _game_root().call("get_available_phase2_actions"):
-		if action.id != "visit":
-			continue
-	var protagonist_state := _game_root().current_session.get_character_state(protagonist_id)
+	var relations: Array = _game_root().call("get_relation_overview")
+	var protagonist_id: String = _game_root().current_session.protagonist_id if _game_root().current_session != null else ""
+	var protagonist_state: RuntimeCharacterState = _game_root().current_session.get_character_state(protagonist_id)
+	if protagonist_state == null:
+		return
 	var targets: Array = _data_repository().call("get_characters_in_city", protagonist_state.current_city_id)
 	for target in targets:
 		if target.id == protagonist_id:
