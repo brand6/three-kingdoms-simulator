@@ -9,6 +9,9 @@ var current_month: int = 0
 var current_xun: int = 0
 var protagonist_id: String = ""
 var character_states: Dictionary = {}
+var relation_states: Dictionary = {}
+var current_xun_action_history: Array[ActionResolution] = []
+var latest_xun_summary: XunSummaryData = null
 
 
 func set_character_state(character_id: String, state: RuntimeCharacterState) -> void:
@@ -17,3 +20,30 @@ func set_character_state(character_id: String, state: RuntimeCharacterState) -> 
 
 func get_character_state(character_id: String) -> RuntimeCharacterState:
 	return character_states.get(character_id) as RuntimeCharacterState
+
+
+func set_relation_state(key: String, state: RuntimeRelationState) -> void:
+	relation_states[key] = state
+
+
+func get_relation_state(key: String) -> RuntimeRelationState:
+	return relation_states.get(key) as RuntimeRelationState
+
+
+func append_action_resolution(result: ActionResolution) -> void:
+	current_xun_action_history.append(result)
+
+
+func clear_xun_action_history() -> void:
+	current_xun_action_history.clear()
+
+
+func get_relation_keys_for_character(character_id: String) -> Array[String]:
+	var keys: Array[String] = []
+	for relation_key in relation_states.keys():
+		var relation_state := relation_states.get(relation_key) as RuntimeRelationState
+		if relation_state == null:
+			continue
+		if relation_state.source_character_id == character_id or relation_state.target_character_id == character_id:
+			keys.append(str(relation_key))
+	return keys
