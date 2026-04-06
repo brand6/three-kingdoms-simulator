@@ -64,241 +64,206 @@ theme_type_variation = &"StatusLabel"
 size_flags_horizontal = 3
 text = "势力：曹操集团"
 
-[node name="OfficeLabel" type="Label" parent="MarginContainer/VBoxContainer/TopBar/TopBarContent"]
+[node name="ClanFamilyLabel" type="Label" parent="MarginContainer/VBoxContainer/TopBar/TopBarContent"]
 layout_mode = 2
 theme_type_variation = &"StatusLabel"
 size_flags_horizontal = 3
 horizontal_alignment = 2
-text = "官职：领主"
+text = "士族/家族：谯郡曹氏 / 曹氏"
 
-[node name="MiddleScroll" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+[node name="MainContent" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-horizontal_scroll_mode = 0
+theme_override_constants/separation = 24
 
-[node name="MiddleBody" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MiddleScroll"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 32
-
-[node name="PrimaryRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 32
-
-[node name="LeftOverview" type="PanelContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow"]
-custom_minimum_size = Vector2(320, 0)
+[node name="LeftOverview" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent"]
+custom_minimum_size = Vector2(240, 0)
 layout_mode = 2
 
-[node name="LeftOverviewContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview"]
+[node name="LeftOverviewContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/LeftOverview"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 12
 
-[node name="LeftHeading" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent"]
+[node name="LeftHeading" type="Label" parent="MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent"]
 layout_mode = 2
 theme_type_variation = &"HeadingLabel"
-text = "人物总览"
+text = "人物状态"
 
-[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent"]
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent"]
 layout_mode = 2
 theme_type_variation = &"DisplayLabel"
 text = "姓名：—"
 
-[node name="PortraitPlaceholder" type="PanelContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent"]
-custom_minimum_size = Vector2(0, 120)
+[node name="PortraitPlaceholder" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent"]
+custom_minimum_size = Vector2(0, 116)
 layout_mode = 2
 
-[node name="PortraitLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent/PortraitPlaceholder"]
+[node name="PortraitLabel" type="Label" parent="MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent/PortraitPlaceholder"]
 layout_mode = 2
 horizontal_alignment = 1
 vertical_alignment = 1
 text = "人物立绘 / 状态标签"
 
-[node name="APLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent"]
+[node name="APLabel" type="Label" parent="MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent"]
 layout_mode = 2
 text = "AP：—"
 
-[node name="EnergyLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent"]
+[node name="EnergyLabel" type="Label" parent="MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent"]
 layout_mode = 2
 text = "精力：—"
 
-[node name="StressLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent"]
+[node name="StressLabel" type="Label" parent="MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent"]
 layout_mode = 2
 text = "压力：—"
 
-[node name="FameLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent"]
+[node name="FameLabel" type="Label" parent="MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent"]
 layout_mode = 2
 text = "名望：—"
 
-[node name="MeritLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/LeftOverview/LeftOverviewContent"]
+[node name="MeritLabel" type="Label" parent="MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent"]
 layout_mode = 2
 text = "功绩：—"
 
-[node name="CenterSummary" type="PanelContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow"]
+[node name="OfficeInfoLabel" type="Label" parent="MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent"]
+layout_mode = 2
+text = "官职：—"
+
+[node name="StatusInfoLabel" type="Label" parent="MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent"]
+layout_mode = 2
+text = "状态：—"
+
+[node name="HealthInfoLabel" type="Label" parent="MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent"]
+layout_mode = 2
+text = "健康：—"
+
+[node name="CenterSummary" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent"]
 layout_mode = 2
 size_flags_horizontal = 3
-
-[node name="CenterSummaryContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary"]
-layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/separation = 16
 
-[node name="CenterHeading" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary/CenterSummaryContent"]
+[node name="RelationSummaryCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary"]
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
-theme_type_variation = &"HeadingLabel"
-text = "当前决策区"
+size_flags_vertical = 3
 
-[node name="CenterCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary/CenterSummaryContent"]
-custom_minimum_size = Vector2(0, 236)
-layout_mode = 2
-
-[node name="CenterCardContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary/CenterSummaryContent/CenterCard"]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="SummaryLabel" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary/CenterSummaryContent/CenterCard/CenterCardContent"]
-layout_mode = 2
-theme_type_variation = &"DisplayLabel"
-text = "推荐行动：先以巡察稳住陈留局势"
-
-[node name="SummaryBody" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary/CenterSummaryContent/CenterCard/CenterCardContent"]
-layout_mode = 2
-autowrap_mode = 3
-text = "阶段目标：先稳住当前城市，再通过拜访与巡察累积政治资本。"
-
-[node name="GoalBody" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary/CenterSummaryContent/CenterCard/CenterCardContent"]
-layout_mode = 2
-autowrap_mode = 3
-theme_type_variation = &"StatusLabel"
-text = "可接任务：巡察陈留、拜访荀彧、回府整顿家事。"
-
-[node name="FocusBody" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary/CenterSummaryContent/CenterCard/CenterCardContent"]
-layout_mode = 2
-autowrap_mode = 3
-theme_type_variation = &"StatusLabel"
-text = "本旬重点：确认谁支持你、谁在观望，并预留 AP 给旬末推进。"
-
-[node name="SuccessHint" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/CenterSummary/CenterSummaryContent/CenterCard/CenterCardContent"]
-layout_mode = 2
-theme_type_variation = &"StatusLabel"
-text = "正在整理本旬建议…"
-
-[node name="RightContext" type="PanelContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow"]
-custom_minimum_size = Vector2(320, 0)
-layout_mode = 2
-
-[node name="RightContextContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/RightContext"]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="TaskHeading" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/RightContext/RightContextContent"]
-layout_mode = 2
-theme_type_variation = &"HeadingLabel"
-text = "当前任务"
-
-[node name="TaskBody" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/RightContext/RightContextContent"]
-layout_mode = 2
-autowrap_mode = 3
-text = "先从可稳定获取收益的行动开始，避免本旬 AP 浪费。"
-
-[node name="EventHeading" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/RightContext/RightContextContent"]
-layout_mode = 2
-theme_type_variation = &"HeadingLabel"
-text = "最近事件"
-
-[node name="EventBody" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/RightContext/RightContextContent"]
-layout_mode = 2
-autowrap_mode = 3
-text = "城中风向尚未稳定，文臣与宿将都在观望你的旬内安排。"
-
-[node name="NoticeHeading" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/RightContext/RightContextContent"]
-layout_mode = 2
-theme_type_variation = &"HeadingLabel"
-text = "重要提示"
-
-[node name="NoticeBody" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/PrimaryRow/RightContext/RightContextContent"]
-layout_mode = 2
-autowrap_mode = 3
-text = "若暂无明确任务，优先选择能带来关系或功绩反馈的行动。"
-
-[node name="SummaryRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody"]
-layout_mode = 2
-theme_override_constants/separation = 32
-
-[node name="RelationSummaryCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow"]
-custom_minimum_size = Vector2(0, 164)
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="RelationSummaryContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow/RelationSummaryCard"]
+[node name="RelationSummaryContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/RelationSummaryCard"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="RelationSummaryHeading" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow/RelationSummaryCard/RelationSummaryContent"]
+[node name="RelationSummaryHeading" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/RelationSummaryCard/RelationSummaryContent"]
 layout_mode = 2
 theme_type_variation = &"HeadingLabel"
 text = "关键关系摘要"
 
-[node name="RelationSummaryBody" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow/RelationSummaryCard/RelationSummaryContent"]
+[node name="RelationSummaryBody" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/RelationSummaryCard/RelationSummaryContent"]
 layout_mode = 2
 autowrap_mode = 3
-text = "主公、亲近者与警惕对象会在这里提示你本旬最值得拜访的人。"
+text = "关键关系摘要：主公、亲近者与高戒备对象会在这里短句显示。"
 
-[node name="FactionSummaryCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow"]
-custom_minimum_size = Vector2(0, 164)
+[node name="FactionSummaryCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary"]
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="FactionSummaryContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow/FactionSummaryCard"]
+[node name="FactionSummaryContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/FactionSummaryCard"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="FactionSummaryHeading" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow/FactionSummaryCard/FactionSummaryContent"]
+[node name="FactionSummaryHeading" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/FactionSummaryCard/FactionSummaryContent"]
 layout_mode = 2
 theme_type_variation = &"HeadingLabel"
-text = "派系摘要"
+text = "势力/派系摘要"
 
-[node name="FactionSummaryBody" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow/FactionSummaryCard/FactionSummaryContent"]
+[node name="FactionSummaryBody" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/FactionSummaryCard/FactionSummaryContent"]
 layout_mode = 2
 autowrap_mode = 3
-text = "所属派系态势、支持力度与主要政治风险会集中显示在这里。"
+text = "势力/派系摘要：所属派系态势、支持力度与政治风险会在这里短句显示。"
 
-[node name="ClanSummaryCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow"]
-custom_minimum_size = Vector2(0, 164)
+[node name="ClanSummaryCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary"]
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="ClanSummaryContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow/ClanSummaryCard"]
+[node name="ClanSummaryContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/ClanSummaryCard"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="ClanSummaryHeading" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow/ClanSummaryCard/ClanSummaryContent"]
+[node name="ClanSummaryHeading" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/ClanSummaryCard/ClanSummaryContent"]
 layout_mode = 2
 theme_type_variation = &"HeadingLabel"
 text = "家族/士族摘要"
 
-[node name="ClanSummaryBody" type="Label" parent="MarginContainer/VBoxContainer/MiddleScroll/MiddleBody/SummaryRow/ClanSummaryCard/ClanSummaryContent"]
+[node name="ClanSummaryBody" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/ClanSummaryCard/ClanSummaryContent"]
 layout_mode = 2
 autowrap_mode = 3
-text = "家族声望、士族背书与当前家务压力会提醒你哪些关系不能忽视。"
+text = "家族/士族摘要：家族声望、门第压力与当前诉求会在这里短句显示。"
+
+[node name="RightContext" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent"]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="TaskPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/RightContext"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TaskPanelContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/RightContext/TaskPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TaskHeading" type="Label" parent="MarginContainer/VBoxContainer/MainContent/RightContext/TaskPanel/TaskPanelContent"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "当前任务"
+
+[node name="TaskListScroll" type="ScrollContainer" parent="MarginContainer/VBoxContainer/MainContent/RightContext/TaskPanel/TaskPanelContent"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="TaskList" type="Label" parent="MarginContainer/VBoxContainer/MainContent/RightContext/TaskPanel/TaskPanelContent/TaskListScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
+text = "- 当前暂无正式任务\n- 从行动中选择拜访、巡察或探亲来创造新机会"
+
+[node name="EventPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/RightContext"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="EventPanelContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent/RightContext/EventPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="EventHeading" type="Label" parent="MarginContainer/VBoxContainer/MainContent/RightContext/EventPanel/EventPanelContent"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "最近事件"
+
+[node name="EventListScroll" type="ScrollContainer" parent="MarginContainer/VBoxContainer/MainContent/RightContext/EventPanel/EventPanelContent"]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="EventList" type="Label" parent="MarginContainer/VBoxContainer/MainContent/RightContext/EventPanel/EventPanelContent/EventListScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
+text = "- 暂无新事件\n- 继续通过行动累积关系、功绩与家门动向"
 
 [node name="BottomBar" type="PanelContainer" parent="MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
 
-[node name="BottomBarContent" type="VBoxContainer" parent="MarginContainer/VBoxContainer/BottomBar"]
+[node name="BottomBarContent" type="HBoxContainer" parent="MarginContainer/VBoxContainer/BottomBar"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="ExplanationLabel" type="Label" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent"]
-layout_mode = 2
-theme_type_variation = &"StatusLabel"
-text = "先点行动安排本旬事务；准备完毕后可直接结束本旬。"
-
-[node name="NavigationRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent"]
-layout_mode = 2
-theme_override_constants/separation = 8
-
-[node name="ActionButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow"]
+[node name="ActionButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -306,7 +271,7 @@ theme_type_variation = &"PrimaryButton"
 tooltip_text = "优先从这里安排本旬的训练、拜访与巡察"
 text = "行动"
 
-[node name="CharacterButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow"]
+[node name="CharacterButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -314,14 +279,14 @@ tooltip_text = "后续阶段开放"
 disabled = true
 text = "角色"
 
-[node name="RelationButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow"]
+[node name="RelationButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Phase 2 开放关系页"
 text = "关系"
 
-[node name="FactionButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow"]
+[node name="FactionButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -329,7 +294,7 @@ tooltip_text = "Phase 3 开放势力页"
 disabled = true
 text = "势力"
 
-[node name="ClanButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow"]
+[node name="ClanButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -337,7 +302,7 @@ tooltip_text = "Phase 4 开放家族/士族页"
 disabled = true
 text = "家族/士族"
 
-[node name="LogButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow"]
+[node name="LogButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -345,7 +310,7 @@ tooltip_text = "后续阶段开放"
 disabled = true
 text = "日志"
 
-[node name="EndTurnButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent/NavigationRow"]
+[node name="EndTurnButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -356,7 +321,7 @@ text = "结束本旬"
 
 [node name="ActionMenuPopup" type="PopupPanel" parent="."]
 initial_position = 0
-size = Vector2i(760, 360)
+size = Vector2i(860, 420)
 
 [node name="ActionMenuMargin" type="MarginContainer" parent="ActionMenuPopup"]
 anchors_preset = 15
@@ -374,7 +339,7 @@ layout_mode = 2
 theme_override_constants/separation = 24
 
 [node name="CategoryPanel" type="PanelContainer" parent="ActionMenuPopup/ActionMenuMargin/ActionMenuLayout"]
-custom_minimum_size = Vector2(180, 0)
+custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
 
 [node name="CategoryContent" type="VBoxContainer" parent="ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/CategoryPanel"]
@@ -404,7 +369,7 @@ theme_type_variation = &"HeadingLabel"
 text = "可执行动作"
 
 [node name="ActionListScroll" type="ScrollContainer" parent="ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/ActionPanel/ActionContent"]
-custom_minimum_size = Vector2(0, 220)
+custom_minimum_size = Vector2(0, 280)
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
