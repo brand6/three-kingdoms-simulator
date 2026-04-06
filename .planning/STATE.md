@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-03-PLAN.md
-last_updated: "2026-04-06T00:46:13.946Z"
+stopped_at: Completed 02-04-PLAN.md
+last_updated: "2026-04-06T00:56:39.752Z"
 last_activity: 2026-04-06
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 9
-  completed_plans: 8
-  percent: 89
+  completed_plans: 9
+  percent: 100
 ---
 
 # Project State
@@ -26,36 +26,37 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 2 of 5 (旬内行动—关系闭环)
-Plan: 3 of 4 in current phase
-Status: In progress — 02-03 complete
-Last activity: 2026-04-06 - Completed 02-03 HUD action and relation UI wiring
+Plan: 4 of 4 in current phase
+Status: Phase complete — ready for verification
+Last activity: 2026-04-06 - Completed 02-04 xun advancement and regression loop
 
-Progress: [█████████░] 89% overall
+Progress: [██████████] 100% for Phase 2 / 40% overall
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 7
-- Average duration: 6.2 min
-- Total execution time: 0.7 hours
+- Total plans completed: 8
+- Average duration: 6.5 min
+- Total execution time: 0.9 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-190 | 4 | 1754s | 438.5s |
-| 02-旬内行动—关系闭环 | 3 | 940s | 313.3s |
+| 02-旬内行动—关系闭环 | 4 | 1560s | 390s |
 
 **Recent Trend:**
 
-- Last 5 plans: 01-190-04 (455s), 01-190 P05 (240s), 02-01 (167s), 02-02 (473s), 02-03 (300s)
-- Trend: Stable across backend and UI phase work
+- Last 5 plans: 01-190 P05 (240s), 02-01 (167s), 02-02 (473s), 02-03 (300s), 02-04 (620s)
+- Trend: Stable across backend, UI, and integration work
 
 | Phase 01-190 P05 | 240 | 2 tasks | 3 files |
 | Phase 02-旬内行动—关系闭环 P01 | 167 | 2 tasks | 6 files |
 | Phase 02-旬内行动—关系闭环 P02 | 473 | 2 tasks | 10 files |
 | Phase 02-旬内行动—关系闭环 P03 | 300 | 2 tasks | 3 files |
+| Phase 02-旬内行动—关系闭环 P04 | 620 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -82,6 +83,8 @@ Recent decisions affecting current work:
 - [Phase 02-旬内行动—关系闭环]: Deterministic settlement flows through a dedicated resolver and appends structured ActionResolution objects into session history for later xun summaries.
 - [Phase 02-旬内行动—关系闭环]: Phase 2 HUD interaction stays fully inside MainScene using PopupPanel and dialog overlays instead of scene changes.
 - [Phase 02-旬内行动—关系闭环]: MainHUD renders action and relation details directly from GameRoot APIs, keeping UI state derived from runtime data rather than duplicated local models.
+- [Phase 02-旬内行动—关系闭环]: Xun summaries are built from accumulated ActionResolution history before time advances, so the summary always describes the finishing xun rather than the next one.
+- [Phase 02-旬内行动—关系闭环]: The end-xun HUD flow uses explicit confirmation and summary dialogs, and the regression closes the summary between loops to mirror real player flow.
 
 ### Pending Todos
 
@@ -100,6 +103,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T00:46:13.942Z
-Stopped at: Completed 02-03-PLAN.md
+Last session: 2026-04-06T00:56:39.745Z
+Stopped at: Completed 02-04-PLAN.md
 Resume file: None

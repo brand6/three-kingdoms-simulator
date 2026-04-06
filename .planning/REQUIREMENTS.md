@@ -10,8 +10,8 @@
 - [x] **CORE-01**: Player can start a 190 scenario sample and enter the main gameplay screen as a single historical character.
 - [x] **CORE-02**: Player can view the current year, month, xun, city, identity, faction, office, AP, energy, stress, fame, and merit from the main HUD.
 - [x] **CORE-03**: Player can spend a xun by selecting multiple actions until AP or action availability is exhausted.
-- [ ] **CORE-04**: Player can end the current xun and advance time through at least three stable xun transitions.
-- [ ] **CORE-05**: Player receives a xun-end summary that explains the major state and relationship changes caused by that xun.
+- [x] **CORE-04**: Player can end the current xun and advance time through at least three stable xun transitions.
+- [x] **CORE-05**: Player receives a xun-end summary that explains the major state and relationship changes caused by that xun.
 
 ### Data Foundation
 
@@ -143,8 +143,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CORE-01 | Phase 1 | Complete |
 | CORE-02 | Phase 1 | Complete |
 | CORE-03 | Phase 2 | Complete |
-| CORE-04 | Phase 2 | Pending |
-| CORE-05 | Phase 2 | Pending |
+| CORE-04 | Phase 2 | Complete |
+| CORE-05 | Phase 2 | Complete |
 | DATA-01 | Phase 1 | Complete |
 | DATA-02 | Phase 1 | Complete |
 | DATA-03 | Phase 1 | Complete |
