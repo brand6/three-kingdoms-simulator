@@ -18,6 +18,7 @@ func _init() -> void:
 func _run() -> void:
 	_test_catalog_metadata_for_cao_cao()
 	_test_hidden_and_disabled_rules()
+	_test_action_resolution_behaviors()
 	quit()
 
 
@@ -98,6 +99,70 @@ func _test_hidden_and_disabled_rules() -> void:
 	if inspect_spec == null:
 		_fail("Inspect should remain visible for Cao Cao when blocked by location.")
 	_assert_equal(inspect_spec.disabled_reason, "当前地点不可执行", "inspect location disabled reason")
+
+
+func _test_action_resolution_behaviors() -> void:
+	var game_root: Node = _game_root()
+	var repository: Node = _data_repository()
+
+	game_root.current_session = repository.bootstrap_session(game_root.DEFAULT_SCENARIO_ID, "cao_cao")
+	if not game_root.has_method("execute_phase2_action"):
+		_fail("GameRoot is missing execute_phase2_action().")
+	if not game_root.has_method("get_latest_action_resolution"):
+		_fail("GameRoot is missing get_latest_action_resolution().")
+
+	var session: GameSession = game_root.current_session
+	var state: RuntimeCharacterState = session.get_character_state("cao_cao")
+	var initial_history_size := session.current_xun_action_history.size()
+
+	var train_result = game_root.execute_phase2_action("train")
+	_assert_equal(train_result.success, true, "train success")
+	_assert_equal(state.ap, 2, "train AP")
+	_assert_equal(state.energy, 78, "train energy")
+	_assert_equal(state.stress, 27, "train stress")
+	_assert_equal(state.merit, 76, "train merit")
+	_assert_equal(state.martial_exp, 6, "train martial_exp")
+
+	game_root.current_session = repository.bootstrap_session(game_root.DEFAULT_SCENARIO_ID, "cao_cao")
+	session = game_root.current_session
+	state = session.get_character_state("cao_cao")
+	var rest_result = game_root.execute_phase2_action("rest")
+	_assert_equal(rest_result.success, true, "rest success")
+	_assert_equal(state.ap, 2, "rest AP")
+	_assert_equal(state.energy, 108, "rest energy")
+	_assert_equal(state.stress, 12, "rest stress")
+	_assert_equal(state.merit, 75, "rest merit unchanged")
+
+	game_root.current_session = repository.bootstrap_session(game_root.DEFAULT_SCENARIO_ID, "cao_cao")
+	session = game_root.current_session
+	state = session.get_character_state("cao_cao")
+	var visit_result = game_root.execute_phase2_action("visit", "chen_gong")
+	var relation = session.get_relation_state("cao_cao->chen_gong")
+	_assert_equal(visit_result.success, true, "visit success")
+	_assert_equal(state.ap, 2, "visit AP")
+	_assert_equal(state.energy, 80, "visit energy")
+	_assert_equal(state.fame, 83, "visit fame")
+	_assert_equal(relation.favor, 54, "visit favor")
+	_assert_equal(relation.trust, 36, "visit trust")
+	_assert_equal(relation.respect, 55, "visit respect")
+	_assert_equal(relation.vigilance, 14, "visit vigilance")
+	_assert_equal(relation.obligation, 15, "visit obligation")
+
+	game_root.current_session = repository.bootstrap_session(game_root.DEFAULT_SCENARIO_ID, "cao_cao")
+	session = game_root.current_session
+	state = session.get_character_state("cao_cao")
+	var failed_visit = game_root.execute_phase2_action("visit", "yuan_shao")
+	_assert_equal(failed_visit.success, false, "failed visit success flag")
+	_assert_equal(failed_visit.title, "行动失败", "failed visit title")
+	_assert_equal(state.stress, 26, "failed visit stress")
+	if str(failed_visit.clue_text).strip_edges().is_empty():
+		_fail("Failed visit should provide non-empty clue_text.")
+
+	if session.current_xun_action_history.size() < initial_history_size + 1:
+		_fail("Action resolution history was not appended to the session.")
+	var latest_result = game_root.get_latest_action_resolution()
+	if latest_result == null:
+		_fail("Expected latest action resolution after executing actions.")
 
 
 func _find_action(actions: Array, action_id: String):
