@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Theme" path="res://themes/PrototypeTheme.tres" id="1_theme"]
 [ext_resource type="Script" path="res://scripts/ui/MainHUD.gd" id="2_script"]
+[ext_resource type="Script" path="res://scripts/ui/CharacterSelectorDialog.gd" id="3_selector"]
+[ext_resource type="Script" path="res://scripts/ui/CharacterProfilePanel.gd" id="4_profile"]
 
 [node name="MainScene" type="Control"]
 layout_mode = 3
@@ -561,3 +563,89 @@ layout_mode = 2
 autowrap_mode = 3
 vertical_alignment = 1
 text = "本旬行动摘要\n主要数值变化\n关系变化摘要\n新提示"
+
+[node name="CharacterSelectorDialog" type="ConfirmationDialog" parent="."]
+title = "选择角色"
+size = Vector2i(880, 420)
+script = ExtResource("3_selector")
+
+[node name="SelectorMargin" type="MarginContainer" parent="CharacterSelectorDialog"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="SelectorContent" type="VBoxContainer" parent="CharacterSelectorDialog/SelectorMargin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SelectorHeading" type="Label" parent="CharacterSelectorDialog/SelectorMargin/SelectorContent"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "角色选择器"
+
+[node name="SelectorHint" type="Label" parent="CharacterSelectorDialog/SelectorMargin/SelectorContent"]
+layout_mode = 2
+autowrap_mode = 3
+theme_type_variation = &"StatusLabel"
+text = "角色 / 势力 / 所在地 / 好感 / 信任 / 敬重 / 戒备 / 状态"
+
+[node name="HeaderRow" type="HBoxContainer" parent="CharacterSelectorDialog/SelectorMargin/SelectorContent"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="RowsScroll" type="ScrollContainer" parent="CharacterSelectorDialog/SelectorMargin/SelectorContent"]
+custom_minimum_size = Vector2(0, 260)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="RowsContainer" type="VBoxContainer" parent="CharacterSelectorDialog/SelectorMargin/SelectorContent/RowsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="CharacterProfilePanel" type="PopupPanel" parent="."]
+initial_position = 0
+size = Vector2i(480, 320)
+script = ExtResource("4_profile")
+
+[node name="ProfileMargin" type="MarginContainer" parent="CharacterProfilePanel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="ProfileContent" type="VBoxContainer" parent="CharacterProfilePanel/ProfileMargin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="NameLabel" type="Label" parent="CharacterProfilePanel/ProfileMargin/ProfileContent"]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "角色名"
+
+[node name="MetaLabel" type="Label" parent="CharacterProfilePanel/ProfileMargin/ProfileContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "身份 / 势力 / 地点 / 官职"
+
+[node name="RelationLabel" type="Label" parent="CharacterProfilePanel/ProfileMargin/ProfileContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "favor / trust / respect / vigilance / obligation"
+
+[node name="NotesLabel" type="Label" parent="CharacterProfilePanel/ProfileMargin/ProfileContent"]
+layout_mode = 2
+autowrap_mode = 3
+text = "说明"
