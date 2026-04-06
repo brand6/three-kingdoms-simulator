@@ -574,7 +574,9 @@ func _show_action_result(result: Variant) -> void:
 
 func _on_end_turn_button_pressed() -> void:
 	_end_xun_dialog.reset_size()
+	_end_xun_dialog.size = END_XUN_DIALOG_SIZE
 	_end_xun_dialog.popup_centered(END_XUN_DIALOG_SIZE)
+	_end_xun_dialog.size = END_XUN_DIALOG_SIZE
 
 
 func _on_end_xun_confirmed() -> void:

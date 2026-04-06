@@ -36,6 +36,10 @@ func _run() -> void:
 		hud._on_end_turn_button_pressed()
 		if not hud._end_xun_dialog.visible:
 			_fail("End-xun confirmation dialog should open before advancing.")
+		if not hud._end_xun_dialog.get_ok_button().visible or not hud._end_xun_dialog.get_cancel_button().visible:
+			_fail("End-xun confirmation buttons should be visible on first open.")
+		if hud._end_xun_dialog.size.x > 520 or hud._end_xun_dialog.size.y > 280:
+			_fail("End-xun confirmation dialog should stay compact on first open, got %s." % [hud._end_xun_dialog.size])
 		hud._on_end_xun_confirmed()
 		await process_frame
 		var expected_time: String = EXPECTED_TIMES[i + 1]
