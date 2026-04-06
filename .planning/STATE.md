@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: Phase 2 UI-SPEC approved
-last_updated: "2026-04-05T13:58:49.431Z"
-last_activity: 2026-04-05
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-04-06T00:31:14.526Z"
+last_activity: 2026-04-06
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 5
-  completed_plans: 5
-  percent: 100
+  total_plans: 9
+  completed_plans: 6
+  percent: 67
 ---
 
 # Project State
@@ -25,19 +25,19 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 
 ## Current Position
 
-Phase: 1 of 5 (190样本数据骨架与单角色入口)
-Plan: 4 of 4 in current phase
-Status: Phase complete — ready for verification
-Last activity: 2026-04-05 - Completed quick task 260405-ums: design ui v1 md ui
+Phase: 2 of 5 (旬内行动—关系闭环)
+Plan: 1 of 4 in current phase
+Status: In progress — 02-01 complete
+Last activity: 2026-04-06 - Completed 02-01 runtime contracts and session storage
 
-Progress: [██████████] 100% for Phase 1 / 25% overall
+Progress: [███████░░░] 67% overall
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 4
-- Average duration: 7.3 min
+- Total plans completed: 5
+- Average duration: 6.4 min
 - Total execution time: 0.5 hours
 
 **By Phase:**
@@ -45,13 +45,15 @@ Progress: [██████████] 100% for Phase 1 / 25% overall
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-190 | 4 | 1754s | 438.5s |
+| 02-旬内行动—关系闭环 | 1 | 167s | 167s |
 
 **Recent Trend:**
 
-- Last 5 plans: 01-190-01 (389s), 01-190-02 (455s), 01-190-03 (455s), 01-190-04 (455s)
-- Trend: Stable
+- Last 5 plans: 01-190-02 (455s), 01-190-03 (455s), 01-190-04 (455s), 01-190 P05 (240s), 02-01 (167s)
+- Trend: Faster recent plan execution
 
 | Phase 01-190 P05 | 240 | 2 tasks | 3 files |
+| Phase 02-旬内行动—关系闭环 P01 | 167 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -72,6 +74,8 @@ Recent decisions affecting current work:
 - [Phase 01-190]: Boot flow remains fixed to scenario_190_smoke plus cao_cao with no selection UI in Phase 1.
 - [Phase 01-190]: TimeLabel remains always visible but now renders as a value-only field instead of a label-value pair.
 - [Phase 01-190]: Merged the duplicated-time UAT reports into one headless cold-start regression that asserts the full top bar.
+- [Phase 02-旬内行动—关系闭环]: Phase 2 shared contracts are explicit typed RefCounted DTOs instead of dictionary conventions.
+- [Phase 02-旬内行动—关系闭环]: Directional relation seeds live in GameSession bootstrap runtime state, not static definition JSON.
 
 ### Pending Todos
 
@@ -90,6 +94,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-05T13:58:49.428Z
-Stopped at: Phase 2 UI-SPEC approved
-Resume file: .planning/phases/02-旬内行动—关系闭环/02-UI-SPEC.md
+Last session: 2026-04-06T00:31:14.523Z
+Stopped at: Completed 02-01-PLAN.md
+Resume file: None

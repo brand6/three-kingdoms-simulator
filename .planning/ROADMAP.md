@@ -49,7 +49,7 @@ Plans:
   4. Player can inspect character and relationship context from the main flow, finish at least three stable xun transitions, and receive a xun-end summary that explains what changed.
 **Plans**: 4 plans
 Plans:
-- [ ] 02-01-PLAN.md — 建立 Phase 2 行动 / 关系 / 旬总结运行时契约与 session 存储
+- [x] 02-01-PLAN.md — 建立 Phase 2 行动 / 关系 / 旬总结运行时契约与 session 存储
 - [ ] 02-02-PLAN.md — 实现五个基础行动目录、结算规则与 GameRoot 接口
 - [ ] 02-03-PLAN.md — 在 MainHUD 内接通行动浮层、目标弹窗、结果反馈与关系页
 - [ ] 02-04-PLAN.md — 实现结束本旬、旬末总结与三次稳定推进回归
@@ -102,7 +102,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. 190样本数据骨架与单角色入口 | 4/4 | Complete | 01-190-01, 01-190-02, 01-190-03, 01-190-04 |
-| 2. 旬内行动—关系闭环 | 0/TBD | Not started | - |
+| 2. 旬内行动—关系闭环 | 1/4 | In Progress | 02-01 |
 | 3. 仕途、势力与可解释政治 | 0/TBD | Not started | - |
 | 4. 家族门阀、婚姻与历史分歧 | 0/TBD | Not started | - |
 | 5. 持久验证与战争接入口 | 0/TBD | Not started | - |

@@ -24,7 +24,7 @@
 
 - [x] **CHAR-01**: Player character has readable core attributes, identity, faction, office, family, clan, personality tags, and location.
 - [x] **CHAR-02**: Player character tracks AP, energy, stress, health-related state, fame, merit, loyalty, and honor/infamy-style reputation values.
-- [ ] **CHAR-03**: Gameplay actions can modify player attributes or status values and surface those changes in UI feedback.
+- [x] **CHAR-03**: Gameplay actions can modify player attributes or status values and surface those changes in UI feedback.
 - [x] **CHAR-04**: Different starting identities use the same underlying time and action rules while exposing different permissions or action availability.
 
 ### Actions
@@ -32,12 +32,12 @@
 - [ ] **ACTN-01**: Player can open an action menu grouped by categories such as growth, relationships, governance, military, and family.
 - [ ] **ACTN-02**: Action list shows action name, category, AP cost, energy impact, target type, and expected effect summary.
 - [ ] **ACTN-03**: Game supports at least five foundational actions for the prototype sample: visit, train, study, inspect, and rest.
-- [ ] **ACTN-04**: Action execution checks identity, conditions, resources, and target validity before applying results.
+- [x] **ACTN-04**: Action execution checks identity, conditions, resources, and target validity before applying results.
 - [ ] **ACTN-05**: Failed actions still produce limited feedback such as partial progress, relationship movement, pressure change, or new information.
 
 ### Relationships
 
-- [ ] **RELA-01**: Game stores directional relationship values between characters including favor, trust, respect, vigilance, and obligation.
+- [x] **RELA-01**: Game stores directional relationship values between characters including favor, trust, respect, vigilance, and obligation.
 - [ ] **RELA-02**: Player can view a relationship screen listing key characters, relationship tags, major values, faction, and available interactions.
 - [ ] **RELA-03**: Visit-style interactions can change relationship values in ways visible to the player.
 - [ ] **RELA-04**: Relationship values influence later gameplay outcomes such as action success, recommendation chance, task opportunities, or appointment results.
@@ -151,14 +151,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-04 | Phase 1 | Complete |
 | CHAR-01 | Phase 1 | Complete |
 | CHAR-02 | Phase 1 | Complete |
-| CHAR-03 | Phase 2 | Pending |
+| CHAR-03 | Phase 2 | Complete |
 | CHAR-04 | Phase 1 | Complete |
 | ACTN-01 | Phase 2 | Pending |
 | ACTN-02 | Phase 2 | Pending |
 | ACTN-03 | Phase 2 | Pending |
-| ACTN-04 | Phase 2 | Pending |
+| ACTN-04 | Phase 2 | Complete |
 | ACTN-05 | Phase 2 | Pending |
-| RELA-01 | Phase 2 | Pending |
+| RELA-01 | Phase 2 | Complete |
 | RELA-02 | Phase 2 | Pending |
 | RELA-03 | Phase 2 | Pending |
 | RELA-04 | Phase 3 | Pending |
