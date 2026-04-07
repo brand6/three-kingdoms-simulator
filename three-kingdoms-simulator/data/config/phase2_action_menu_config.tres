@@ -27,6 +27,6 @@ rules = [{
 }, {
 "action_id": "inspect",
 "menu_order": 50,
-"allowed_identity_types": PackedStringArray("ruler", "military_officer"),
+"allowed_identity_types": PackedStringArray("ruler", "civil_official", "military_officer"),
 "locked_reason": "当前身份不可执行"
 }]
