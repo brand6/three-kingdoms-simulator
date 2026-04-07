@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed quick task 260406-ojk
-last_updated: "2026-04-06T09:49:34Z"
-last_activity: 2026-04-06
+status: planning
+stopped_at: Phase 2.1 context gathered
+last_updated: "2026-04-07T05:48:42.968Z"
+last_activity: 2026-04-07
 progress:
-  total_phases: 5
+  total_phases: 6
   completed_phases: 2
   total_plans: 12
   completed_plans: 12
-  percent: 100
+  percent: 0
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-04)
 
 **Core value:** 让玩家在 15 到 30 分钟内明确感受到“个人命运嵌入势力政治”的单角色历史模拟体验。
-**Current focus:** Phase 02 — 旬内行动—关系闭环
+**Current focus:** Phase 02.1 — 官职与任务部署
 
 ## Current Position
 
-Phase: 3
+Phase: 02.1
 Plan: Not started
-Status: Ready to execute
-Last activity: 2026-04-06
+Status: Inserted, ready to plan
+Last activity: 2026-04-07
 
-Progress: [██████████] 100% for Phase 2 / 40% overall
+Progress: [████████--] 0% for Phase 02.1 / 33% overall
 
 ## Performance Metrics
 
@@ -89,6 +89,10 @@ Recent decisions affecting current work:
 - [Phase 02-旬内行动—关系闭环]: Xun summaries are built from accumulated ActionResolution history before time advances, so the summary always describes the finishing xun rather than the next one.
 - [Phase 02-旬内行动—关系闭环]: The end-xun HUD flow uses explicit confirmation and summary dialogs, and the regression closes the summary between loops to mirror real player flow.
 
+### Roadmap Evolution
+
+- Phase 02.1 inserted after Phase 2: 官职与任务部署 (URGENT)
+
 ### Pending Todos
 
 None yet.
@@ -107,6 +111,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-06T09:49:34Z
-Stopped at: Completed quick task 260406-ojk
-Resume file: None
+Last session: 2026-04-07T05:48:42.964Z
+Stopped at: Phase 2.1 context gathered
+Resume file: .planning/phases/02.1-/02.1-CONTEXT.md
