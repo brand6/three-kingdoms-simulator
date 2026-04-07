@@ -48,6 +48,26 @@ func _run() -> void:
 	while session.current_xun < 3:
 		game_root.end_current_xun()
 	await process_frame
+	game_root.execute_phase2_action("study")
+	game_root.end_current_xun()
+	await process_frame
+
+	if session.last_month_evaluation == null:
+		_fail("Expected last_month_evaluation after third xun settlement.")
+	if str(session.last_month_evaluation.task_result).is_empty():
+		_fail("Expected task result in month evaluation.")
+	if str(session.last_month_evaluation.promotion_failure_label) not in ["", "功绩不足", "名望不足", "无空缺", "任务未达标"]:
+		_fail("Unexpected promotion failure label: %s" % session.last_month_evaluation.promotion_failure_label)
+
+	var summary_lines: Array[String] = session.last_month_evaluation.summary_lines
+	if summary_lines.is_empty():
+		_fail("Expected summary lines in month evaluation.")
+	var found_political_summary := false
+	for line in summary_lines:
+		if line.contains("政治含义"):
+			found_political_summary = true
+	if not found_political_summary:
+		_fail("Expected visible political summary line in month evaluation.")
 
 	main_scene.queue_free()
 	await process_frame

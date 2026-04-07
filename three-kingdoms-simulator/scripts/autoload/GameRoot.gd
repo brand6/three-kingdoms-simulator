@@ -9,6 +9,8 @@ const CHARACTER_SELECTOR_ROW_SCRIPT := preload("res://scripts/runtime/CharacterS
 const CHARACTER_PROFILE_VIEW_DATA_SCRIPT := preload("res://scripts/runtime/CharacterProfileViewData.gd")
 const ACTION_RESOLUTION_SCRIPT := preload("res://scripts/runtime/ActionResolution.gd")
 const TASK_SYSTEM_SCRIPT := preload("res://scripts/systems/TaskSystem.gd")
+const CAREER_SYSTEM_SCRIPT := preload("res://scripts/systems/CareerSystem.gd")
+const MONTHLY_EVALUATION_RESULT_SCRIPT := preload("res://scripts/runtime/MonthlyEvaluationResult.gd")
 
 var current_session: GameSession
 var last_boot_error: String = ""
@@ -16,6 +18,7 @@ var _hud: MainHUD
 var _phase2_action_catalog: Variant = PHASE2_ACTION_CATALOG_SCRIPT.new()
 var _phase2_action_resolver: Variant = PHASE2_ACTION_RESOLVER_SCRIPT.new()
 var _task_system: Variant = TASK_SYSTEM_SCRIPT.new()
+var _career_system: Variant = CAREER_SYSTEM_SCRIPT.new()
 var _latest_action_resolution: Variant = null
 
 
@@ -208,6 +211,8 @@ func end_current_xun() -> Variant:
 	var finishing_label: String = str(_time_manager().call("get_xun_label", current_session.current_year, current_session.current_month, current_session.current_xun))
 	var summary: Variant = _build_xun_summary(finishing_label)
 	current_session.latest_xun_summary = summary
+	if current_session.current_xun == 3:
+		_process_month_end_evaluation()
 	_reset_protagonist_ap()
 	current_session.clear_xun_action_history()
 	_time_manager().call("advance_xun")
@@ -217,6 +222,60 @@ func end_current_xun() -> Variant:
 	if current_session.current_xun == 1:
 		_initialize_month_start_state()
 	return summary
+
+
+func get_last_month_evaluation() -> Variant:
+	if current_session == null:
+		return null
+	return current_session.last_month_evaluation
+
+
+func _process_month_end_evaluation() -> void:
+	var settlement: Dictionary = _task_system.settle_month_task(current_session, _data_repository())
+	var runtime_state: RuntimeCharacterState = current_session.get_character_state(current_session.protagonist_id)
+	var career_state: PlayerCareerState = current_session.player_career_state as PlayerCareerState
+	if runtime_state != null:
+		runtime_state.merit += int(settlement.get("merit_delta", 0))
+		runtime_state.fame += int(settlement.get("fame_delta", 0))
+		runtime_state.trust += int(settlement.get("trust_delta", 0))
+	if career_state != null:
+		career_state.total_merit = runtime_state.merit if runtime_state != null else career_state.total_merit
+		career_state.current_fame = runtime_state.fame if runtime_state != null else career_state.current_fame
+		career_state.current_trust = runtime_state.trust if runtime_state != null else career_state.current_trust
+		career_state.months_in_current_office += 1
+	var promotion_result: Dictionary = _career_system.evaluate_promotion(current_session, _data_repository(), settlement)
+	var old_office_id := career_state.current_office_id if career_state != null else ""
+	var new_office_id := old_office_id
+	var office_changed := false
+	if bool(promotion_result.get("success", false)) and career_state != null:
+		new_office_id = str(promotion_result.get("new_office_id", old_office_id))
+		office_changed = new_office_id != old_office_id
+		career_state.current_office_id = new_office_id
+		career_state.months_in_current_office = 0
+		var new_office = _data_repository().call("get_office", new_office_id)
+		career_state.office_tier = int(new_office.tier if new_office != null else career_state.office_tier)
+		career_state.unlocked_task_tags = Array(new_office.unlock_task_tags).duplicate() if new_office != null else career_state.unlocked_task_tags
+	var summary_lines: Array[String] = Array(settlement.get("summary_lines", [])).duplicate()
+	if office_changed:
+		summary_lines.append("任命结果：已擢升至 %s" % new_office_id)
+	else:
+		summary_lines.append("任命结果：%s" % str(promotion_result.get("failure_label", "")))
+	current_session.last_month_evaluation = MONTHLY_EVALUATION_RESULT_SCRIPT.create(
+		"%d-%02d" % [current_session.current_year, current_session.current_month],
+		current_session.protagonist_id,
+		str(settlement.get("task_result", "failed")),
+		int(settlement.get("merit_delta", 0)),
+		int(settlement.get("fame_delta", 0)),
+		int(settlement.get("trust_delta", 0)),
+		office_changed,
+		old_office_id,
+		new_office_id,
+		str(promotion_result.get("rule_id", "")),
+		summary_lines,
+		str(promotion_result.get("hint", "")),
+		Dictionary(promotion_result.get("missing_values", {})).duplicate(true),
+		str(promotion_result.get("failure_label", ""))
+	)
 
 
 func get_latest_xun_summary() -> Variant:

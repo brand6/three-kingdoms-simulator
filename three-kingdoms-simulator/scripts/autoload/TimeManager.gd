@@ -44,3 +44,7 @@ func get_current_month() -> int:
 
 func get_current_xun() -> int:
 	return _current_xun
+
+
+func is_month_end() -> bool:
+	return _current_xun == 3
