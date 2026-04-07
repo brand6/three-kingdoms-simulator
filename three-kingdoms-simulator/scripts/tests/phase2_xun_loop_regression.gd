@@ -54,6 +54,9 @@ func _run() -> void:
 			_fail("Expected merit to persist across xun transitions.")
 		if hud._xun_summary_dialog == null or not hud._xun_summary_dialog.visible:
 			_fail("Xun summary dialog should open after confirmation.")
+		var xun_summary_ok := hud.get_node_or_null("XunSummaryDialog/XunSummaryMargin/XunSummaryContent/ActionRow/ConfirmButton") as Button
+		if xun_summary_ok == null or not xun_summary_ok.visible:
+			_fail("Xun summary dialog should expose a visible confirm button on first open.")
 		var summary_text: String = hud._xun_summary_body.text
 		if not summary_text.contains("本旬行动摘要") or not summary_text.contains("主要数值变化") or not summary_text.contains("关系变化摘要"):
 			_fail("Summary dialog omitted required sections: %s" % summary_text)

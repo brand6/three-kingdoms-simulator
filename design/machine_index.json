@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-04",
+  "updated_at": "2026-04-07",
   "root": "design",
   "entrypoints": {
     "human": "design/Agent.md",
@@ -77,6 +77,16 @@
       "legacy_path": "design/项目总设计方案 v1.md"
     },
     {
+      "path": "design/总纲/官职与任务原型部署 Phase 2.1 v1.md",
+      "title": "官职与任务原型部署 Phase 2.1 v1",
+      "category": "overview",
+      "summary": "定义 Phase 2.1 的正式 GDD 章节，冻结荀彧开局、月初领任务、月末结算、功绩驱动升官的原型闭环。",
+      "keywords": ["Phase 2.1", "官职", "任务", "荀彧", "仕途", "升官"],
+      "recommended_for": ["阶段设计", "仕途原型", "Phase 3 前置准备"],
+      "priority": 3,
+      "legacy_path": ""
+    },
+    {
       "path": "design/系统设计/核心系统详细设计 v1.md",
       "title": "核心系统详细设计 v1",
       "category": "systems",
@@ -127,6 +137,26 @@
       "legacy_path": "design/Godot 数据结构草案 v1.md"
     },
     {
+      "path": "design/数据/官职与任务原型部署数据字段设计 v1.md",
+      "title": "官职与任务原型部署数据字段设计 v1",
+      "category": "data",
+      "summary": "冻结 Phase 2.1 所需的官职、任务、任务池、升官规则与月末结算字段设计。",
+      "keywords": ["Phase 2.1", "数据结构", "官职", "任务", "升官", "月末结算"],
+      "recommended_for": ["字段设计", "Resource 定义", "存档设计", "实现前建模"],
+      "priority": 8,
+      "legacy_path": ""
+    },
+    {
+      "path": "design/数据/Phase 2.1 最小数据录入清单 v1.md",
+      "title": "Phase 2.1 最小数据录入清单 v1",
+      "category": "data",
+      "summary": "明确 Phase 2.1 先录什么、至少录多少、按什么顺序录、录完如何验收。",
+      "keywords": ["Phase 2.1", "数据录入", "样本", "Resource", "剧本", "验收"],
+      "recommended_for": ["数据录入", "样本准备", "最小闭环", "实现前准备"],
+      "priority": 8,
+      "legacy_path": ""
+    },
+    {
       "path": "design/原型与实现/Godot 原型开发拆解 v1.md",
       "title": "Godot 原型开发拆解 v1",
       "category": "implementation",
@@ -155,6 +185,16 @@
       "recommended_for": ["开发执行", "AI 任务下发", "排期"],
       "priority": 10,
       "legacy_path": "design/原型任务拆解清单 v1.md"
+    },
+    {
+      "path": "design/原型与实现/Phase 2.1 Godot 实现映射表 v1.md",
+      "title": "Phase 2.1 Godot 实现映射表 v1",
+      "category": "implementation",
+      "summary": "将 Phase 2.1 的设计内容映射到 Godot 模块、Resource、运行时状态、UI 面板与验收点。",
+      "keywords": ["Phase 2.1", "Godot", "实现映射", "模块职责", "UI", "状态"],
+      "recommended_for": ["实现前对齐", "模块拆解", "开发顺序", "AI 开发桥接"],
+      "priority": 10,
+      "legacy_path": ""
     },
     {
       "path": "design/UIUX/原型 UI 流程图 v1.md",
@@ -227,10 +267,14 @@
     "project_entry": [
       "design/总纲/GDD 框架 v1.md",
       "design/总纲/项目总设计方案 v1.md",
+      "design/总纲/官职与任务原型部署 Phase 2.1 v1.md",
       "design/系统设计/核心系统详细设计 v1.md"
     ],
     "system_implementation": [
       "design/系统设计/核心系统详细设计 v1.md",
+      "design/总纲/官职与任务原型部署 Phase 2.1 v1.md",
+      "design/数据/官职与任务原型部署数据字段设计 v1.md",
+      "design/原型与实现/Phase 2.1 Godot 实现映射表 v1.md",
       "design/数据/Godot 数据结构草案 v1.md",
       "design/原型与实现/原型任务拆解清单 v1.md"
     ],
@@ -246,7 +290,15 @@
     "scenario_data_entry": [
       "design/剧情与样本/190 剧本原型人物-势力样本表 v1.md",
       "design/剧情与样本/190 剧本原型事件样本表 v1.md",
+      "design/数据/Phase 2.1 最小数据录入清单 v1.md",
       "design/数据/Godot 数据结构草案 v1.md"
+    ],
+    "phase_2_1_career_prototype": [
+      "design/总纲/官职与任务原型部署 Phase 2.1 v1.md",
+      "design/数据/官职与任务原型部署数据字段设计 v1.md",
+      "design/数据/Phase 2.1 最小数据录入清单 v1.md",
+      "design/原型与实现/Phase 2.1 Godot 实现映射表 v1.md",
+      "design/原型与实现/Godot 原型开发拆解 v1.md"
     ]
   }
 }

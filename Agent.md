@@ -8,3 +8,8 @@
 项目说明
 
 - 本项目为godot单人历史模拟游戏“三国模拟器”，项目文件在three-kingdoms-simulator文件夹下
+- 使用godot-remote-executor技能来操作godot,所需的token在broker-server-token.txt文件内，调用技能时带上token
+
+技能使用
+
+* 使用planning-with-files技能来记录设计文档和项目的进展情况

@@ -499,14 +499,34 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="XunSummaryBody" type="Label" parent="XunSummaryDialog/XunSummaryMargin" unique_id=2110313373]
+[node name="XunSummaryContent" type="VBoxContainer" parent="XunSummaryDialog/XunSummaryMargin" unique_id=1322113373]
 layout_mode = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="XunSummaryBody" type="Label" parent="XunSummaryDialog/XunSummaryMargin/XunSummaryContent" unique_id=2110313373]
+layout_mode = 2
+size_flags_vertical = 3
 text = "本旬行动摘要
 主要数值变化
 关系变化摘要
 新提示"
 vertical_alignment = 1
 autowrap_mode = 3
+
+[node name="ActionRow" type="HBoxContainer" parent="XunSummaryDialog/XunSummaryMargin/XunSummaryContent" unique_id=2110313374]
+layout_mode = 2
+alignment = 2
+
+[node name="ConfirmButton" type="Button" parent="XunSummaryDialog/XunSummaryMargin/XunSummaryContent/ActionRow" unique_id=2110313375]
+custom_minimum_size = Vector2(160, 48)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "确认"
 
 [node name="CharacterSelectorDialog" type="ConfirmationDialog" parent="." unique_id=398735697]
 title = "选择角色"
@@ -685,8 +705,19 @@ theme_override_constants/separation = 16
 
 [node name="BodyLabel" type="Label" parent="MonthReportPanel/PanelMargin/PanelContent" unique_id=1449280104]
 layout_mode = 2
+size_flags_vertical = 3
 text = "任务结果月报"
 autowrap_mode = 3
+
+[node name="ActionRow" type="HBoxContainer" parent="MonthReportPanel/PanelMargin/PanelContent" unique_id=1449280105]
+layout_mode = 2
+alignment = 2
+
+[node name="ConfirmButton" type="Button" parent="MonthReportPanel/PanelMargin/PanelContent/ActionRow" unique_id=1449280106]
+custom_minimum_size = Vector2(160, 48)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "确认"
 
 [node name="PromotionPopup" type="AcceptDialog" parent="." unique_id=1449280201]
 title = "任命结果"
@@ -710,5 +741,16 @@ theme_override_constants/separation = 16
 
 [node name="BodyLabel" type="Label" parent="PromotionPopup/PanelMargin/PanelContent" unique_id=1449280204]
 layout_mode = 2
+size_flags_vertical = 3
 text = "任命结果"
 autowrap_mode = 3
+
+[node name="ActionRow" type="HBoxContainer" parent="PromotionPopup/PanelMargin/PanelContent" unique_id=1449280205]
+layout_mode = 2
+alignment = 2
+
+[node name="ConfirmButton" type="Button" parent="PromotionPopup/PanelMargin/PanelContent/ActionRow" unique_id=1449280206]
+custom_minimum_size = Vector2(160, 48)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "确认"

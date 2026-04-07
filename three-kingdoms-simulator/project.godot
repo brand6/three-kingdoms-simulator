@@ -25,6 +25,10 @@ TimeManager="*res://scripts/autoload/TimeManager.gd"
 
 project/assembly_name="three-kingdoms-simulator"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/hasturoperationgd/plugin.cfg")
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

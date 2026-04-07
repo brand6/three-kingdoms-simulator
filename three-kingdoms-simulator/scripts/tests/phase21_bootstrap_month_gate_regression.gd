@@ -42,7 +42,7 @@ func _run() -> void:
 	var before_ap := runtime_state.ap
 	var blocked_result = game_root.execute_phase2_action("study")
 	_assert_equal(blocked_result.success, false, "blocked action success")
-	if not str(blocked_result.reason_text).contains("请先择定一项主任务"):
+	if not str(blocked_result.reason_text).contains("请先择定一项本月任务"):
 		_fail("Blocked action should explain the month-start task gate.")
 	_assert_equal(runtime_state.ap, before_ap, "AP unchanged before task selection")
 

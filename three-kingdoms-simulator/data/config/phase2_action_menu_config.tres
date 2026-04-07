@@ -1,32 +1,32 @@
-[gd_resource type="Resource" script_class="Phase2ActionMenuConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="Phase2ActionMenuConfig" format=3 uid="uid://jywe5uawne0d"]
 
-[ext_resource type="Script" path="res://scripts/runtime/Phase2ActionMenuConfig.gd" id="1_menu"]
+[ext_resource type="Script" uid="uid://cku8fn22t22hc" path="res://scripts/runtime/Phase2ActionMenuConfig.gd" id="1_menu"]
 
 [resource]
 script = ExtResource("1_menu")
-rules = [{
+rules = Array[Dictionary]([{
 "action_id": "train",
-"menu_order": 10,
 "allowed_identity_types": PackedStringArray("ruler", "civil_official", "military_officer", "free_agent"),
-"locked_reason": "当前身份不可执行"
+"locked_reason": "当前身份不可执行",
+"menu_order": 10
 }, {
 "action_id": "study",
-"menu_order": 20,
 "allowed_identity_types": PackedStringArray("ruler", "civil_official", "military_officer", "free_agent"),
-"locked_reason": "当前身份不可执行"
+"locked_reason": "当前身份不可执行",
+"menu_order": 20
 }, {
 "action_id": "rest",
-"menu_order": 30,
 "allowed_identity_types": PackedStringArray("ruler", "civil_official", "military_officer", "free_agent"),
-"locked_reason": "当前身份不可执行"
+"locked_reason": "当前身份不可执行",
+"menu_order": 30
 }, {
 "action_id": "visit",
-"menu_order": 40,
 "allowed_identity_types": PackedStringArray("ruler", "civil_official", "military_officer", "free_agent"),
-"locked_reason": "当前身份不可执行"
+"locked_reason": "当前身份不可执行",
+"menu_order": 40
 }, {
 "action_id": "inspect",
-"menu_order": 50,
 "allowed_identity_types": PackedStringArray("ruler", "civil_official", "military_officer"),
-"locked_reason": "当前身份不可执行"
-}]
+"locked_reason": "当前身份不可执行",
+"menu_order": 50
+}])

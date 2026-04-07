@@ -1,5 +1,17 @@
 # design 文档整理变更记录
 
+## 2026-04-07
+
+### 新增文件
+- `design/总纲/官职与任务原型部署 Phase 2.1 v1.md`：Phase 2.1 正式 GDD 章节稿，定义荀彧开局、月初领任务、月末结算与功绩驱动升官闭环。
+- `design/数据/官职与任务原型部署数据字段设计 v1.md`：Phase 2.1 配套字段设计稿，定义官职、任务、任务池、升官规则与月末结算数据结构。
+- `design/原型与实现/Phase 2.1 Godot 实现映射表 v1.md`：将 Phase 2.1 的设计内容映射到 Godot 模块、Resource、运行时状态、UI 面板与验收点。
+- `design/数据/Phase 2.1 最小数据录入清单 v1.md`：明确 Phase 2.1 的最小录入对象、最小条数、录入顺序与验收方式。
+
+### 索引更新
+- 更新 `design/Agent.md`：补充 Phase 2.1 文档说明与推荐检索路径。
+- 更新 `design/machine_index.json`：新增两份文档索引并增加 `phase_2_1_career_prototype` 检索路线。
+
 ## 2026-04-04
 
 ### 索引与规范补充

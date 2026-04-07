@@ -25,3 +25,6 @@ desktop.ini
 # Visual Studio / Rider
 /.idea/
 /.vs/
+
+# token
+broker-server-token.txt

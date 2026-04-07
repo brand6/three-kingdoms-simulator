@@ -162,12 +162,12 @@ func execute_phase2_action(action_id: String, target_character_id: String = "") 
 			action_id,
 			"本月尚未领受公事",
 			false,
-			"本月尚未领受公事，请先择定一项主任务。",
+			"本月尚未领受公事，请先择定一项本月任务。",
 			target_character_id,
 			{},
 			{},
-			"待主任务锁定后，旬内行动才会计入本月事务。",
-			"本月行动被暂缓，等待先领主任务。"
+			"待本月任务锁定后，旬内行动才会计入本月事务。",
+			"本月行动被暂缓，等待先领本月任务。"
 		)
 		return _latest_action_resolution
 	var protagonist := _data_repository().call("get_character", current_session.protagonist_id) as CharacterDefinition

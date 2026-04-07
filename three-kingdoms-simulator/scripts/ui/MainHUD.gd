@@ -6,8 +6,8 @@ const EMPTY_TASK_TITLE := "当前暂无正式任务"
 const EMPTY_TASK_BODY := "从行动中选择拜访、巡察或探亲来创造新机会"
 const MONTH_EMPTY_TASK_TITLE := "本月暂无可领任务"
 const MONTH_EMPTY_TASK_BODY := "当前官职暂无匹配事务。请检查任务池配置，或等待下月任务刷新后再作部署。"
-const MONTH_PICKER_TITLE := "领取主任务"
-const MONTH_GATE_COPY := "本月尚未领受公事，请先择定一项主任务。"
+const MONTH_PICKER_TITLE := "领取本月任务"
+const MONTH_GATE_COPY := "本月尚未领受公事，请先择定一项本月任务。"
 const EMPTY_EVENT_BODY := "- 暂无新事件\n- 系统会继续根据你的所在地、势力位置与关键人物关系刷新近期动向"
 const LOADING_RELATION_SUMMARY := "关键关系摘要：正在整理主公、亲近者与高戒备对象的短句摘要。"
 const LOADING_FACTION_SUMMARY := "势力/派系摘要：正在汇总所属势力的支持态势、派系位置与当前风险。"
@@ -27,6 +27,7 @@ const XUN_SUMMARY_RELATIONS := "关系变化摘要"
 const XUN_SUMMARY_PROMPTS := "新提示"
 const ACTION_POPUP_SIZE := Vector2i(240, 0)
 const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
+const XUN_SUMMARY_DIALOG_SIZE := Vector2i(620, 420)
 
 @onready var _time_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/TimeLabel")
 @onready var _city_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/CityLabel")
@@ -63,7 +64,7 @@ const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 @onready var _action_result_body: Label = get_node("ActionResultDialog/ActionResultMargin/ActionResultBody")
 @onready var _end_xun_dialog: ConfirmationDialog = get_node("EndXunDialog")
 @onready var _xun_summary_dialog: AcceptDialog = get_node("XunSummaryDialog")
-@onready var _xun_summary_body: Label = get_node("XunSummaryDialog/XunSummaryMargin/XunSummaryBody")
+@onready var _xun_summary_body: Label = get_node("XunSummaryDialog/XunSummaryMargin/XunSummaryContent/XunSummaryBody")
 @onready var _task_select_panel: PopupPanel = get_node("TaskSelectPanel")
 @onready var _month_report_panel = get_node("MonthReportPanel")
 @onready var _promotion_popup = get_node("PromotionPopup")
@@ -94,8 +95,14 @@ func _ready() -> void:
 	_end_xun_dialog.confirmed.connect(_on_end_xun_confirmed)
 	_task_select_panel.task_confirmed.connect(_on_month_task_confirmed)
 	_month_report_panel.confirmed_report.connect(_on_month_report_confirmed)
+	var xun_summary_confirm := get_node_or_null("XunSummaryDialog/XunSummaryMargin/XunSummaryContent/ActionRow/ConfirmButton") as Button
+	if xun_summary_confirm != null:
+		xun_summary_confirm.pressed.connect(func() -> void:
+			_xun_summary_dialog.hide()
+		)
 	_end_xun_dialog.get_ok_button().text = "确认"
 	_end_xun_dialog.get_cancel_button().text = "取消"
+	_xun_summary_dialog.get_ok_button().hide()
 	if Engine.is_editor_hint():
 		return
 	call_deferred("_bootstrap_default_entry")
@@ -613,10 +620,11 @@ func _on_end_turn_button_pressed() -> void:
 func _on_end_xun_confirmed() -> void:
 	_end_xun_dialog.hide()
 	var summary = _game_root().call("end_current_xun")
-	show_success_state(_game_root().current_session)
 	var evaluation = _game_root().call("consume_last_month_evaluation")
 	if evaluation != null:
 		_active_month_end_evaluation = evaluation as MonthlyEvaluationResult
+	show_success_state(_game_root().current_session)
+	if evaluation != null:
 		_xun_summary_dialog.hide()
 		_show_month_end_feedback(_active_month_end_evaluation)
 	else:
@@ -636,10 +644,19 @@ func _show_xun_summary(summary: Variant) -> void:
 		XUN_SUMMARY_PROMPTS,
 		"\n".join(summary.prompt_lines),
 	]
-	_xun_summary_dialog.popup_centered_ratio(0.5)
+	_xun_summary_dialog.reset_size()
+	_xun_summary_dialog.min_size = XUN_SUMMARY_DIALOG_SIZE
+	_xun_summary_dialog.max_size = XUN_SUMMARY_DIALOG_SIZE
+	_xun_summary_dialog.size = XUN_SUMMARY_DIALOG_SIZE
+	call_deferred("_popup_xun_summary_dialog")
 	if _game_root().current_session != null:
 		_task_list.text = _build_task_summary(_game_root().current_session)
 	_event_list.text = "- 旬末总结已生成\n- %s" % (summary.action_lines[0] if not summary.action_lines.is_empty() else END_TURN_TEXT)
+
+
+func _popup_xun_summary_dialog() -> void:
+	_xun_summary_dialog.popup_centered(XUN_SUMMARY_DIALOG_SIZE)
+	_xun_summary_dialog.size = XUN_SUMMARY_DIALOG_SIZE
 
 
 func _format_summary_dict(values: Dictionary) -> String:
@@ -720,6 +737,8 @@ func _sync_month_task_ui_state() -> void:
 
 
 func _show_month_end_feedback(evaluation: MonthlyEvaluationResult) -> void:
+	if _task_select_panel.visible:
+		_task_select_panel.hide()
 	_month_report_panel.show_report(_build_month_report_text(evaluation))
 
 

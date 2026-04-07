@@ -123,8 +123,13 @@ func _run() -> void:
 
 	if not month_report.visible:
 		_fail("Month report should open at month end before promotion popup.")
+	if picker.visible:
+		_fail("Task picker must stay hidden while the month report is active.")
 	if promotion_popup.visible:
 		_fail("Promotion popup must not open before the month report is confirmed.")
+	var month_report_ok := month_report.get_node_or_null("PanelMargin/PanelContent/ActionRow/ConfirmButton") as Button
+	if month_report_ok == null or not month_report_ok.visible:
+		_fail("Month report should expose a visible confirm button.")
 	var report_text := _label_text(month_report, "PanelMargin/PanelContent/BodyLabel")
 	if not report_text.contains("任务名称：%s" % selected_task_name):
 		_fail("Month report should use the completed task snapshot instead of a cleared live task state.")
@@ -145,6 +150,9 @@ func _run() -> void:
 	await process_frame
 	if not promotion_popup.visible:
 		_fail("Promotion popup should open after month report confirmation.")
+	var promotion_ok := promotion_popup.get_node_or_null("PanelMargin/PanelContent/ActionRow/ConfirmButton") as Button
+	if promotion_ok == null or not promotion_ok.visible:
+		_fail("Promotion popup should expose a visible confirm button.")
 	if picker.visible:
 		_fail("Next-month task picker must stay hidden until promotion confirmation finishes.")
 	var promotion_text := _label_text(promotion_popup, "PanelMargin/PanelContent/BodyLabel")

@@ -67,7 +67,7 @@
   - design/GDD 框架 v1.md
 
 ### 阶段 5：交付
-- **状态：** in_progress
+- **状态：** complete
 - 执行的操作：
   - 汇总现有设计文档，形成统一索引与交付入口
   - 准备进行 git commit 与 push
@@ -99,6 +99,76 @@
   - design/行动菜单结构设计 v1.md
   - design/主界面改版布局草案 v1.md
 
+## 会话：2026-04-07
+
+### 阶段 6：Phase 2.1 范围冻结
+- **状态：** complete
+- 执行的操作：
+  - 基于用户反馈，确认应在 Phase 3 前插入 Phase 2.1 过渡阶段
+  - 将默认角色由曹操调整为荀彧，以便更好承接任务、官职与派系相关系统
+  - 输出《官职与任务原型部署 Phase 2.1 v1》正式 GDD 章节稿
+  - 输出《官职与任务原型部署数据字段设计 v1》作为配套数据建模文档
+  - 按 design 目录规范同步更新 `design/Agent.md`、`design/machine_index.json`、`design/CHANGELOG.md`
+  - 恢复并读取根目录规划文件，为 Phase 2.1 补充新的阶段组与关键发现
+- 创建/修改的文件：
+  - task_plan.md
+  - findings.md
+  - progress.md
+  - design/总纲/官职与任务原型部署 Phase 2.1 v1.md
+  - design/数据/官职与任务原型部署数据字段设计 v1.md
+  - design/Agent.md
+  - design/machine_index.json
+  - design/CHANGELOG.md
+
+### 阶段 7：实现映射拆解
+- **状态：** complete
+- 执行的操作：
+  - 基于 Phase 2.1 GDD、字段设计稿、Godot 模块拆分与原型开发拆解文档，整理实现桥接层要求
+  - 输出《Phase 2.1 Godot 实现映射表 v1》
+  - 将设计项映射到 `TimeManager`、`TaskSystem`、`CharacterSystem`、`CareerSystem`、`DataRepository`、`MonthReportPanel` 等 Godot 模块
+  - 明确静态 Resource、运行时状态、UI 面板与月度时序的职责边界
+  - 同步更新 design 索引文件，使 Phase 2.1 开发入口完整
+- 创建/修改的文件：
+  - task_plan.md
+  - findings.md
+  - progress.md
+  - design/原型与实现/Phase 2.1 Godot 实现映射表 v1.md
+  - design/Agent.md
+  - design/machine_index.json
+  - design/CHANGELOG.md
+
+### 阶段 7.5：实现前对齐
+- **状态：** pending
+- 计划中的下一步：
+  - 依据实现映射表确认项目中的实际脚本落位与命名方式
+  - 确认首批 Resource 目录与最小样本录入顺序
+  - 确认任务选择与月末结算 UI 面板是否独立实现
+
+### 阶段 8：最小数据录入准备
+- **状态：** in_progress
+- 执行的操作：
+  - 基于字段设计稿、实现映射表、190 样本表与 Godot 数据结构草案，梳理 Phase 2.1 真正需要的首批录入对象
+  - 输出《Phase 2.1 最小数据录入清单 v1》
+  - 明确 P0 / P1 / P2 录入对象、最小条数、录入顺序与逐项验收方式
+  - 同步更新 design 索引文件，为后续 Resource 录入提供明确入口
+- 创建/修改的文件：
+  - task_plan.md
+  - findings.md
+  - progress.md
+  - design/数据/Phase 2.1 最小数据录入清单 v1.md
+  - design/Agent.md
+  - design/machine_index.json
+  - design/CHANGELOG.md
+
+## 测试结果
+| 测试 | 输入 | 预期结果 | 实际结果 | 状态 |
+|------|------|---------|---------|------|
+| Phase 2.1 文档创建 | 新增 GDD 章节与字段设计稿 | 文件成功落盘并可读 | 已创建并校验 | passed |
+| design 索引同步 | Agent / machine_index / changelog | 新文档可被检索 | 已同步更新 | passed |
+| 会话恢复脚本执行 | `.agents` 实际脚本路径 | 输出恢复报告或无未同步上下文 | 已执行，未发现需额外同步内容 | passed |
+| Phase 2.1 实现映射文档创建 | 新增实现桥接文档 | 文件成功落盘并可读 | 已创建并校验 | passed |
+| Phase 2.1 数据录入清单创建 | 新增最小录入执行文档 | 文件成功落盘并可读 | 已创建并校验 | passed |
+
 ## 错误日志
 | 时间戳 | 错误 | 尝试次数 | 解决方案 |
 |--------|------|---------|---------|
@@ -107,11 +177,11 @@
 ## 五问重启检查
 | 问题 | 答案 |
 |------|------|
-| 我在哪里？ | 阶段 5：交付 |
-| 我要去哪里？ | 后续细化专项设计并进入开发阶段 |
-| 目标是什么？ | 把主界面、行动入口与布局方案细化到开发可直接照做 |
+| 我在哪里？ | 阶段 8 已开始，当前处于最小数据录入准备阶段 |
+| 我要去哪里？ | 完成首批 Resource 样本录入、月度任务闭环实现与联调验收 |
+| 目标是什么？ | 把 Phase 2.1 从“文档已齐”推进到“最小样本已可录入” |
 | 我学到了什么？ | 见 findings.md |
-| 我做了什么？ | 已完成主要设计资料，并继续把主界面细化到布局草案层 |
+| 我做了什么？ | 已补齐 Phase 2.1 的最小数据录入清单，并同步更新 design 索引与规划文件 |
 
 ---
 *每个阶段完成后或遇到错误时更新此文件*

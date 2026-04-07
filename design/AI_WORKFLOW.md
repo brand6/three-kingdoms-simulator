@@ -26,7 +26,7 @@
 - `design/machine_index.json`
   - 增加或更新对应文件索引
 - `design/CHANGELOG.md`
-  - 记录新增、移动、重命名、版本升级
+  - 记录对旧文档进行重命名、版本升级时更新，生成新文档不需要
 
 ## 4. machine_index.json 最少应填写
 
