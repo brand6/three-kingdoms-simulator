@@ -18,6 +18,7 @@ var _selected_index: int = -1
 
 func _ready() -> void:
 	_confirm_button.pressed.connect(_on_confirm_button_pressed)
+	_confirm_button.visible = false
 	_confirm_button.disabled = true
 
 
@@ -25,10 +26,12 @@ func show_task_picker(candidates: Array, repository: Node) -> void:
 	_title_label.text = "领取主任务"
 	_gate_label.text = "本月尚未领受公事，请先择定一项主任务。"
 	_candidates = candidates.duplicate(true)
-	_selected_index = 0 if not _candidates.is_empty() else -1
+	_selected_index = -1
 	_render_cards(repository)
 	_render_selected_reward(repository)
-	_confirm_button.disabled = _selected_index < 0
+	_confirm_button.visible = false
+	_confirm_button.disabled = true
+	_queue_popup_relayout()
 	popup_centered(Vector2i(720, 520))
 
 
@@ -97,7 +100,19 @@ func _on_card_pressed(index: int, repository: Node) -> void:
 	_selected_index = index
 	_render_cards(repository)
 	_render_selected_reward(repository)
+	_confirm_button.visible = true
 	_confirm_button.disabled = false
+	_queue_popup_relayout()
+
+
+func _queue_popup_relayout() -> void:
+	_card_list.queue_sort()
+	call_deferred("_refresh_popup_layout")
+
+
+func _refresh_popup_layout() -> void:
+	reset_size()
+	popup_centered(size)
 
 
 func _on_confirm_button_pressed() -> void:

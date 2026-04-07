@@ -59,7 +59,22 @@ func _run() -> void:
 	if not card_text.contains("预计奖励："):
 		_fail("Task cards should include expected reward copy.")
 
-	game_root.call("select_month_task", 0)
+	var confirm_button := _confirm_button(picker)
+	if confirm_button.visible:
+		_fail("Confirm CTA should stay hidden until a task card is clicked.")
+	if not confirm_button.disabled:
+		_fail("Confirm CTA should stay disabled until a task card is clicked.")
+
+	picker.call("_on_card_pressed", 0, root.get_node("/root/DataRepository"))
+	await process_frame
+	await process_frame
+	if not confirm_button.visible:
+		_fail("Clicking a task card should reveal the confirm CTA immediately.")
+	if confirm_button.disabled:
+		_fail("Clicking a task card should enable the confirm CTA immediately.")
+
+	picker.call("_on_confirm_button_pressed")
+	await process_frame
 	if picker.visible:
 		_fail("Task picker should close after task selection.")
 	if _action_button(hud).disabled:
@@ -134,6 +149,10 @@ func _run() -> void:
 
 func _action_button(hud: Node) -> Button:
 	return hud.get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/ActionButton") as Button
+
+
+func _confirm_button(picker: Node) -> Button:
+	return picker.get_node("PanelMargin/PanelContent/ActionRow/ConfirmButton") as Button
 
 
 func _task_summary(hud: Node) -> String:
