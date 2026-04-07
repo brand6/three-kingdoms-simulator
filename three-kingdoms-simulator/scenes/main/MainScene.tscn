@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://8s8c2wpe4738" path="res://scripts/ui/MainHUD.gd" id="2_script"]
 [ext_resource type="Script" uid="uid://cq1fdimvnkcgj" path="res://scripts/ui/CharacterSelectorDialog.gd" id="3_selector"]
 [ext_resource type="Script" uid="uid://dl7km7stqvsb1" path="res://scripts/ui/CharacterProfilePanel.gd" id="4_profile"]
+[ext_resource type="Script" path="res://scripts/ui/TaskSelectPanel.gd" id="5_task_select"]
 
 [node name="MainScene" type="Control" unique_id=1848903375]
 layout_mode = 3
@@ -571,3 +572,60 @@ autowrap_mode = 3
 layout_mode = 2
 text = "说明"
 autowrap_mode = 3
+
+[node name="TaskSelectPanel" type="PopupPanel" parent="." unique_id=1449280001]
+visible = false
+size = Vector2i(720, 520)
+script = ExtResource("5_task_select")
+
+[node name="PanelMargin" type="MarginContainer" parent="TaskSelectPanel" unique_id=1449280002]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="PanelContent" type="VBoxContainer" parent="TaskSelectPanel/PanelMargin" unique_id=1449280003]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="TaskSelectPanel/PanelMargin/PanelContent" unique_id=1449280004]
+layout_mode = 2
+theme_type_variation = &"HeadingLabel"
+text = "领取主任务"
+
+[node name="GateLabel" type="Label" parent="TaskSelectPanel/PanelMargin/PanelContent" unique_id=1449280005]
+layout_mode = 2
+theme_type_variation = &"StatusLabel"
+text = "本月尚未领受公事，请先择定一项主任务。"
+autowrap_mode = 3
+
+[node name="CardScroll" type="ScrollContainer" parent="TaskSelectPanel/PanelMargin/PanelContent" unique_id=1449280006]
+custom_minimum_size = Vector2(0, 280)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="CardList" type="VBoxContainer" parent="TaskSelectPanel/PanelMargin/PanelContent/CardScroll" unique_id=1449280007]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="SelectedRewardLabel" type="Label" parent="TaskSelectPanel/PanelMargin/PanelContent" unique_id=1449280008]
+layout_mode = 2
+text = "已选任务预期：—"
+autowrap_mode = 3
+
+[node name="ActionRow" type="HBoxContainer" parent="TaskSelectPanel/PanelMargin/PanelContent" unique_id=1449280009]
+layout_mode = 2
+alignment = 2
+
+[node name="ConfirmButton" type="Button" parent="TaskSelectPanel/PanelMargin/PanelContent/ActionRow" unique_id=1449280010]
+custom_minimum_size = Vector2(160, 48)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "领取主任务"

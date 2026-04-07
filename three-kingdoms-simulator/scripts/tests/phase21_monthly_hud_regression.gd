@@ -37,9 +37,9 @@ func _run() -> void:
 		_fail("Task picker should auto-open at month start.")
 	if _action_button(hud).disabled == false:
 		_fail("Action button should stay locked until a monthly task is confirmed.")
-	if not _label_text(picker, "TitleLabel").contains("领取主任务"):
+	if not _label_text(picker, "PanelMargin/PanelContent/TitleLabel").contains("领取主任务"):
 		_fail("Task picker should show the month-start CTA copy.")
-	if _label_text(picker, "GateLabel") != "本月尚未领受公事，请先择定一项主任务。":
+	if _label_text(picker, "PanelMargin/PanelContent/GateLabel") != "本月尚未领受公事，请先择定一项主任务。":
 		_fail("Task picker should use the institutional month-start gate copy.")
 
 	var card_text := _first_task_card_text(picker)
@@ -50,7 +50,7 @@ func _run() -> void:
 	if not card_text.contains("预计奖励："):
 		_fail("Task cards should include expected reward copy.")
 
-	game_root.call("select_month_task", tasks[0].task_id)
+	game_root.call("select_month_task", 0)
 	if picker.visible:
 		_fail("Task picker should close after task selection.")
 	if _action_button(hud).disabled:
@@ -83,7 +83,7 @@ func _label_text(picker: Node, name: String) -> String:
 
 
 func _first_task_card_text(picker: Node) -> String:
-	var container := picker.get_node_or_null("CardScroll/CardList") as VBoxContainer
+	var container := picker.get_node_or_null("PanelMargin/PanelContent/CardScroll/CardList") as VBoxContainer
 	if container == null or container.get_child_count() == 0:
 		return ""
 	var first_card := container.get_child(0)

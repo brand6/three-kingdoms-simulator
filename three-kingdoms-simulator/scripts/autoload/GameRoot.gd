@@ -190,7 +190,10 @@ func get_pending_month_tasks() -> Array:
 func select_month_task(selected_index: int) -> Variant:
 	if current_session == null:
 		return null
-	return _task_system.select_month_task(current_session, _data_repository(), selected_index)
+	var task_state = _task_system.select_month_task(current_session, _data_repository(), selected_index)
+	if task_state != null and _hud != null:
+		_hud.show_success_state(current_session)
+	return task_state
 
 
 func _initialize_month_start_state() -> void:

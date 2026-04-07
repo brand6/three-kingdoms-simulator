@@ -4,6 +4,10 @@ class_name MainHUD
 const ERROR_TEXT := "190 样本加载失败。请检查 Luban JSON 导出文件、默认主角 ID 与数据路径配置，然后重新启动项目。"
 const EMPTY_TASK_TITLE := "当前暂无正式任务"
 const EMPTY_TASK_BODY := "从行动中选择拜访、巡察或探亲来创造新机会"
+const MONTH_EMPTY_TASK_TITLE := "本月暂无可领任务"
+const MONTH_EMPTY_TASK_BODY := "当前官职暂无匹配事务。请检查任务池配置，或等待下月任务刷新后再作部署。"
+const MONTH_PICKER_TITLE := "领取主任务"
+const MONTH_GATE_COPY := "本月尚未领受公事，请先择定一项主任务。"
 const EMPTY_EVENT_BODY := "- 暂无新事件\n- 系统会继续根据你的所在地、势力位置与关键人物关系刷新近期动向"
 const LOADING_RELATION_SUMMARY := "关键关系摘要：正在整理主公、亲近者与高戒备对象的短句摘要。"
 const LOADING_FACTION_SUMMARY := "势力/派系摘要：正在汇总所属势力的支持态势、派系位置与当前风险。"
@@ -60,6 +64,7 @@ const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 @onready var _end_xun_dialog: ConfirmationDialog = get_node("EndXunDialog")
 @onready var _xun_summary_dialog: AcceptDialog = get_node("XunSummaryDialog")
 @onready var _xun_summary_body: Label = get_node("XunSummaryDialog/XunSummaryMargin/XunSummaryBody")
+@onready var _task_select_panel: PopupPanel = get_node("TaskSelectPanel")
 
 var _selected_action_category: String = "成长"
 
@@ -84,6 +89,7 @@ func _ready() -> void:
 	_target_picker_dialog.confirmed.connect(_on_target_picker_confirmed)
 	_character_selector_dialog.row_chosen.connect(_on_character_selector_row_chosen)
 	_end_xun_dialog.confirmed.connect(_on_end_xun_confirmed)
+	_task_select_panel.task_confirmed.connect(_on_month_task_confirmed)
 	_end_xun_dialog.get_ok_button().text = "确认"
 	_end_xun_dialog.get_cancel_button().text = "取消"
 	if Engine.is_editor_hint():
@@ -121,7 +127,7 @@ func show_success_state(session: GameSession) -> void:
 	var ap_value := _metric_value(runtime_state, &"ap")
 	var merit_value := _metric_value(runtime_state, &"merit")
 
-	_task_list.text = _build_task_list(city_name, faction_name, ap_value)
+	_task_list.text = _build_task_summary(session)
 	_event_list.text = _build_event_list(city_name, faction_name, protagonist_name)
 	_relation_summary_body.text = _build_relation_summary(faction_name, merit_value)
 	_faction_summary_body.text = _build_faction_summary(faction_name, city_name)
@@ -141,8 +147,9 @@ func show_success_state(session: GameSession) -> void:
 	_office_info_label.text = "官职：%s" % office_text
 	_status_info_label.text = "状态：%s" % _status_text(runtime_state)
 	_health_info_label.text = "健康：%s" % _health_text(runtime_state)
-	_end_turn_button.disabled = false
+	_apply_month_action_gate(session)
 	_refresh_overlay_data()
+	_open_month_task_picker_if_needed(session)
 
 
 func show_error_state(message: String) -> void:
@@ -175,8 +182,27 @@ func _empty_task_text() -> String:
 	return "- %s\n- %s" % [EMPTY_TASK_TITLE, EMPTY_TASK_BODY]
 
 
-func _build_task_list(city_name: String, faction_name: String, ap_value: String) -> String:
-	return "- 巡察 %s｜来源：主循环｜进度：待执行｜影响：秩序与功绩\n- 拜访关键人物｜来源：行动｜进度：可开始｜影响：争取%s支持\n- 保留 %s 点 AP 给旬末推进｜来源：节奏控制｜进度：自行判断｜影响：确保%s仍有后续操作空间" % [city_name, faction_name, ap_value, city_name]
+func _build_task_summary(session: GameSession) -> String:
+	if session == null:
+		return _empty_task_text()
+	var task_state: MonthlyTaskState = session.current_month_task as MonthlyTaskState
+	if task_state == null:
+		if session.month_action_locked:
+			var pending: Array = _game_root().call("get_pending_month_tasks")
+			if pending.is_empty():
+				return "%s\n%s" % [MONTH_EMPTY_TASK_TITLE, MONTH_EMPTY_TASK_BODY]
+			return "%s\n%s" % [MONTH_PICKER_TITLE, MONTH_GATE_COPY]
+		return _empty_task_text()
+	var template = _data_repository().call("get_task_template", task_state.task_template_id)
+	var task_name := str(template.name if template != null else task_state.task_template_id)
+	var progress := task_state.progress_snapshot
+	var current_value := int(progress.current_value if progress != null else 0)
+	var target_value := int(progress.target_value if progress != null else 0)
+	var bonus_value := int(progress.bonus_value if progress != null else 0)
+	var progress_text := "%d/%d" % [current_value, target_value]
+	if bonus_value > target_value:
+		progress_text = "%s（优秀 %d）" % [progress_text, bonus_value]
+	return "当前主任务：%s\n当前进度：%s\n剩余旬数：%d" % [task_name, progress_text, _remaining_xun_count(session)]
 
 
 func _build_event_list(city_name: String, faction_name: String, protagonist_name: String) -> String:
@@ -314,6 +340,9 @@ func _display_value(value: Variant) -> String:
 
 
 func _on_action_button_pressed() -> void:
+	if _game_root().current_session != null and _game_root().current_session.month_action_locked:
+		_open_month_task_picker_if_needed(_game_root().current_session)
+		return
 	_refresh_action_menu()
 	_popup_action_menu()
 
@@ -323,6 +352,9 @@ func _on_relation_button_pressed() -> void:
 
 
 func _refresh_overlay_data() -> void:
+	_sync_month_task_ui_state()
+	if _game_root().current_session != null:
+		_task_list.text = _build_task_summary(_game_root().current_session)
 	_refresh_action_menu()
 
 
@@ -560,7 +592,7 @@ func _show_action_result(result: Variant) -> void:
 		clue_text if not clue_text.is_empty() else "无"
 	]
 	_action_result_dialog.popup_centered_ratio(0.45)
-	_task_list.text = "- 最近行动：%s\n- %s：%s\n- 下一步：继续从行动中巩固关系或秩序收益" % [result.title, RESULT_LABEL_REASON, result.reason_text]
+	_task_list.text = _build_task_summary(_game_root().current_session)
 	_event_list.text = "- 结果反馈：%s\n- %s：%s\n- %s：%s" % [result.summary_line, RESULT_LABEL_STATS, _format_stat_delta_text(result.stat_deltas), RESULT_LABEL_RELATIONS, relation_text]
 	_relation_summary_body.text = "关键关系摘要：%s" % relation_text
 
@@ -627,3 +659,53 @@ func _format_relation_delta_text(relation_deltas: Dictionary) -> String:
 func _clear_children(node: Node) -> void:
 	for child in node.get_children():
 		child.queue_free()
+
+
+func _apply_month_action_gate(session: GameSession) -> void:
+	var locked := session != null and session.month_action_locked
+	_action_button.disabled = locked
+	_relation_button.disabled = locked
+	_end_turn_button.disabled = locked
+
+
+func _open_month_task_picker_if_needed(session: GameSession) -> void:
+	if session == null or not session.month_action_locked:
+		return
+	var candidates: Array = _game_root().call("get_pending_month_tasks")
+	_task_select_panel.show_task_picker(candidates, _data_repository())
+
+
+func _on_month_task_confirmed(selected_index: int) -> void:
+	var task_state = _game_root().call("select_month_task", selected_index)
+	if task_state == null:
+		return
+	_task_select_panel.hide()
+	show_success_state(_game_root().current_session)
+
+
+func _process(_delta: float) -> void:
+	if Engine.is_editor_hint():
+		return
+	_sync_month_task_ui_state()
+
+
+func _sync_month_task_ui_state() -> void:
+	var session: GameSession = _game_root().current_session
+	if session == null:
+		return
+	_apply_month_action_gate(session)
+	if session.month_action_locked:
+		if not _task_select_panel.visible:
+			_open_month_task_picker_if_needed(session)
+	else:
+		if _task_select_panel.visible:
+			_task_select_panel.hide()
+
+
+func _remaining_xun_count(session: GameSession) -> int:
+	if session == null:
+		return 0
+	var task_system = _game_root().get("_task_system")
+	if task_system != null and task_system.has_method("remaining_xun_count"):
+		return int(task_system.call("remaining_xun_count", session))
+	return max(0, 3 - session.current_xun)
