@@ -40,6 +40,12 @@ func _run() -> void:
 		_fail("Expected selecting the first month task to succeed.")
 	if session.month_action_locked:
 		_fail("Month action gate should unlock after task selection.")
+	var inspect_actions: Array = game_root.get_available_phase2_actions()
+	var inspect_spec = _find_action(inspect_actions, "inspect")
+	if inspect_spec == null:
+		_fail("Expected inspect to stay visible after monthly task selection.")
+	if str(inspect_spec.disabled_reason) != "":
+		_fail("Expected inspect to stay enabled for xun_yu after task selection.")
 
 	var before_progress: int = task_state.progress_snapshot.current_value
 	game_root.execute_phase2_action("study")
@@ -47,8 +53,13 @@ func _run() -> void:
 		_fail("Expected study to increase selected month task progress.")
 	if task_state.progress_snapshot.current_value != 4:
 		_fail("Expected the stable admin task to gain +4 progress from study.")
+	var inspect_before_progress: int = task_state.progress_snapshot.current_value
+	game_root.execute_phase2_action("inspect")
+	if task_state.progress_snapshot.current_value <= inspect_before_progress:
+		_fail("Expected inspect to increase selected month task progress.")
+	if task_state.progress_snapshot.current_value != 7:
+		_fail("Expected the stable admin task to gain +3 progress from inspect.")
 
-	game_root.execute_phase2_action("study")
 	game_root.execute_phase2_action("study")
 	if task_state.progress_snapshot.current_value < task_state.progress_snapshot.target_value:
 		_fail("Expected first-month stable path to reach success threshold before month end.")
@@ -71,7 +82,7 @@ func _run() -> void:
 		_fail("Expected task result in month evaluation.")
 	if evaluation.task_name != "整顿文书":
 		_fail("Expected month evaluation to persist the completed task name snapshot.")
-	if evaluation.progress_current_value != 12 or evaluation.progress_target_value != 8 or evaluation.progress_bonus_value != 11:
+	if evaluation.progress_current_value != 11 or evaluation.progress_target_value != 8 or evaluation.progress_bonus_value != 11:
 		_fail("Expected month evaluation to persist the completed task progress snapshot.")
 	if evaluation.task_result != "excellent":
 		_fail("Expected stable first-month task to resolve as excellent, got %s." % evaluation.task_result)
@@ -127,3 +138,10 @@ func _run() -> void:
 func _fail(message: String) -> void:
 	push_error(message)
 	quit(1)
+
+
+func _find_action(actions: Array, action_id: String):
+	for action in actions:
+		if action.id == action_id:
+			return action
+	return null
