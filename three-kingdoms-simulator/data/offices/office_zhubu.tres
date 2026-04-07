@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="OfficeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/OfficeData.gd" id="1_office"]
+
+[resource]
+script = ExtResource("1_office")
+id = "office_zhubu"
+name = "主簿级辅官"
+tier = 2
+description = "可直接接触更稳定的内政与人事事务，开始拥有更明确的政治可见度。"
+unlock_task_tags = Array[String](["logistics", "admin", "politics_basic", "personnel", "politics_mid", "dispatch"])
+blocked_task_tags = Array[String]([])
+merit_threshold = 25
+next_office_id = "office_central_aide"
+prev_office_id = "office_congshi"
+address_title = "主簿"
+stipend_text = "秉掌案牍与调度，已入可被主君直接考察的辅官序列。"
+is_phase2_1_available = true
+sort_order = 20

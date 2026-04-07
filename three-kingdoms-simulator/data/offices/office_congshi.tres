@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="OfficeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/OfficeData.gd" id="1_office"]
+
+[resource]
+script = ExtResource("1_office")
+id = "office_congshi"
+name = "从事"
+tier = 1
+description = "正式进入势力政务链条的基础幕僚官，开始接受月度考评与正式事务指派。"
+unlock_task_tags = Array[String](["logistics", "admin", "politics_basic"])
+blocked_task_tags = Array[String](["central_affairs"])
+merit_threshold = 10
+next_office_id = "office_zhubu"
+prev_office_id = "office_commoner"
+address_title = "从事君"
+stipend_text = "列属幕府，食禄有定，须以月度公事自证才干。"
+is_phase2_1_available = true
+sort_order = 10

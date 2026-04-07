@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="OfficeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/OfficeData.gd" id="1_office"]
+
+[resource]
+script = ExtResource("1_office")
+id = "office_commoner"
+name = "白身"
+tier = 0
+description = "尚未正式进入势力任官序列的起步身份，主要承担零散杂务与观察期事务。"
+unlock_task_tags = Array[String]([])
+blocked_task_tags = Array[String](["central_affairs", "personnel", "politics_mid"])
+merit_threshold = 0
+next_office_id = "office_congshi"
+prev_office_id = ""
+address_title = "门下士"
+stipend_text = "暂未食禄，仅以听差与观望为主。"
+is_phase2_1_available = true
+sort_order = 0

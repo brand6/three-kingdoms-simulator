@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="OfficeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/OfficeData.gd" id="1_office"]
+
+[resource]
+script = ExtResource("1_office")
+id = "office_central_aide"
+name = "中枢幕僚级"
+tier = 3
+description = "接近中枢决策层的幕僚位置，可承接 central_affairs 等更高层政务。"
+unlock_task_tags = Array[String](["logistics", "admin", "politics_basic", "personnel", "politics_mid", "dispatch", "central_affairs"])
+blocked_task_tags = Array[String]([])
+merit_threshold = 45
+next_office_id = ""
+prev_office_id = "office_zhubu"
+address_title = "中枢幕僚"
+stipend_text = "得预闻中枢机务，凡月度功过皆更受注目。"
+is_phase2_1_available = true
+sort_order = 30
