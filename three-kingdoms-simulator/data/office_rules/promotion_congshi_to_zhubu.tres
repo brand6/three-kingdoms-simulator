@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PromotionRuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/PromotionRuleData.gd" id="1_rule"]
+
+[resource]
+script = ExtResource("1_rule")
+id = "promotion_congshi_to_zhubu"
+from_office_id = "office_congshi"
+to_office_id = "office_zhubu"
+required_merit = 25
+required_fame = 12
+require_task_success_this_month = true
+min_months_in_office = 0
+vacancy_key = "vacancy_zhubu"
+notification_source_character_id = "cao_cao"
+success_note = "曹操命曰：本月公事办结有功，可进主簿级辅官。"
+failure_note = "功绩不足 / 名望不足 / 无空缺 / 任务未达标 时，本月暂缓擢升主簿。"
+is_phase2_1_available = true

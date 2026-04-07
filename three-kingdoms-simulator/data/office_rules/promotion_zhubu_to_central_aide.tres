@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PromotionRuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/PromotionRuleData.gd" id="1_rule"]
+
+[resource]
+script = ExtResource("1_rule")
+id = "promotion_zhubu_to_central_aide"
+from_office_id = "office_zhubu"
+to_office_id = "office_central_aide"
+required_merit = 45
+required_fame = 20
+require_task_success_this_month = true
+min_months_in_office = 1
+vacancy_key = "vacancy_central_aide"
+notification_source_character_id = "cao_cao"
+success_note = "上命传达：可入中枢幕府，参掌更高机务。"
+failure_note = "功绩不足 / 名望不足 / 无空缺 / 任务未达标 时，暂不得入中枢。"
+is_phase2_1_available = true

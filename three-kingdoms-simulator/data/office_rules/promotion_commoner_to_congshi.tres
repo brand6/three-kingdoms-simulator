@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PromotionRuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/PromotionRuleData.gd" id="1_rule"]
+
+[resource]
+script = ExtResource("1_rule")
+id = "promotion_commoner_to_congshi"
+from_office_id = "office_commoner"
+to_office_id = "office_congshi"
+required_merit = 10
+required_fame = 0
+require_task_success_this_month = true
+min_months_in_office = 0
+vacancy_key = "vacancy_congshi"
+notification_source_character_id = "cao_cao"
+success_note = "曹操下令：白身事务办结有据，可补授从事。"
+failure_note = "任务未达标 / 功绩不足 / 无空缺 时，不予授任从事。"
+is_phase2_1_available = true
