@@ -4,9 +4,25 @@
 [ext_resource type="Script" uid="uid://8s8c2wpe4738" path="res://scripts/ui/MainHUD.gd" id="2_script"]
 [ext_resource type="Script" uid="uid://cq1fdimvnkcgj" path="res://scripts/ui/CharacterSelectorDialog.gd" id="3_selector"]
 [ext_resource type="Script" uid="uid://dl7km7stqvsb1" path="res://scripts/ui/CharacterProfilePanel.gd" id="4_profile"]
-[ext_resource type="Script" path="res://scripts/ui/TaskSelectPanel.gd" id="5_task_select"]
-[ext_resource type="Script" path="res://scripts/ui/MonthReportPanel.gd" id="6_month_report"]
-[ext_resource type="Script" path="res://scripts/ui/PromotionPopup.gd" id="7_promotion"]
+[ext_resource type="Script" uid="uid://qqi5vjdpcfbs" path="res://scripts/ui/TaskSelectPanel.gd" id="5_task_select"]
+[ext_resource type="Script" uid="uid://r7cm1vwd0qbu" path="res://scripts/ui/MonthReportPanel.gd" id="6_month_report"]
+[ext_resource type="Script" uid="uid://f8yran4qbxi2" path="res://scripts/ui/PromotionPopup.gd" id="7_promotion"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hi3im"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.894118, 0.847059, 0.772549, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.811765, 0.764706, 0.690196, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="MainScene" type="Control" unique_id=1848903375]
 layout_mode = 3
@@ -324,7 +340,10 @@ text = "结束本旬"
 [node name="ActionMenuPopup" type="PopupPanel" parent="." unique_id=26974020]
 
 [node name="ActionMenuMargin" type="MarginContainer" parent="ActionMenuPopup" unique_id=1539434310]
-layout_mode = 2
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 96.0
+offset_bottom = 96.0
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
@@ -337,7 +356,10 @@ theme_override_constants/separation = 4
 [node name="ActionSubMenuPopup" type="PopupPanel" parent="." unique_id=1635969262]
 
 [node name="SubMenuMargin" type="MarginContainer" parent="ActionSubMenuPopup" unique_id=590416681]
-layout_mode = 2
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 96.0
+offset_bottom = 96.0
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
@@ -576,14 +598,21 @@ text = "说明"
 autowrap_mode = 3
 
 [node name="TaskSelectPanel" type="PopupPanel" parent="." unique_id=1449280001]
-visible = false
+transparent_bg = false
 size = Vector2i(720, 520)
+transparent = false
+exclusive = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_hi3im")
 script = ExtResource("5_task_select")
 
 [node name="PanelMargin" type="MarginContainer" parent="TaskSelectPanel" unique_id=1449280002]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 16
@@ -598,12 +627,13 @@ theme_override_constants/separation = 16
 [node name="TitleLabel" type="Label" parent="TaskSelectPanel/PanelMargin/PanelContent" unique_id=1449280004]
 layout_mode = 2
 theme_type_variation = &"HeadingLabel"
-text = "领取主任务"
+text = "领取本月任务"
 
 [node name="GateLabel" type="Label" parent="TaskSelectPanel/PanelMargin/PanelContent" unique_id=1449280005]
 layout_mode = 2
 theme_type_variation = &"StatusLabel"
-text = "本月尚未领受公事，请先择定一项主任务。"
+visible = false
+text = ""
 autowrap_mode = 3
 
 [node name="CardScroll" type="ScrollContainer" parent="TaskSelectPanel/PanelMargin/PanelContent" unique_id=1449280006]
@@ -618,6 +648,7 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
 [node name="SelectedRewardLabel" type="Label" parent="TaskSelectPanel/PanelMargin/PanelContent" unique_id=1449280008]
+visible = false
 layout_mode = 2
 text = "已选任务预期：—"
 autowrap_mode = 3
@@ -630,7 +661,7 @@ alignment = 2
 custom_minimum_size = Vector2(160, 48)
 layout_mode = 2
 theme_type_variation = &"PrimaryButton"
-text = "领取主任务"
+text = "领取本月任务"
 
 [node name="MonthReportPanel" type="AcceptDialog" parent="." unique_id=1449280101]
 title = "任务结果月报"
@@ -654,8 +685,8 @@ theme_override_constants/separation = 16
 
 [node name="BodyLabel" type="Label" parent="MonthReportPanel/PanelMargin/PanelContent" unique_id=1449280104]
 layout_mode = 2
-autowrap_mode = 3
 text = "任务结果月报"
+autowrap_mode = 3
 
 [node name="PromotionPopup" type="AcceptDialog" parent="." unique_id=1449280201]
 title = "任命结果"
@@ -679,5 +710,5 @@ theme_override_constants/separation = 16
 
 [node name="BodyLabel" type="Label" parent="PromotionPopup/PanelMargin/PanelContent" unique_id=1449280204]
 layout_mode = 2
-autowrap_mode = 3
 text = "任命结果"
+autowrap_mode = 3

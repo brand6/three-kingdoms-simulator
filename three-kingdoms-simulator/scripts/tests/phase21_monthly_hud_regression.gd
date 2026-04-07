@@ -44,12 +44,15 @@ func _run() -> void:
 
 	if not picker.visible:
 		_fail("Task picker should auto-open at month start.")
+	if picker.size.x < 720 or picker.size.y < 520:
+		_fail("Task picker should use the stable month-start popup size on first open.")
 	if _action_button(hud).disabled == false:
 		_fail("Action button should stay locked until a monthly task is confirmed.")
-	if not _label_text(picker, "PanelMargin/PanelContent/TitleLabel").contains("领取主任务"):
+	if not _label_text(picker, "PanelMargin/PanelContent/TitleLabel").contains("领取本月任务"):
 		_fail("Task picker should show the month-start CTA copy.")
-	if _label_text(picker, "PanelMargin/PanelContent/GateLabel") != "本月尚未领受公事，请先择定一项主任务。":
-		_fail("Task picker should use the institutional month-start gate copy.")
+	var gate_label := picker.get_node_or_null("PanelMargin/PanelContent/GateLabel") as Label
+	if gate_label == null or gate_label.visible:
+		_fail("Task picker should hide the hint copy above the confirm CTA.")
 
 	var card_text := _first_task_card_text(picker)
 	if not card_text.contains("发布人："):
@@ -60,10 +63,15 @@ func _run() -> void:
 		_fail("Task cards should include expected reward copy.")
 
 	var confirm_button := _confirm_button(picker)
-	if confirm_button.visible:
-		_fail("Confirm CTA should stay hidden until a task card is clicked.")
+	if not confirm_button.visible:
+		_fail("Confirm CTA should be visible as soon as the task picker opens.")
 	if not confirm_button.disabled:
 		_fail("Confirm CTA should stay disabled until a task card is clicked.")
+	var selected_reward_label := picker.get_node_or_null("PanelMargin/PanelContent/SelectedRewardLabel") as Label
+	if selected_reward_label == null:
+		_fail("Task picker should expose the selected reward label.")
+	if selected_reward_label.visible or selected_reward_label.text.strip_edges() != "":
+		_fail("Task picker should not show task info above the confirm CTA before a task is selected.")
 
 	picker.call("_on_card_pressed", 0, root.get_node("/root/DataRepository"))
 	await process_frame
@@ -72,6 +80,10 @@ func _run() -> void:
 		_fail("Clicking a task card should reveal the confirm CTA immediately.")
 	if confirm_button.disabled:
 		_fail("Clicking a task card should enable the confirm CTA immediately.")
+	if selected_reward_label.visible or selected_reward_label.text.strip_edges() != "":
+		_fail("Selecting a task should still keep the area above the confirm CTA free of task info.")
+	if not picker.exclusive:
+		_fail("Task picker should run in exclusive mode so outside clicks do not dismiss it during month selection.")
 
 	picker.call("_on_confirm_button_pressed")
 	await process_frame
