@@ -47,7 +47,7 @@
 - [ ] **CARE-01**: Player can receive at least two task sources in the prototype, including ruler-assigned or family-related requests.
 - [x] **CARE-02**: Completing actions or tasks can change merit and fame values.
 - [x] **CARE-03**: Game performs a month-end evaluation that can produce appointment, promotion, rejection, or missed-opportunity feedback.
-- [ ] **CARE-04**: Month-end results explain the main reasons for the outcome, including support, opposition, merit level, trust, or status blockers.
+- [x] **CARE-04**: Month-end results explain the main reasons for the outcome, including support, opposition, merit level, trust, or status blockers.
 - [x] **CARE-05**: Office or appointment changes alter available permissions, action options, or political standing.
 
 ### Factions
@@ -165,7 +165,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CARE-01 | Phase 3 | Pending |
 | CARE-02 | Phase 3 | Complete |
 | CARE-03 | Phase 3 | Complete |
-| CARE-04 | Phase 3 | Pending |
+| CARE-04 | Phase 3 | Complete |
 | CARE-05 | Phase 3 | Complete |
 | FACT-01 | Phase 3 | Pending |
 | FACT-02 | Phase 3 | Pending |
