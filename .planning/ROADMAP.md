@@ -59,6 +59,30 @@ Plans:
 **Canonical refs**: `design/系统设计/核心系统详细设计 v1.md` §§2-3; `design/原型与实现/Godot 原型开发拆解 v1.md` §§3-6; `design/原型与实现/原型任务拆解清单 v1.md` T06-T08; `design/UIUX/原型 UI 流程图 v1.md` §§4-7, 11-13
 **UI hint**: yes
 
+### Phase 02.1: 官职与任务部署 (INSERTED)
+
+**Goal:** 玩家以荀彧身份在新月领受 1 个主任务，在三旬内用现有基础行动推进任务，并在月末收到可解释的任务结算与简化任命结果；首月至少有 1 条更稳定的升官正反馈路径，trust 也能通过可见叙事反馈参与这一轮仕途体验。
+**Requirements**: CARE-02, CARE-03, CARE-04, CARE-05, UI-03
+**Depends on:** Phase 2
+**Plans:** 1/6 plans executed
+
+**Success Criteria** (what must be TRUE):
+  1. Player boots as 荀彧, and each new month auto-opens a task picker that requires exactly one main-task selection before any xun actions can proceed, but the gate copy reads as a仕途制度提示 rather than a blunt system lock.
+  2. The selected monthly task progresses only through the existing five foundational actions, and the first-month task pool guarantees at least one stable success path that can realistically satisfy the first promotion threshold when the vacancy is open.
+  3. The third xun of the month automatically triggers task settlement, merit/fame/trust writeback, and a simplified appointment check using vacancy + data-threshold + notification rules, while trust must also surface in visible narrative feedback instead of remaining a hidden numeric delta.
+  4. Month-end feedback first shows a constrained task report with task name, result, progress, merit/fame/trust deltas, and one political-meaning summary line, then a separate promotion popup whose failure copy is standardized as `功绩不足` / `名望不足` / `无空缺` / `任务未达标`, without introducing Phase 3 multi-candidate or faction logic.
+
+Plans:
+- [x] 02.1-01-PLAN.md — 建立官职 / 任务 / 升官 / 月结算静态与运行时契约
+- [ ] 02.1-02-PLAN.md — 录入四级官职链与三条升官规则样本数据
+- [ ] 02.1-03-PLAN.md — 录入四个任务模板、月初任务池规则与荀彧开局补丁
+- [ ] 02.1-04-PLAN.md — 扩展仓库与 bootstrap，使荀彧开局与月初任务门控生效
+- [ ] 02.1-05-PLAN.md — 实现月任务推进、月末结算与简化任命后端闭环
+- [ ] 02.1-06-PLAN.md — 在 MainHUD 接通月初选任务、月报与升官弹窗并补回归
+
+**Canonical refs**: `.planning/PROJECT.md`; `design/总纲/官职与任务原型部署 Phase 2.1 v1.md`; `design/数据/官职与任务原型部署数据字段设计 v1.md`; `design/数据/Phase 2.1 最小数据录入清单 v1.md`; `design/原型与实现/Phase 2.1 Godot 实现映射表 v1.md`; `design/UIUX/原型 UI 流程图 v1.md` §§4-7, 11-13
+**UI hint**: yes
+
 ### Phase 3: 仕途、势力与可解释政治
 **Goal**: 玩家的行动与关系会进入月末仕途结算，形成任务、任命、权限变化和派系博弈的可解释政治循环。
 **Depends on**: Phase 2
@@ -100,12 +124,13 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
+Phases execute in numeric order: 1 → 2 → 2.1 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. 190样本数据骨架与单角色入口 | 4/4 | Complete | 01-190-01, 01-190-02, 01-190-03, 01-190-04 |
 | 2. 旬内行动—关系闭环 | 4/7 | Gap closure planned | 02-01, 02-02, 02-03, 02-04 |
+| 2.1. 官职与任务部署 | 0/6 | Planned | - |
 | 3. 仕途、势力与可解释政治 | 0/TBD | Not started | - |
 | 4. 家族门阀、婚姻与历史分歧 | 0/TBD | Not started | - |
 | 5. 持久验证与战争接入口 | 0/TBD | Not started | - |
