@@ -8,12 +8,14 @@ const XUN_SUMMARY_DATA_SCRIPT := preload("res://scripts/runtime/XunSummaryData.g
 const CHARACTER_SELECTOR_ROW_SCRIPT := preload("res://scripts/runtime/CharacterSelectorRow.gd")
 const CHARACTER_PROFILE_VIEW_DATA_SCRIPT := preload("res://scripts/runtime/CharacterProfileViewData.gd")
 const ACTION_RESOLUTION_SCRIPT := preload("res://scripts/runtime/ActionResolution.gd")
+const TASK_SYSTEM_SCRIPT := preload("res://scripts/systems/TaskSystem.gd")
 
 var current_session: GameSession
 var last_boot_error: String = ""
 var _hud: MainHUD
 var _phase2_action_catalog: Variant = PHASE2_ACTION_CATALOG_SCRIPT.new()
 var _phase2_action_resolver: Variant = PHASE2_ACTION_RESOLVER_SCRIPT.new()
+var _task_system: Variant = TASK_SYSTEM_SCRIPT.new()
 var _latest_action_resolution: Variant = null
 
 
@@ -171,6 +173,8 @@ func execute_phase2_action(action_id: String, target_character_id: String = "") 
 		target_character = _data_repository().call("get_character", target_character_id) as CharacterDefinition
 	_latest_action_resolution = _phase2_action_resolver.execute(action_id, current_session, protagonist, target_character)
 	current_session.append_action_resolution(_latest_action_resolution)
+	if _latest_action_resolution != null and bool(_latest_action_resolution.success):
+		_task_system.append_progress_from_action(current_session, _data_repository(), action_id)
 	return _latest_action_resolution
 
 
@@ -180,74 +184,18 @@ func get_pending_month_tasks() -> Array:
 	return current_session.pending_month_task_candidates.duplicate(true)
 
 
+func select_month_task(selected_index: int) -> Variant:
+	if current_session == null:
+		return null
+	return _task_system.select_month_task(current_session, _data_repository(), selected_index)
+
+
 func _initialize_month_start_state() -> void:
 	if current_session == null:
 		return
-	current_session.pending_month_task_candidates = _build_month_task_candidates()
+	current_session.pending_month_task_candidates = _task_system.generate_month_candidates(current_session, _data_repository())
 	current_session.current_month_task = null
 	current_session.month_action_locked = true
-
-
-func _build_month_task_candidates() -> Array:
-	var candidates: Array = []
-	var career_state: PlayerCareerState = current_session.player_career_state as PlayerCareerState
-	if career_state == null:
-		return candidates
-	for rule in _data_repository().call("get_task_pool_rules"):
-		if rule == null:
-			continue
-		if not Array(rule.scenario_ids).is_empty() and not Array(rule.scenario_ids).has(current_session.scenario_id):
-			continue
-		if not Array(rule.character_ids).is_empty() and not Array(rule.character_ids).has(current_session.protagonist_id):
-			continue
-		if career_state.office_tier < int(rule.office_tier_min) or career_state.office_tier > int(rule.office_tier_max):
-			continue
-		var include_tags: Array = Array(rule.include_task_tags)
-		var stable_task_id := ""
-		for flag in current_session.player_career_state.career_flags:
-			if str(flag).begins_with("stable_first_promotion_path:"):
-				stable_task_id = str(flag).trim_prefix("stable_first_promotion_path:")
-				break
-		if not stable_task_id.is_empty():
-			var stable_task = _data_repository().call("get_task_template", stable_task_id)
-			if stable_task != null:
-				candidates.append(_task_candidate_payload(stable_task))
-		for task in _data_repository().call("get_task_templates"):
-			if task == null:
-				continue
-			if not stable_task_id.is_empty() and str(task.id) == stable_task_id:
-				continue
-			if int(task.min_office_tier) > career_state.office_tier or int(task.max_office_tier) < career_state.office_tier:
-				continue
-			var task_tags: Array = Array(task.task_tags)
-			var matched := false
-			for task_tag in task_tags:
-				if include_tags.has(task_tag):
-					matched = true
-					break
-			if matched:
-				candidates.append(_task_candidate_payload(task))
-			if candidates.size() >= int(rule.candidate_count):
-				break
-		if candidates.is_empty():
-			for fallback_id in rule.fallback_task_ids:
-				var fallback_task = _data_repository().call("get_task_template", str(fallback_id))
-				if fallback_task != null:
-					candidates.append(_task_candidate_payload(fallback_task))
-		while candidates.size() > int(rule.candidate_count):
-			candidates.pop_back()
-		break
-	return candidates
-
-
-func _task_candidate_payload(task: Variant) -> Dictionary:
-	return {
-		"task_template_id": str(task.id),
-		"name": str(task.name),
-		"issuer_character_id": str(task.issuer_character_id),
-		"description": str(task.description),
-		"base_rewards": Dictionary(task.base_rewards).duplicate(true),
-	}
 
 
 func get_latest_action_resolution() -> Variant:
@@ -266,6 +214,8 @@ func end_current_xun() -> Variant:
 	current_session.current_year = int(_time_manager().call("get_current_year"))
 	current_session.current_month = int(_time_manager().call("get_current_month"))
 	current_session.current_xun = int(_time_manager().call("get_current_xun"))
+	if current_session.current_xun == 1:
+		_initialize_month_start_state()
 	return summary
 
 
