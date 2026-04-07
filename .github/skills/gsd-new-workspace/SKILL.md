@@ -1,9 +1,15 @@
 ---
+language: zh-CN
 name: gsd-new-workspace
 description: Create an isolated workspace with repo copies and independent .planning/
 argument-hint: "--name <name> [--repos repo1,repo2] [--path /target] [--strategy worktree|clone] [--branch name] [--auto]"
 allowed-tools: Read, Bash, Write, AskUserQuestion
 ---
+language: zh-CN
+name: gsd-new-workspace
+description: Create a new GSD workspace with starter templates and configuration
+argument-hint: "<path>"
+allowed-tools: Read, Write, Bash
 
 <context>
 **Flags:**

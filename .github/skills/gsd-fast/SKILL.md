@@ -4,6 +4,7 @@ description: Execute a trivial task inline — no subagents, no planning overhea
 argument-hint: "[task description]"
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 ---
+language: zh-CN
 
 
 <objective>

@@ -2,6 +2,7 @@
 name: gsd-help
 description: Show available GSD commands and usage guide
 ---
+language: zh-CN
 
 <objective>
 Display the complete GSD command reference.

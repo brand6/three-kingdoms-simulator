@@ -4,6 +4,7 @@ description: Archive completed milestone and prepare for next version
 argument-hint: "<version>"
 allowed-tools: Read, Write, Bash
 ---
+language: zh-CN
 
 
 <objective>

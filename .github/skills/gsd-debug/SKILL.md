@@ -4,6 +4,7 @@ description: Systematic debugging with persistent state across context resets
 argument-hint: "[issue description]"
 allowed-tools: Read, Bash, Task, AskUserQuestion
 ---
+language: zh-CN
 
 
 <objective>

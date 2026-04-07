@@ -3,6 +3,7 @@ name: gsd-add-backlog
 description: Add an idea to the backlog parking lot (999.x numbering)
 argument-hint: "<description>"
 allowed-tools: Read, Write, Bash
+language: zh-CN
 ---
 
 

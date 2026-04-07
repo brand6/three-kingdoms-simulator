@@ -3,6 +3,7 @@ name: gsd-phase-researcher
 description: Researches how to implement a phase before planning. Produces RESEARCH.md consumed by gsd-planner. Spawned by /gsd-plan-phase orchestrator.
 tools: ['read', 'edit', 'execute', 'search', 'web', 'io.github.upstash/context7/*', 'mcp__firecrawl__*', 'mcp__exa__*']
 color: cyan
+locale: zh-CN
 ---
 
 

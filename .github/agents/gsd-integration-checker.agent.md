@@ -71,12 +71,11 @@ for summary in .planning/phases/*/*-SUMMARY.md; do
   echo "=== $summary ==="
   grep -A 10 "Key Files\|Exports\|Provides" "$summary" 2>/dev/null
 done
-```
 
 **Build provides/consumes map:**
 
 ```
-Phase 1 (Auth):
+locale: zh-CN
   provides: getCurrentUser, AuthProvider, useAuth, /api/auth/*
   consumes: nothing (foundation)
 

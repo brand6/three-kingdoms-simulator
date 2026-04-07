@@ -60,6 +60,10 @@ func get_available_phase2_actions() -> Array:
 	return _phase2_action_catalog.get_available_actions(protagonist, runtime_state, visit_targets)
 
 
+func get_phase2_action_categories() -> Array:
+	return _phase2_action_catalog.get_categories()
+
+
 func get_relation_overview() -> Array:
 	var relations: Array = []
 	if current_session == null:

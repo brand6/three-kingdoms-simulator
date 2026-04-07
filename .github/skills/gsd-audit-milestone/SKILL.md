@@ -4,6 +4,7 @@ description: Audit milestone completion against original intent before archiving
 argument-hint: "[version]"
 allowed-tools: Read, Glob, Grep, Bash, Task, Write
 ---
+language: zh-CN
 
 <objective>
 Verify milestone achieved its definition of done. Check requirements coverage, cross-phase integration, and end-to-end flows.

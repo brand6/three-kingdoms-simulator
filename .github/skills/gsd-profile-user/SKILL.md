@@ -1,4 +1,6 @@
 ---
+---
+language: zh-CN
 name: gsd-profile-user
 description: Generate developer behavioral profile and create Claude-discoverable artifacts
 argument-hint: "[--questionnaire] [--refresh]"

@@ -4,6 +4,7 @@ description: Generate tests for a completed phase based on UAT criteria and impl
 argument-hint: "<phase> [additional instructions]"
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, AskUserQuestion
 ---
+language: zh-CN
 
 <objective>
 Generate unit and E2E tests for a completed phase, using its SUMMARY.md, CONTEXT.md, and VERIFICATION.md as specifications.

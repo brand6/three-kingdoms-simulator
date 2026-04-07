@@ -4,6 +4,7 @@ description: Gather phase context through adaptive questioning before planning. 
 argument-hint: "<phase> [--auto] [--batch] [--analyze] [--text]"
 allowed-tools: Read, Write, Bash, Glob, Grep, AskUserQuestion, Task, mcp__context7__resolve-library-id, mcp__context7__query-docs
 ---
+language: zh-CN
 
 
 <objective>

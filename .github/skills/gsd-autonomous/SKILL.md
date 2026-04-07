@@ -4,6 +4,7 @@ description: Run all remaining phases autonomously — discuss→plan→execute 
 argument-hint: "[--from N]"
 allowed-tools: Read, Write, Bash, Glob, Grep, AskUserQuestion, Task
 ---
+language: zh-CN
 
 <objective>
 Execute all remaining milestone phases autonomously. For each phase: discuss → plan → execute. Pauses only for user decisions (grey area acceptance, blockers, validation requests).

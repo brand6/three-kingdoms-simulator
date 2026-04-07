@@ -5,12 +5,12 @@ const GENERATED_ROOT := "res://data/generated/190"
 
 
 func load_dataset(dataset_id: String) -> Dictionary:
-	var index := _read_json("%s/index.json" % GENERATED_ROOT)
+	var index: Dictionary = _read_json("%s/index.json" % GENERATED_ROOT) as Dictionary
 	if index.is_empty() or not index.has(dataset_id):
 		push_error("Missing dataset index entry: %s" % dataset_id)
 		return {}
 
-	var dataset_files: Dictionary = index[dataset_id]
+	var dataset_files: Dictionary = index.get(dataset_id, {}) as Dictionary
 	return {
 		"scenario": _read_json("%s/%s" % [GENERATED_ROOT, str(dataset_files.get("scenario", ""))]),
 		"characters": _read_json("%s/%s" % [GENERATED_ROOT, str(dataset_files.get("characters", ""))]),

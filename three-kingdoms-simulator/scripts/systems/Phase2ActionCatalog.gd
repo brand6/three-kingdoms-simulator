@@ -9,6 +9,7 @@ const CATEGORY_RELATION := "关系"
 const CATEGORY_GOVERNANCE := "政务"
 const CATEGORY_MILITARY := "军事"
 const CATEGORY_FAMILY := "家族"
+const CATEGORY_MOVE := "移动"
 
 const REASON_NO_AP := "AP 不足"
 const REASON_NO_ENERGY := "精力不足"
@@ -22,6 +23,7 @@ const CATEGORIES := [
 	CATEGORY_GOVERNANCE,
 	CATEGORY_MILITARY,
 	CATEGORY_FAMILY,
+	CATEGORY_MOVE,
 ]
 
 

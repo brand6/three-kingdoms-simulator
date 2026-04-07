@@ -4,6 +4,7 @@ description: Execute all plans in a phase with wave-based parallelization
 argument-hint: "<phase-number> [--wave N] [--gaps-only] [--interactive]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task, TodoWrite, AskUserQuestion
 ---
+language: zh-CN
 
 <objective>
 Execute all plans in a phase using wave-based parallel execution.

@@ -4,6 +4,7 @@ description: Capture a forward-looking idea with trigger conditions — surfaces
 argument-hint: "[idea summary]"
 allowed-tools: Read, Write, Edit, Bash, AskUserQuestion
 ---
+language: zh-CN
 
 
 <objective>

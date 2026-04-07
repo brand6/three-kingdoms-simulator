@@ -1,4 +1,6 @@
 ---
+---
+language: zh-CN
 name: gsd-milestone-summary
 description: Generate a comprehensive project summary from milestone artifacts for team onboarding and review
 argument-hint: "[version]"

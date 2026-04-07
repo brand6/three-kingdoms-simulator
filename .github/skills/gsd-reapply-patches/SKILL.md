@@ -1,4 +1,6 @@
 ---
+---
+language: zh-CN
 name: gsd-reapply-patches
 description: Reapply local modifications after a GSD update
 ---

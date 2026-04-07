@@ -54,12 +54,11 @@ cat .planning/research/ARCHITECTURE.md
 cat .planning/research/PITFALLS.md
 
 # Planning config loaded via gsd-tools.cjs in commit step
-```
 
 Parse each file to extract:
 - **STACK.md:** Recommended technologies, versions, rationale
 - **FEATURES.md:** Table stakes, differentiators, anti-features
-- **ARCHITECTURE.md:** Patterns, component boundaries, data flow
+locale: zh-CN
 - **PITFALLS.md:** Critical/moderate/minor pitfalls, phase warnings
 
 ## Step 2: Synthesize Executive Summary

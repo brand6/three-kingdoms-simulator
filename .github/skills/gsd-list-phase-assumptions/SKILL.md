@@ -3,6 +3,7 @@ name: gsd-list-phase-assumptions
 description: Surface the agent's assumptions about a phase approach before planning
 argument-hint: "[phase]"
 allowed-tools: Read, Bash, Grep, Glob
+language: zh-CN
 ---
 
 

@@ -1,4 +1,6 @@
 ---
+---
+language: zh-CN
 name: gsd-remove-phase
 description: Remove a future phase from roadmap and renumber subsequent phases
 argument-hint: "<phase-number>"

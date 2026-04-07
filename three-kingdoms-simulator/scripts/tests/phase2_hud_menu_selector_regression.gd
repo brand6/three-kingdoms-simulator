@@ -18,7 +18,7 @@ func _run() -> void:
 	var hud = root.get_node("/root/MainScene")
 	hud._on_action_button_pressed()
 	await process_frame
-	_assert_action_menu(hud)
+	await _assert_action_menu(hud)
 
 	hud._select_action("visit")
 	hud._refresh_action_menu()
@@ -54,15 +54,26 @@ func _assert_action_menu(hud: Node) -> void:
 	for child in hud._category_list.get_children():
 		if child is Button:
 			labels.append(child.text)
-	_assert_equal(labels, ["训练", "读书", "休整", "拜访", "巡察"], "left rail basic actions")
-	if labels.has("成长") or labels.has("关系"):
-		_fail("Left rail should not show old category labels.")
+	_assert_equal(labels, ["成长", "关系", "政务", "军事", "家族", "移动"], "left rail action categories")
 	var detail_text := ""
 	for child in hud._action_list.get_children():
-		if child is Label:
-			detail_text += child.text + "\n"
-	if not detail_text.contains("说明") and not detail_text.contains("效果摘要"):
-		_fail("Action detail panel should describe the selected action.")
+		for grandchild in child.get_children():
+			for row_child in grandchild.get_children():
+				if row_child is Label:
+					detail_text += row_child.text + "\n"
+	if not detail_text.contains("训练") or not detail_text.contains("效果摘要"):
+		_fail("Growth category should expand to second-level action entries.")
+	hud._select_action_category("关系")
+	hud._refresh_action_menu()
+	await process_frame
+	var relation_text := ""
+	for child in hud._action_list.get_children():
+		for grandchild in child.get_children():
+			for row_child in grandchild.get_children():
+				if row_child is Label:
+					relation_text += row_child.text + "\n"
+	if not relation_text.contains("拜访"):
+		_fail("Relation category should show second-level visit action.")
 
 
 func _assert_equal(actual: Variant, expected: Variant, label: String) -> void:

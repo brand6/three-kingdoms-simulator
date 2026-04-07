@@ -1,7 +1,6 @@
----
 name: gsd-join-discord
 description: Join the GSD Discord community
----
+language: zh-CN
 
 
 <objective>

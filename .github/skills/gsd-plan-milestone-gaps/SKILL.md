@@ -1,10 +1,13 @@
 ---
+language: zh-CN
 name: gsd-plan-milestone-gaps
 description: Create phases to close all gaps identified by milestone audit
 allowed-tools: Read, Write, Bash, Glob, Grep, AskUserQuestion
 ---
-
-<objective>
+language: zh-CN
+name: gsd-plan-milestone-gaps
+description: Create plan to fill gaps between milestones
+allowed-tools: Read, Write, Bash, Task
 Create all phases necessary to close gaps identified by `/gsd-audit-milestone`.
 
 Reads MILESTONE-AUDIT.md, groups gaps into logical phases, creates phase entries in ROADMAP.md, and offers to plan each phase.

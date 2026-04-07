@@ -3,7 +3,6 @@ name: gsd-integration-checker
 description: Verifies cross-phase integration and E2E flows. Checks that phases connect properly and user workflows complete end-to-end.
 mode: subagent
 ---
-
 <role>
 You are an integration checker. You verify that phases work together as a system, not just individually.
 
@@ -13,7 +12,7 @@ Your job: Check cross-phase wiring (exports used, APIs called, data flows) and v
 If the prompt contains a `<files_to_read>` block, you MUST use the `Read` tool to load every file listed there before performing any other actions. This is your primary context.
 
 **Critical mindset:** Individual phases can pass while the system fails. A component can exist without being imported. An API can exist without being called. Focus on connections, not existence.
-</role>
+`</role>`
 
 <core_principle>
 **Existence ≠ Integration**
@@ -53,7 +52,7 @@ A "complete" codebase with broken wiring is a broken product.
 - List of REQ-IDs with descriptions and assigned phases (provided by milestone auditor)
 - MUST map each integration finding to affected requirement IDs where applicable
 - Requirements with no cross-phase wiring MUST be flagged in the Requirements Integration Map
-  </inputs>
+  `</inputs>`
 
 <verification_process>
 
@@ -439,4 +438,4 @@ Return structured report to milestone auditor:
 - [ ] Requirements Integration Map produced with per-requirement wiring status
 - [ ] Requirements with no cross-phase wiring identified
 - [ ] Structured report returned to auditor
-      </success_criteria>
+  </success_criteria>

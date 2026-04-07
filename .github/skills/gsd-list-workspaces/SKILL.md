@@ -1,7 +1,8 @@
 ---
 name: gsd-list-workspaces
 description: List active GSD workspaces and their status
-allowed-tools: Bash, Read
+allowed-tools: Read, Bash
+language: zh-CN
 ---
 
 <objective>

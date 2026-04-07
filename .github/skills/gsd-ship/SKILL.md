@@ -1,4 +1,6 @@
 ---
+---
+language: zh-CN
 name: gsd-ship
 description: Create PR, run review, and prepare for merge after verification passes
 argument-hint: "[phase number or milestone, e.g., '4' or 'v1.0']"

@@ -11,10 +11,14 @@
             "id": "c64d371af0158b57",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "design/行动菜单结构设计 v1.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "新标签页"
+              "title": "行动菜单结构设计 v1"
             }
           }
         ]
@@ -178,6 +182,11 @@
   },
   "active": "c64d371af0158b57",
   "lastOpenFiles": [
+    "three-kingdoms-simulator/icon.svg.import",
+    "three-kingdoms-simulator/icon.svg",
+    "three-kingdoms-simulator/project.godot",
+    "three-kingdoms-simulator",
+    "CLAUDE.md",
     "agents/game_designer.md",
     "agents/programmer.md",
     "agents/git.md",
@@ -206,14 +215,10 @@
     "design/数值",
     "design/系统设计/核心系统详细设计 v1.md",
     "design/系统设计/士族门阀系统专项设计 v2.md",
-    "design/系统设计",
     "design/总纲/项目总设计方案 v1.md",
     "design/总纲/GDD 框架 v1.md",
-    "design/总纲",
     "design/190 剧本原型事件样本表 v1.md",
     "design/原型任务拆解清单 v1.md",
-    "design/Godot 系统模块拆分清单 v1.md",
-    "design/Godot 数据结构草案 v1.md",
     "agents/image/git/1775226793896.png"
   ]
 }

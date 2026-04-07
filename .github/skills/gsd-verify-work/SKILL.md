@@ -1,16 +1,16 @@
 ---
 name: gsd-verify-work
-description: Validate built features through conversational UAT
-argument-hint: "[phase number, e.g., '4']"
+description: 通过对话式 UAT 验证已实现功能
+argument-hint: "[阶段编号，例如 '4']"
 allowed-tools: Read, Bash, Glob, Grep, Edit, Write, Task
 ---
 
 <objective>
-Validate built features through conversational testing with persistent state.
+通过对话式测试（保留会话状态）验证已实现的功能是否符合用户预期。
 
-Purpose: Confirm what the agent built actually works from user's perspective. One test at a time, plain text responses, no interrogation. When issues are found, automatically diagnose, plan fixes, and prepare for execution.
+目的：从用户视角确认实现内容可用。每次进行单个用例测试，输出以中文文本为主、格式清晰。当发现问题时，自动进行诊断、生成修复计划并准备交付执行。
 
-Output: {phase_num}-UAT.md tracking all test results. If issues found: diagnosed gaps, verified fix plans ready for /gsd-execute-phase
+输出：生成 `{phase_num}-UAT.md`，记录所有测试结果、诊断与修复建议；若存在缺陷，会产出可用于 `/gsd-execute-phase` 的修复计划。
 </objective>
 
 <execution_context>
@@ -19,11 +19,11 @@ Output: {phase_num}-UAT.md tracking all test results. If issues found: diagnosed
 </execution_context>
 
 <context>
-Phase: $ARGUMENTS (optional)
-- If provided: Test specific phase (e.g., "4")
-- If not provided: Check for active sessions or prompt for phase
+阶段：$ARGUMENTS（可选）
+- 指定时：测试特定阶段（例如 "4"）
+- 未指定时：检测活动会话或提示选择阶段
 
-Context files are resolved inside the workflow (`init verify-work`) and delegated via `<files_to_read>` blocks.
+上下文文件在工作流内部解析（`init verify-work`），并通过 `<files_to_read>` 块传递。
 </context>
 
 <process>

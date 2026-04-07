@@ -4,6 +4,7 @@ description: Capture idea or task as todo from current conversation context
 argument-hint: "[optional description]"
 allowed-tools: Read, Write, Bash, AskUserQuestion
 ---
+language: zh-CN
 
 
 <objective>

@@ -1,4 +1,6 @@
 ---
+---
+language: zh-CN
 name: gsd-note
 description: Zero-friction idea capture. Append, list, or promote notes to todos.
 argument-hint: "<text> | list | promote <N> [--global]"

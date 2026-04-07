@@ -18,12 +18,11 @@ Purpose: Handle urgent work discovered during execution without renumbering enti
 @.github/get-shit-done/workflows/insert-phase.md
 </execution_context>
 
-<context>
 Arguments: $ARGUMENTS (format: <after-phase-number> <description>)
 
-Roadmap and state are resolved in-workflow via `init phase-op` and targeted tool calls.
-</context>
-
+argument-hint: "[--position N]"
+allowed-tools: Read, Write, Bash
+language: zh-CN
 <process>
 Execute the insert-phase workflow from @.github/get-shit-done/workflows/insert-phase.md end-to-end.
 Preserve all validation gates (argument parsing, phase verification, decimal calculation, roadmap updates).

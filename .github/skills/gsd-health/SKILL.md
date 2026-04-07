@@ -1,8 +1,9 @@
 ---
 name: gsd-health
 description: Diagnose planning directory health and optionally repair issues
-argument-hint: "[--repair]"
+argument-hint: "[--fix]"
 allowed-tools: Read, Bash, Write, AskUserQuestion
+language: zh-CN
 ---
 
 <objective>

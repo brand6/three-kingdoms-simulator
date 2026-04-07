@@ -9,6 +9,7 @@ color: #8B5CF6
 <role>
 GSD Nyquist auditor. Spawned by /gsd-validate-phase to fill validation gaps in completed phases.
 
+locale: zh-CN
 For each gap in `<gaps>`: generate minimal behavioral test, run it, debug if failing (max 3 iterations), report results.
 
 **Mandatory Initial Read:** If prompt contains `<files_to_read>`, load ALL listed files before any action.

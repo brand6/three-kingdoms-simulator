@@ -1,4 +1,6 @@
 ---
+---
+language: zh-CN
 name: gsd-workstreams
 description: Manage parallel workstreams — list, create, switch, status, progress, complete, and resume
 ---

@@ -12,18 +12,6 @@ const END_TURN_TEXT := "结束本旬：确认后将立即结算本旬变化并�
 const ACTION_MENU_EMPTY_HEADING := "当前暂无可显示行动"
 const ACTION_MENU_EMPTY_BODY := "请确认会话是否已正确载入，再尝试打开行动菜单。"
 const CATEGORY_EMPTY_BODY := "当前分类下暂无二级动作。后续可在此扩展更多原型行动。"
-const ACTION_LABEL_NAME := "动作名称"
-const ACTION_LABEL_CATEGORY := "行动标签"
-const ACTION_LABEL_AP := "AP"
-const ACTION_LABEL_ENERGY := "精力"
-const ACTION_LABEL_TARGET := "目标类型"
-const ACTION_LABEL_EFFECT := "效果摘要"
-const ACTION_LABEL_DISABLED := "禁用原因"
-const REASON_NO_AP := "AP 不足"
-const REASON_NO_ENERGY := "精力不足"
-const REASON_WRONG_LOCATION := "当前地点不可执行"
-const REASON_NO_VISIT_TARGET := "暂无可拜访对象"
-const RELATION_COLUMNS := "人物名 / 关系标签 / 好感 / 信任 / 敬重 / 戒备 / 所属势力 / 可互动状态"
 const RESULT_LABEL_OUTCOME := "成败结论"
 const RESULT_LABEL_REASON := "原因说明"
 const RESULT_LABEL_STATS := "数值变化"
@@ -33,7 +21,7 @@ const XUN_SUMMARY_ACTIONS := "本旬行动摘要"
 const XUN_SUMMARY_STATS := "主要数值变化"
 const XUN_SUMMARY_RELATIONS := "关系变化摘要"
 const XUN_SUMMARY_PROMPTS := "新提示"
-const ACTION_POPUP_SIZE := Vector2i(860, 420)
+const ACTION_POPUP_SIZE := Vector2i(240, 0)
 const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 
 @onready var _time_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/TimeLabel")
@@ -59,11 +47,9 @@ const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 @onready var _relation_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/RelationButton")
 @onready var _end_turn_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/EndTurnButton")
 @onready var _action_menu_popup: PopupPanel = get_node("ActionMenuPopup")
-@onready var _category_heading: Label = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/CategoryPanel/CategoryContent/CategoryHeading")
-@onready var _category_list: VBoxContainer = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/CategoryPanel/CategoryContent/CategoryList")
-@onready var _action_heading: Label = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/ActionPanel/ActionContent/ActionHeading")
-@onready var _action_list: VBoxContainer = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/ActionPanel/ActionContent/ActionListScroll/ActionList")
-@onready var _action_empty_state: Label = get_node("ActionMenuPopup/ActionMenuMargin/ActionMenuLayout/ActionPanel/ActionContent/ActionEmptyState")
+@onready var _category_list: VBoxContainer = get_node("ActionMenuPopup/ActionMenuMargin/CategoryList")
+@onready var _action_sub_menu_popup: PopupPanel = get_node("ActionSubMenuPopup")
+@onready var _action_list: VBoxContainer = get_node("ActionSubMenuPopup/SubMenuMargin/ActionList")
 @onready var _target_picker_dialog: ConfirmationDialog = get_node("TargetPickerDialog")
 @onready var _target_list: VBoxContainer = get_node("TargetPickerDialog/TargetPickerMargin/TargetPickerContent/TargetListScroll/TargetList")
 @onready var _relation_list: VBoxContainer = get_node("RelationPopup/RelationMargin/RelationContent/RelationListScroll/RelationList")
@@ -75,7 +61,6 @@ const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 @onready var _xun_summary_dialog: AcceptDialog = get_node("XunSummaryDialog")
 @onready var _xun_summary_body: Label = get_node("XunSummaryDialog/XunSummaryMargin/XunSummaryBody")
 
-var _selected_action_id: String = "train"
 var _selected_action_category: String = "成长"
 
 
@@ -342,106 +327,77 @@ func _refresh_overlay_data() -> void:
 
 
 func _refresh_action_menu() -> void:
-	_category_heading.text = "一级分类"
 	_clear_children(_category_list)
-	_clear_children(_action_list)
 	var categories: Array = _game_root().call("get_phase2_action_categories")
-	var actions: Array = _game_root().call("get_available_phase2_actions")
-	if categories.is_empty() and actions.is_empty():
-		_action_empty_state.visible = true
-		_action_empty_state.text = "%s\n%s" % [ACTION_MENU_EMPTY_HEADING, ACTION_MENU_EMPTY_BODY]
-		return
 	if categories.is_empty():
 		categories = ["成长", "关系", "政务", "军事", "家族", "移动"]
-	if not categories.has(_selected_action_category):
-		_selected_action_category = str(categories[0])
+	# 获取全部行动（含 disabled），用于判断分类是否有内容
+	var all_actions: Array = _game_root().call("get_available_phase2_actions")
+	var any_visible := false
 	for category in categories:
+		var category_actions := _filter_actions_by_category(all_actions, str(category))
+		if category_actions.is_empty():
+			continue  # 该分类下无任何行动定义，隐藏按钮
+		any_visible = true
 		var button := Button.new()
 		button.text = str(category)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.theme_type_variation = &"PrimaryButton" if str(category) == _selected_action_category else &"Button"
 		button.pressed.connect(_on_action_category_pressed.bind(str(category)))
 		_category_list.add_child(button)
-	var category_actions := _filter_actions_by_category(actions, _selected_action_category)
-	_action_heading.text = "二级动作：%s" % _selected_action_category
-	if not category_actions.is_empty():
-		var action_ids := _action_ids(category_actions)
-		if not action_ids.has(_selected_action_id):
-			_selected_action_id = str(category_actions[0].id)
+	if not any_visible:
+		var label := Label.new()
+		label.text = ACTION_MENU_EMPTY_BODY
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_category_list.add_child(label)
+	# 更新选中分类：若当前选中分类已不可见，重置为第一个有内容的分类
+	if not categories.has(_selected_action_category) or _filter_actions_by_category(all_actions, _selected_action_category).is_empty():
+		for category in categories:
+			if not _filter_actions_by_category(all_actions, str(category)).is_empty():
+				_selected_action_category = str(category)
+				break
+
+
+func _open_sub_menu(category_id: String) -> void:
+	_clear_children(_action_list)
+	var actions: Array = _game_root().call("get_available_phase2_actions")
+	var category_actions := _filter_actions_by_category(actions, category_id)
+	if category_actions.is_empty():
+		var label := Label.new()
+		label.text = CATEGORY_EMPTY_BODY
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_action_list.add_child(label)
 	else:
-		_selected_action_id = ""
-	_action_empty_state.visible = false
-	_render_action_entries(category_actions)
+		for spec in category_actions:
+			var button := Button.new()
+			button.text = str(spec.display_name)
+			button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			button.disabled = not str(spec.disabled_reason).is_empty()
+			var tooltip := "AP：%d｜精力：%s\n%s" % [spec.ap_cost, _signed_value(spec.energy_delta), spec.effect_summary]
+			if not str(spec.disabled_reason).is_empty():
+				tooltip += "\n⚠ %s" % spec.disabled_reason
+			button.tooltip_text = tooltip
+			button.pressed.connect(_on_action_entry_pressed.bind(spec))
+			_action_list.add_child(button)
+	# 等下一帧布局完成后再定位，确保 size 已经反映实际内容高度
+	call_deferred("_position_sub_menu")
 
 
-func _render_action_entries(actions: Array) -> void:
-	if actions.is_empty():
-		_action_empty_state.visible = true
-		_action_empty_state.text = CATEGORY_EMPTY_BODY
-		return
-	for spec in actions:
-		var card := PanelContainer.new()
-		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		var content := VBoxContainer.new()
-		content.add_theme_constant_override("separation", 6)
-		card.add_child(content)
-		var title := Label.new()
-		title.text = "%s%s" % [spec.display_name, "（当前选中）" if str(spec.id) == _selected_action_id else ""]
-		title.theme_type_variation = &"HeadingLabel"
-		content.add_child(title)
-		for line in [
-			"%s：%d｜%s：%s｜%s：%s" % [ACTION_LABEL_AP, spec.ap_cost, ACTION_LABEL_ENERGY, _signed_value(spec.energy_delta), ACTION_LABEL_TARGET, _localized_target_type(spec.target_type)],
-			"%s：%s" % [ACTION_LABEL_EFFECT, spec.effect_summary],
-		]:
-			var label := Label.new()
-			label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-			label.text = line
-			content.add_child(label)
-		var disabled_reason := str(spec.disabled_reason)
-		var reason_label := Label.new()
-		reason_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		reason_label.text = "%s：%s" % [ACTION_LABEL_DISABLED, disabled_reason if not disabled_reason.is_empty() else "可执行"]
-		content.add_child(reason_label)
-		var button := Button.new()
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.disabled = not disabled_reason.is_empty()
-		button.theme_type_variation = &"PrimaryButton" if str(spec.id) == _selected_action_id else &"Button"
-		button.text = "选择目标" if str(spec.target_type) == "character" else "执行行动"
-		button.pressed.connect(_on_action_entry_pressed.bind(spec))
-		content.add_child(button)
-		_action_list.add_child(card)
-
-
-func _select_action(action_id: String) -> void:
-	_selected_action_id = action_id
-
-
-func _select_action_category(category_id: String) -> void:
-	_selected_action_category = category_id
+func _position_sub_menu() -> void:
+	_action_sub_menu_popup.reset_size()
+	var primary_pos := _action_menu_popup.position
+	var primary_size := _action_menu_popup.size
+	var sub_x := primary_pos.x + primary_size.x
+	var sub_y := primary_pos.y
+	_action_sub_menu_popup.popup(Rect2i(Vector2i(sub_x, sub_y), Vector2i(0, 0)))
 
 
 func _on_action_category_pressed(category_id: String) -> void:
-	_select_action_category(category_id)
-	_refresh_action_menu()
+	_selected_action_category = category_id
+	_open_sub_menu(category_id)
 
 
 func _on_action_entry_pressed(spec: Variant) -> void:
-	_select_action(str(spec.id))
 	_handle_action_selected(spec)
-
-
-func _action_ids(actions: Array) -> Array:
-	var ids: Array = []
-	for spec in actions:
-		ids.append(str(spec.id))
-	return ids
-
-
-func _find_action_spec(actions: Array, action_id: String) -> Variant:
-	for spec in actions:
-		if str(spec.id) == action_id:
-			return spec
-	return null
 
 
 func _filter_actions_by_category(actions: Array, category_id: String) -> Array:
@@ -453,23 +409,16 @@ func _filter_actions_by_category(actions: Array, category_id: String) -> Array:
 
 
 func _popup_action_menu() -> void:
+	# 等下一帧布局完成后弹出，确保 reset_size() 反映实际内容高度
+	call_deferred("_show_action_menu_popup")
+
+
+func _show_action_menu_popup() -> void:
 	_action_menu_popup.reset_size()
 	var button_rect := _action_button.get_global_rect()
-	var popup_position := Vector2i(int(button_rect.position.x), int(max(24.0, button_rect.position.y - float(ACTION_POPUP_SIZE.y) - 12.0)))
-	_action_menu_popup.popup(Rect2i(popup_position, ACTION_POPUP_SIZE))
-
-
-func _format_action_row(spec: Variant) -> String:
-	var lines := [
-		"%s：%s" % [ACTION_LABEL_NAME, spec.display_name],
-		"%s：%d" % [ACTION_LABEL_AP, spec.ap_cost],
-		"%s：%s" % [ACTION_LABEL_ENERGY, _signed_value(spec.energy_delta)],
-		"%s：%s" % [ACTION_LABEL_TARGET, _localized_target_type(spec.target_type)],
-		"%s：%s" % [ACTION_LABEL_EFFECT, spec.effect_summary],
-	]
-	if not str(spec.disabled_reason).is_empty():
-		lines.append(spec.disabled_reason)
-	return "\n".join(lines)
+	var popup_x := int(button_rect.position.x)
+	var popup_y := int(button_rect.position.y) - 12
+	_action_menu_popup.popup(Rect2i(Vector2i(popup_x, popup_y), Vector2i(0, 0)))
 
 
 func _localized_target_type(target_type: String) -> String:
@@ -489,11 +438,11 @@ func _signed_value(value: int) -> String:
 func _handle_action_selected(spec: Variant) -> void:
 	if not str(spec.disabled_reason).is_empty():
 		return
+	_action_menu_popup.hide()
+	_action_sub_menu_popup.hide()
 	if spec.id == "visit":
-		_action_menu_popup.hide()
 		_open_character_selector("visit")
 		return
-	_action_menu_popup.hide()
 	var result = _game_root().call("execute_phase2_action", spec.id, "")
 	_show_action_result(result)
 	show_success_state(_game_root().current_session)

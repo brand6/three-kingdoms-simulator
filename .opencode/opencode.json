@@ -1,5 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "instructions": ["无论用户提问语言，所有输出必须使用简体中文。代码部分保留英文语法，但注释、说明、思考过程必须用中文。"],
   "permission": {
     "read": {
       "D:/Projects/Godot/三国模拟器/.opencode/get-shit-done/*": "allow"
@@ -10,6 +11,11 @@
   },
   "model": "github-copilot/gpt-5.4",
   "small_model": "github-copilot/gpt-5-mini",
+  "agent":{
+    "build": {
+      "prompt": "始终以中文（简体，zh-CN）与用户交流。用中文进行回答。"
+    }
+  },
   "command": {
     "update": {
       "agent": "document",
@@ -22,15 +28,12 @@
       "type": "remote",
       "url": "https://mcp.context7.com/mcp",
       "enabled": true,
-      "headers": {
-        "CONTEXT7_API_KEY": "$CONTEXT7_API_KEY"
-      }
     },
     "godot": {
       "type":"local",
       "command": ["npx","-y","@coding-solo/godot-mcp"],
       "environment": {
-        "GODOT_PATH": "D:/Godot/Godot_v4.6.1-stable_mono_win64t",
+        "GODOT_PATH": "D:/Godot/Godot_v4.6.1-stable_mono_win64/Godot_v4.6.1-stable_mono_win64.exe",
         "DEBUG": "true"
       }
     },

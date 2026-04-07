@@ -56,16 +56,30 @@ blocked: 0
   reason: "User reported: 符合,但存在一个问题:主界面顶部显示了两个年份"
   severity: minor
   test: 1
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "MainHUD.gd 把 TimeLabel 按‘字段名：值’格式渲染时，前缀硬编码成了时间模板，而 TimeManager.gd 又返回完整时间串，拼接后导致顶部出现两个年份。"
+  artifacts:
+    - path: "three-kingdoms-simulator/scripts/ui/MainHUD.gd"
+      issue: "show_success_state() 与 _render_empty_fields() 都把 TimeLabel 错当成键值对字段，使用 _pair_text(\"190年 / 月 / 旬\", ...) 进行重复拼接。"
+    - path: "three-kingdoms-simulator/scenes/main/MainScene.tscn"
+      issue: "TimeLabel 默认文案沿用了时间模板，强化了错误的显示语义。"
+  missing:
+    - "将 TimeLabel 改为直接显示完整时间值，不再通过 _pair_text() 追加前缀。"
+    - "同步修正空状态与场景默认文本，确保时间栏只显示一次时间。"
+    - "回归验证冷启动与顶栏显示测试，确认顶部只显示一次 190年 / 1月 / 第1旬。"
+  debug_session: ".planning/debug/uat2-topbar-double-year.md"
 - truth: "进入主界面后，顶栏应显示 190年 / 1月 / 第1旬，并且当前城市、当前身份、所属势力、当前官职分别显示为 陈留、ruler、曹操集团、lord。"
   status: failed
   reason: "User reported: 不符合,顶栏显示了两遍年份\"190年/月/旬:190年/1月/第1旬\",其他信息没有问题"
   severity: minor
   test: 2
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "MainHUD.gd 将已完整格式化的时间文本再次包成‘190年 / 月 / 旬：值’，导致顶栏时间重复；该问题与测试 1 属于同一根因。"
+  artifacts:
+    - path: "three-kingdoms-simulator/scripts/ui/MainHUD.gd"
+      issue: "show_success_state() 中 TimeLabel 运行时赋值错误地使用 _pair_text()。"
+    - path: "three-kingdoms-simulator/scripts/autoload/TimeManager.gd"
+      issue: "get_current_label() 已返回完整时间字符串，本身无错，但被上层重复拼接后放大了问题。"
+  missing:
+    - "将时间栏的运行时赋值改为直接使用 TimeManager.get_current_label() 的返回值。"
+    - "统一 HUD 中时间栏与其他键值对栏位的渲染约定，避免再次混用。"
+    - "补一条回归验证：顶栏精确显示 190年 / 1月 / 第1旬，其他顶栏字段保持不变。"
+  debug_session: ".planning/debug/uat2-topbar-double-year.md"

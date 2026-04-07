@@ -1,4 +1,6 @@
 ---
+---
+language: zh-CN
 name: gsd-next
 description: Automatically advance to the next logical step in the GSD workflow
 allowed-tools: Read, Bash, Grep, Glob, SlashCommand
