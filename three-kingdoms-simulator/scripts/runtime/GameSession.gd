@@ -12,6 +12,12 @@ var character_states: Dictionary = {}
 var relation_states: Dictionary = {}
 var current_xun_action_history: Array = []
 var latest_xun_summary: Variant = null
+var player_career_state = null
+var current_month_task = null
+var pending_month_task_candidates: Array = []
+var last_month_evaluation = null
+var month_action_locked: bool = false
+var vacancy_states: Dictionary = {}
 
 
 func set_character_state(character_id: String, state: RuntimeCharacterState) -> void:

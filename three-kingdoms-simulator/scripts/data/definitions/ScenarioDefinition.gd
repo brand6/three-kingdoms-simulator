@@ -11,6 +11,9 @@ var description: String = ""
 var city_ids: Array[String] = []
 var faction_ids: Array[String] = []
 var character_ids: Array[String] = []
+var default_player_character_id: String = ""
+var available_office_ids: Array[String] = []
+var available_task_template_ids: Array[String] = []
 
 
 static func from_dictionary(data: Dictionary) -> ScenarioDefinition:
@@ -25,6 +28,9 @@ static func from_dictionary(data: Dictionary) -> ScenarioDefinition:
 	definition.city_ids = _to_string_array(data.get("city_ids", []))
 	definition.faction_ids = _to_string_array(data.get("faction_ids", []))
 	definition.character_ids = _to_string_array(data.get("character_ids", []))
+	definition.default_player_character_id = str(data.get("default_player_character_id", ""))
+	definition.available_office_ids = _to_string_array(data.get("available_office_ids", []))
+	definition.available_task_template_ids = _to_string_array(data.get("available_task_template_ids", []))
 	return definition
 
 
