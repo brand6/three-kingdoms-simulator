@@ -64,7 +64,7 @@ Plans:
 **Goal:** 玩家以荀彧身份在新月领受 1 个主任务，在三旬内用现有基础行动推进任务，并在月末收到可解释的任务结算与简化任命结果；首月至少有 1 条更稳定的升官正反馈路径，trust 也能通过可见叙事反馈参与这一轮仕途体验。
 **Requirements**: CARE-02, CARE-03, CARE-04, CARE-05, UI-03
 **Depends on:** Phase 2
-**Plans:** 3/6 plans executed
+**Plans:** 4/6 plans executed
 
 **Success Criteria** (what must be TRUE):
   1. Player boots as 荀彧, and each new month auto-opens a task picker that requires exactly one main-task selection before any xun actions can proceed, but the gate copy reads as a仕途制度提示 rather than a blunt system lock.
@@ -76,7 +76,7 @@ Plans:
 - [x] 02.1-01-PLAN.md — 建立官职 / 任务 / 升官 / 月结算静态与运行时契约
 - [x] 02.1-02-PLAN.md — 录入四级官职链与三条升官规则样本数据
 - [x] 02.1-03-PLAN.md — 录入四个任务模板、月初任务池规则与荀彧开局补丁
-- [ ] 02.1-04-PLAN.md — 扩展仓库与 bootstrap，使荀彧开局与月初任务门控生效
+- [x] 02.1-04-PLAN.md — 扩展仓库与 bootstrap，使荀彧开局与月初任务门控生效
 - [ ] 02.1-05-PLAN.md — 实现月任务推进、月末结算与简化任命后端闭环
 - [ ] 02.1-06-PLAN.md — 在 MainHUD 接通月初选任务、月报与升官弹窗并补回归
 
