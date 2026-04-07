@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CharacterSetupPatchData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/CharacterSetupPatchData.gd" id="1_patch"]
+
+[resource]
+script = ExtResource("1_patch")
+id = "xunyu_default_start_patch"
+scenario_id = "scenario_190_smoke"
+default_player_character_id = "xun_yu"
+start_city_id = "xuchang"
+start_faction_id = "cao_cao_faction"
+start_office_id = "office_congshi"
+start_merit = 18
+start_fame = 11
+start_trust = 14
+start_relation_overrides = [{"source_character_id":"cao_cao","target_character_id":"xun_yu","trust":52},{"source_character_id":"xun_yu","target_character_id":"cao_cao","trust":64}]
+start_flags = Array[String](["phase2_1_default_entry", "stable_first_promotion_path:task_document_cleanup"])
