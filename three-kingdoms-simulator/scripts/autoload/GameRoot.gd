@@ -233,7 +233,18 @@ func get_last_month_evaluation() -> Variant:
 	return current_session.last_month_evaluation
 
 
+func consume_last_month_evaluation() -> Variant:
+	if current_session == null:
+		return null
+	var evaluation = current_session.last_month_evaluation
+	current_session.clear_last_month_evaluation()
+	return evaluation
+
+
 func _process_month_end_evaluation() -> void:
+	var task_state: MonthlyTaskState = current_session.current_month_task as MonthlyTaskState
+	var progress_snapshot = task_state.progress_snapshot if task_state != null else null
+	var task_template = _data_repository().call("get_task_template", task_state.task_template_id if task_state != null else "")
 	var settlement: Dictionary = _task_system.settle_month_task(current_session, _data_repository())
 	var runtime_state: RuntimeCharacterState = current_session.get_character_state(current_session.protagonist_id)
 	var career_state: PlayerCareerState = current_session.player_career_state as PlayerCareerState
@@ -265,7 +276,7 @@ func _process_month_end_evaluation() -> void:
 		summary_lines.append("任命结果：已擢升至 %s" % new_office_id)
 	else:
 		summary_lines.append("任命结果：%s" % str(promotion_result.get("failure_label", "")))
-	current_session.last_month_evaluation = MONTHLY_EVALUATION_RESULT_SCRIPT.create(
+	current_session.set_last_month_evaluation(MONTHLY_EVALUATION_RESULT_SCRIPT.create(
 		"%d-%02d" % [current_session.current_year, current_session.current_month],
 		current_session.protagonist_id,
 		str(settlement.get("task_result", "failed")),
@@ -276,11 +287,15 @@ func _process_month_end_evaluation() -> void:
 		old_office_id,
 		new_office_id,
 		str(promotion_result.get("rule_id", "")),
+		str(task_template.name if task_template != null else task_state.task_template_id if task_state != null else "—"),
+		int(progress_snapshot.current_value if progress_snapshot != null else 0),
+		int(progress_snapshot.target_value if progress_snapshot != null else 0),
+		int(progress_snapshot.bonus_value if progress_snapshot != null else 0),
 		summary_lines,
 		str(promotion_result.get("hint", "")),
 		Dictionary(promotion_result.get("missing_values", {})).duplicate(true),
 		str(promotion_result.get("failure_label", ""))
-	)
+	))
 
 
 func get_latest_xun_summary() -> Variant:

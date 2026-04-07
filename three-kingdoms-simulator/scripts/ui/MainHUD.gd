@@ -69,6 +69,7 @@ const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 @onready var _promotion_popup = get_node("PromotionPopup")
 
 var _selected_action_category: String = "成长"
+var _active_month_end_evaluation: MonthlyEvaluationResult = null
 
 
 func _game_root() -> Node:
@@ -124,7 +125,7 @@ func show_success_state(session: GameSession) -> void:
 	var faction_name := _display_value(faction.name if faction != null else "")
 	var protagonist_name := _display_value(protagonist.name if protagonist != null else "")
 	var identity_text := _localized_identity(protagonist.identity_type if protagonist != null else "")
-	var office_text := _localized_office(protagonist.office_id if protagonist != null else "")
+	var office_text := _current_office_text(session, protagonist)
 	var clan_text := _localized_clan(protagonist.clan_id if protagonist != null else "")
 	var family_text := _localized_family(protagonist.family_id if protagonist != null else "")
 	var ap_value := _metric_value(runtime_state, &"ap")
@@ -613,10 +614,11 @@ func _on_end_xun_confirmed() -> void:
 	_end_xun_dialog.hide()
 	var summary = _game_root().call("end_current_xun")
 	show_success_state(_game_root().current_session)
-	var evaluation = _game_root().call("get_last_month_evaluation")
+	var evaluation = _game_root().call("consume_last_month_evaluation")
 	if evaluation != null:
+		_active_month_end_evaluation = evaluation as MonthlyEvaluationResult
 		_xun_summary_dialog.hide()
-		_show_month_end_feedback(evaluation)
+		_show_month_end_feedback(_active_month_end_evaluation)
 	else:
 		_show_xun_summary(summary)
 
@@ -717,28 +719,24 @@ func _show_month_end_feedback(evaluation: MonthlyEvaluationResult) -> void:
 
 
 func _on_month_report_confirmed() -> void:
-	var evaluation: MonthlyEvaluationResult = _game_root().call("get_last_month_evaluation")
+	var evaluation := _active_month_end_evaluation
 	if evaluation == null:
 		return
 	_promotion_popup.show_promotion(_build_promotion_text(evaluation))
+	_active_month_end_evaluation = null
 
 
 func _build_month_report_text(evaluation: MonthlyEvaluationResult) -> String:
-	var session: GameSession = _game_root().current_session
-	var task_state: MonthlyTaskState = session.current_month_task as MonthlyTaskState if session != null else null
-	var task_template = _data_repository().call("get_task_template", task_state.task_template_id if task_state != null else "")
-	var task_name := str(task_template.name if task_template != null else "—")
-	var progress_snapshot = task_state.progress_snapshot if task_state != null else null
-	var progress_text := "0/0"
-	if progress_snapshot != null:
-		progress_text = "%d/%d（优秀 %d）" % [progress_snapshot.current_value, progress_snapshot.target_value, progress_snapshot.bonus_value]
+	var progress_text := "%d/%d" % [evaluation.progress_current_value, evaluation.progress_target_value]
+	if evaluation.progress_bonus_value > evaluation.progress_target_value:
+		progress_text = "%s（优秀 %d）" % [progress_text, evaluation.progress_bonus_value]
 	var political_line := "政治含义：暂无"
 	for line in evaluation.summary_lines:
 		if str(line).begins_with("政治含义："):
 			political_line = str(line)
 			break
 	return "任务名称：%s\n结果：%s\n进度：%s\n功绩变化：%+d\n名望变化：%+d\n信任变化：%+d\n%s" % [
-		task_name,
+		evaluation.task_name,
 		str(evaluation.task_result),
 		progress_text,
 		evaluation.merit_delta,
@@ -781,11 +779,20 @@ func _build_promotion_shortfall_line(evaluation: MonthlyEvaluationResult) -> Str
 		"无空缺":
 			return "当前无空缺"
 		_:
-			var task_state: MonthlyTaskState = _game_root().current_session.current_month_task as MonthlyTaskState
-			var snapshot = task_state.progress_snapshot if task_state != null else null
-			if snapshot != null:
-				return "当前进度 %d/%d，未达到成功阈值" % [snapshot.current_value, snapshot.target_value]
+			if evaluation.progress_target_value > 0:
+				return "当前进度 %d/%d，未达到成功阈值" % [evaluation.progress_current_value, evaluation.progress_target_value]
 			return "本月主任务未达成功阈值"
+
+
+func _current_office_text(session: GameSession, protagonist: CharacterDefinition) -> String:
+	if session != null and session.player_career_state != null:
+		var office_id := str(session.player_career_state.current_office_id)
+		if not office_id.is_empty():
+			var office = _data_repository().call("get_office", office_id)
+			if office != null:
+				return str(office.name)
+			return _localized_office(office_id)
+	return _localized_office(protagonist.office_id if protagonist != null else "")
 
 
 func _remaining_xun_count(session: GameSession) -> int:

@@ -40,6 +40,7 @@ func _run() -> void:
 	var tasks: Array = game_root.call("get_pending_month_tasks")
 	if tasks.is_empty():
 		_fail("A new month should expose selectable monthly tasks.")
+	var selected_task_name := str(tasks[0].get("name", ""))
 
 	if not picker.visible:
 		_fail("Task picker should auto-open at month start.")
@@ -82,6 +83,10 @@ func _run() -> void:
 	if promotion_popup.visible:
 		_fail("Promotion popup must not open before the month report is confirmed.")
 	var report_text := _label_text(month_report, "PanelMargin/PanelContent/BodyLabel")
+	if not report_text.contains("任务名称：%s" % selected_task_name):
+		_fail("Month report should use the completed task snapshot instead of a cleared live task state.")
+	if not report_text.contains("进度：0/8（优秀 11）"):
+		_fail("Month report should preserve the completed task progress snapshot after rollover.")
 	if not report_text.contains("任务名称："):
 		_fail("Month report should show task name.")
 	if not report_text.contains("结果："):
@@ -109,6 +114,18 @@ func _run() -> void:
 	await process_frame
 	if month_report.visible or promotion_popup.visible:
 		_fail("Month-end dialogs should both close cleanly after confirmation.")
+
+	if game_root.call("get_last_month_evaluation") != null:
+		_fail("Month-end evaluation should be consumed after the report flow starts.")
+
+	game_root.call("select_month_task", 0)
+	hud._on_end_turn_button_pressed()
+	hud._on_end_xun_confirmed()
+	await process_frame
+	if not hud._xun_summary_dialog.visible:
+		_fail("A normal next-month xun ending should show the xun summary instead of replaying stale month-end UI.")
+	if month_report.visible or promotion_popup.visible:
+		_fail("Later non-month-end xun endings must not replay stale month-end dialogs.")
 
 	main_scene.queue_free()
 	await process_frame

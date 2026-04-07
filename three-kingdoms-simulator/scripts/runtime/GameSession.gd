@@ -44,6 +44,14 @@ func clear_xun_action_history() -> void:
 	current_xun_action_history.clear()
 
 
+func set_last_month_evaluation(evaluation: Variant) -> void:
+	last_month_evaluation = evaluation
+
+
+func clear_last_month_evaluation() -> void:
+	last_month_evaluation = null
+
+
 func get_relation_keys_for_character(character_id: String) -> Array[String]:
 	var keys: Array[String] = []
 	for relation_key in relation_states.keys():

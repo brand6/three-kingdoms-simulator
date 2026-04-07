@@ -11,6 +11,10 @@ var office_changed: bool = false
 var old_office_id: String = ""
 var new_office_id: String = ""
 var promotion_triggered_by_rule_id: String = ""
+var task_name: String = ""
+var progress_current_value: int = 0
+var progress_target_value: int = 0
+var progress_bonus_value: int = 0
 var summary_lines: Array[String] = []
 var next_goal_hint: String = ""
 var promotion_missing_values: Dictionary = {}
@@ -28,6 +32,10 @@ static func create(
 	old_office_id_value: String,
 	new_office_id_value: String,
 	promotion_triggered_by_rule_id_value: String,
+	task_name_value: String = "",
+	progress_current_value_value: int = 0,
+	progress_target_value_value: int = 0,
+	progress_bonus_value_value: int = 0,
 	summary_lines_value: Array[String] = [],
 	next_goal_hint_value: String = "",
 	promotion_missing_values_value: Dictionary = {},
@@ -44,6 +52,10 @@ static func create(
 	result.old_office_id = old_office_id_value
 	result.new_office_id = new_office_id_value
 	result.promotion_triggered_by_rule_id = promotion_triggered_by_rule_id_value
+	result.task_name = task_name_value
+	result.progress_current_value = progress_current_value_value
+	result.progress_target_value = progress_target_value_value
+	result.progress_bonus_value = progress_bonus_value_value
 	result.summary_lines = summary_lines_value.duplicate()
 	result.next_goal_hint = next_goal_hint_value
 	result.promotion_missing_values = promotion_missing_values_value.duplicate(true)
