@@ -87,8 +87,24 @@ func _run() -> void:
 		_fail("HUD should show current task progress.")
 	if not task_summary.contains("剩余旬数："):
 		_fail("HUD should show remaining xun count.")
+	var task_name_line := task_summary.split("\n")[0]
 
-	for _i in range(3):
+	hud._on_end_turn_button_pressed()
+	hud._on_end_xun_confirmed()
+	await process_frame
+	if not hud._xun_summary_dialog.visible:
+		_fail("A normal same-month xun ending should still show the xun summary dialog.")
+	var post_xun_task_summary := _task_summary(hud)
+	if not post_xun_task_summary.contains(task_name_line):
+		_fail("Normal same-month xun transitions should keep the current task name in the HUD.")
+	if not post_xun_task_summary.contains("当前进度：") or not post_xun_task_summary.contains("剩余旬数："):
+		_fail("Normal same-month xun transitions should keep progress and remaining xun in the HUD.")
+	if post_xun_task_summary.contains("本旬已结束") or post_xun_task_summary.contains("下旬建议"):
+		_fail("Normal same-month xun transitions must not replace the task HUD with placeholder advice copy.")
+	hud._xun_summary_dialog.hide()
+	await process_frame
+
+	for _i in range(2):
 		hud._on_end_turn_button_pressed()
 		hud._on_end_xun_confirmed()
 		await process_frame
@@ -117,6 +133,8 @@ func _run() -> void:
 	await process_frame
 	if not promotion_popup.visible:
 		_fail("Promotion popup should open after month report confirmation.")
+	if picker.visible:
+		_fail("Next-month task picker must stay hidden until promotion confirmation finishes.")
 	var promotion_text := _label_text(promotion_popup, "PanelMargin/PanelContent/BodyLabel")
 	if not promotion_text.contains("未获任命"):
 		_fail("Promotion popup should show the failed-promotion verdict when no appointment is granted.")
@@ -129,6 +147,8 @@ func _run() -> void:
 	await process_frame
 	if month_report.visible or promotion_popup.visible:
 		_fail("Month-end dialogs should both close cleanly after confirmation.")
+	if not picker.visible:
+		_fail("Next-month task picker should open only after promotion confirmation.")
 
 	if game_root.call("get_last_month_evaluation") != null:
 		_fail("Month-end evaluation should be consumed after the report flow starts.")

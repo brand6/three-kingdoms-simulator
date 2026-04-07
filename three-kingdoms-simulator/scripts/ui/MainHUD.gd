@@ -637,7 +637,8 @@ func _show_xun_summary(summary: Variant) -> void:
 		"\n".join(summary.prompt_lines),
 	]
 	_xun_summary_dialog.popup_centered_ratio(0.5)
-	_task_list.text = "- 本旬已结束\n- 下旬建议：%s" % (summary.prompt_lines[0] if not summary.prompt_lines.is_empty() else "继续规划关键行动")
+	if _game_root().current_session != null:
+		_task_list.text = _build_task_summary(_game_root().current_session)
 	_event_list.text = "- 旬末总结已生成\n- %s" % (summary.action_lines[0] if not summary.action_lines.is_empty() else END_TURN_TEXT)
 
 
@@ -681,7 +682,7 @@ func _apply_month_action_gate(session: GameSession) -> void:
 
 
 func _open_month_task_picker_if_needed(session: GameSession) -> void:
-	if session == null or not session.month_action_locked:
+	if session == null or not session.month_action_locked or _is_month_end_feedback_active():
 		return
 	var candidates: Array = _game_root().call("get_pending_month_tasks")
 	_task_select_panel.show_task_picker(candidates, _data_repository())
@@ -706,6 +707,10 @@ func _sync_month_task_ui_state() -> void:
 	if session == null:
 		return
 	_apply_month_action_gate(session)
+	if _is_month_end_feedback_active():
+		if _task_select_panel.visible:
+			_task_select_panel.hide()
+		return
 	if session.month_action_locked:
 		if not _task_select_panel.visible:
 			_open_month_task_picker_if_needed(session)
@@ -724,6 +729,10 @@ func _on_month_report_confirmed() -> void:
 		return
 	_promotion_popup.show_promotion(_build_promotion_text(evaluation))
 	_active_month_end_evaluation = null
+
+
+func _is_month_end_feedback_active() -> bool:
+	return _active_month_end_evaluation != null or _month_report_panel.visible or _promotion_popup.visible
 
 
 func _build_month_report_text(evaluation: MonthlyEvaluationResult) -> String:
