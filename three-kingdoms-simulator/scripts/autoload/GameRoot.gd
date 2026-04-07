@@ -7,6 +7,7 @@ const PHASE2_ACTION_RESOLVER_SCRIPT := preload("res://scripts/systems/Phase2Acti
 const XUN_SUMMARY_DATA_SCRIPT := preload("res://scripts/runtime/XunSummaryData.gd")
 const CHARACTER_SELECTOR_ROW_SCRIPT := preload("res://scripts/runtime/CharacterSelectorRow.gd")
 const CHARACTER_PROFILE_VIEW_DATA_SCRIPT := preload("res://scripts/runtime/CharacterProfileViewData.gd")
+const ACTION_RESOLUTION_SCRIPT := preload("res://scripts/runtime/ActionResolution.gd")
 
 var current_session: GameSession
 var last_boot_error: String = ""
@@ -30,10 +31,15 @@ func bootstrap_default_entry() -> void:
 		_hud.show_loading_state()
 
 	_data_repository().call("load_phase1_smoke_sample")
-	current_session = _data_repository().call("bootstrap_session", DEFAULT_SCENARIO_ID, DEFAULT_PROTAGONIST_ID) as GameSession
+	var setup_patch = _data_repository().call("get_setup_patch_for_scenario", DEFAULT_SCENARIO_ID)
+	var effective_protagonist_id := DEFAULT_PROTAGONIST_ID
+	if setup_patch != null and not str(setup_patch.default_player_character_id).is_empty():
+		effective_protagonist_id = str(setup_patch.default_player_character_id)
+	current_session = _data_repository().call("bootstrap_session", DEFAULT_SCENARIO_ID, effective_protagonist_id) as GameSession
 	if current_session == null:
 		show_boot_error("默认数据集或主角 ID 无法载入。")
 		return
+	_initialize_month_start_state()
 
 	_time_manager().call("initialize", current_session.current_year, current_session.current_month, current_session.current_xun)
 	if _hud != null:
@@ -146,6 +152,19 @@ func get_character_profile_view_data(character_id: String) -> Variant:
 func execute_phase2_action(action_id: String, target_character_id: String = "") -> Variant:
 	if current_session == null:
 		return null
+	if current_session.month_action_locked:
+		_latest_action_resolution = ACTION_RESOLUTION_SCRIPT.create(
+			action_id,
+			"本月尚未领受公事",
+			false,
+			"本月尚未领受公事，请先择定一项主任务。",
+			target_character_id,
+			{},
+			{},
+			"待主任务锁定后，旬内行动才会计入本月事务。",
+			"本月行动被暂缓，等待先领主任务。"
+		)
+		return _latest_action_resolution
 	var protagonist := _data_repository().call("get_character", current_session.protagonist_id) as CharacterDefinition
 	var target_character: Variant = null
 	if not target_character_id.is_empty():
@@ -153,6 +172,82 @@ func execute_phase2_action(action_id: String, target_character_id: String = "") 
 	_latest_action_resolution = _phase2_action_resolver.execute(action_id, current_session, protagonist, target_character)
 	current_session.append_action_resolution(_latest_action_resolution)
 	return _latest_action_resolution
+
+
+func get_pending_month_tasks() -> Array:
+	if current_session == null:
+		return []
+	return current_session.pending_month_task_candidates.duplicate(true)
+
+
+func _initialize_month_start_state() -> void:
+	if current_session == null:
+		return
+	current_session.pending_month_task_candidates = _build_month_task_candidates()
+	current_session.current_month_task = null
+	current_session.month_action_locked = true
+
+
+func _build_month_task_candidates() -> Array:
+	var candidates: Array = []
+	var career_state: PlayerCareerState = current_session.player_career_state as PlayerCareerState
+	if career_state == null:
+		return candidates
+	for rule in _data_repository().call("get_task_pool_rules"):
+		if rule == null:
+			continue
+		if not Array(rule.scenario_ids).is_empty() and not Array(rule.scenario_ids).has(current_session.scenario_id):
+			continue
+		if not Array(rule.character_ids).is_empty() and not Array(rule.character_ids).has(current_session.protagonist_id):
+			continue
+		if career_state.office_tier < int(rule.office_tier_min) or career_state.office_tier > int(rule.office_tier_max):
+			continue
+		var include_tags: Array = Array(rule.include_task_tags)
+		var stable_task_id := ""
+		for flag in current_session.player_career_state.career_flags:
+			if str(flag).begins_with("stable_first_promotion_path:"):
+				stable_task_id = str(flag).trim_prefix("stable_first_promotion_path:")
+				break
+		if not stable_task_id.is_empty():
+			var stable_task = _data_repository().call("get_task_template", stable_task_id)
+			if stable_task != null:
+				candidates.append(_task_candidate_payload(stable_task))
+		for task in _data_repository().call("get_task_templates"):
+			if task == null:
+				continue
+			if not stable_task_id.is_empty() and str(task.id) == stable_task_id:
+				continue
+			if int(task.min_office_tier) > career_state.office_tier or int(task.max_office_tier) < career_state.office_tier:
+				continue
+			var task_tags: Array = Array(task.task_tags)
+			var matched := false
+			for task_tag in task_tags:
+				if include_tags.has(task_tag):
+					matched = true
+					break
+			if matched:
+				candidates.append(_task_candidate_payload(task))
+			if candidates.size() >= int(rule.candidate_count):
+				break
+		if candidates.is_empty():
+			for fallback_id in rule.fallback_task_ids:
+				var fallback_task = _data_repository().call("get_task_template", str(fallback_id))
+				if fallback_task != null:
+					candidates.append(_task_candidate_payload(fallback_task))
+		while candidates.size() > int(rule.candidate_count):
+			candidates.pop_back()
+		break
+	return candidates
+
+
+func _task_candidate_payload(task: Variant) -> Dictionary:
+	return {
+		"task_template_id": str(task.id),
+		"name": str(task.name),
+		"issuer_character_id": str(task.issuer_character_id),
+		"description": str(task.description),
+		"base_rewards": Dictionary(task.base_rewards).duplicate(true),
+	}
 
 
 func get_latest_action_resolution() -> Variant:
