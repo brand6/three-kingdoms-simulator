@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="TaskTemplateData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/TaskTemplateData.gd" id="1_task"]
+
+[resource]
+script = ExtResource("1_task")
+id = "task_document_cleanup"
+name = "整顿文书"
+issuer_character_id = "cao_cao"
+issuer_role_tag = "ruler"
+task_type = "admin"
+task_tags = Array[String](["admin"])
+min_office_tier = 1
+max_office_tier = 2
+description = "清理积压案牍、统一文书格式，并补齐府署往来登记，使政务流转恢复秩序。"
+objective_summary = "以读书与巡察配合整理文案，本月务求案牍无滞。"
+duration_months = 1
+difficulty = 1
+progress_rule_id = "document_cleanup_admin"
+success_condition = {"current_value": 8}
+excellent_condition = {"current_value": 11}
+base_rewards = {"merit": 7, "fame": 1, "trust": 1, "success_note": "案牍条理分明，曹操认为你足以承担更稳重的府署事务。"}
+bonus_rewards = {"merit": 3, "fame": 1, "trust": 1, "success_note": "文书积弊一并肃清，幕府上下对你的办事分寸更为放心。"}
+fail_result = {"merit_delta": 0, "fame_delta": 0, "trust_delta": -1, "failure_note": "文案仍有疏漏，上意虽未重责，但对你本月掌事的把握略生疑虑。"}
+followup_tags = Array[String](["admin", "personnel"])
+ui_priority = 100
+is_phase2_1_available = true

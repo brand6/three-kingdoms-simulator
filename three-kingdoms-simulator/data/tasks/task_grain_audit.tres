@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="TaskTemplateData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/TaskTemplateData.gd" id="1_task"]
+
+[resource]
+script = ExtResource("1_task")
+id = "task_grain_audit"
+name = "整理军粮"
+issuer_character_id = "cao_cao"
+issuer_role_tag = "ruler"
+task_type = "logistics"
+task_tags = Array[String](["logistics"])
+min_office_tier = 1
+max_office_tier = 2
+description = "核对军粮簿册、巡查仓储并补正调拨缺漏，确保下月军需可按时发出。"
+objective_summary = "以巡察为主推进仓储清点，本月达成军粮账目闭合。"
+duration_months = 1
+difficulty = 1
+progress_rule_id = "logistics_balanced"
+success_condition = {"current_value": 8}
+excellent_condition = {"current_value": 11}
+base_rewards = {"merit": 7, "fame": 0, "trust": 0, "success_note": "军粮条目核实清楚，幕府记你一功。"}
+bonus_rewards = {"merit": 3, "fame": 1, "trust": 0, "success_note": "仓储漏洞一并补齐，本月后勤事务完成得尤为稳妥。"}
+fail_result = {"merit_delta": 0, "fame_delta": 0, "trust_delta": 0, "failure_note": "账簿仍有漏项，军粮事务虽未酿祸，但未能立功。"}
+followup_tags = Array[String](["admin"])
+ui_priority = 20
+is_phase2_1_available = true

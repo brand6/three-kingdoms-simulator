@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="TaskTemplateData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/TaskTemplateData.gd" id="1_task"]
+
+[resource]
+script = ExtResource("1_task")
+id = "task_recommend_talent"
+name = "举荐人才"
+issuer_character_id = "cao_cao"
+issuer_role_tag = "ruler"
+task_type = "personnel"
+task_tags = Array[String](["personnel"])
+min_office_tier = 2
+max_office_tier = 3
+description = "联络可用之士，整理其资历与品评，向上呈递一份可信的人才举荐。"
+objective_summary = "以拜访与读书并进梳理人才脉络，为上级完成一份可采纳的举荐。"
+duration_months = 1
+difficulty = 2
+progress_rule_id = "recommend_talent_network"
+success_condition = {"current_value": 8}
+excellent_condition = {"current_value": 11}
+base_rewards = {"merit": 8, "fame": 1, "trust": 3, "success_note": "所荐之才与所陈之辞都更得上意采信。"}
+bonus_rewards = {"merit": 2, "fame": 1, "trust": 1, "success_note": "你的人才眼光被进一步认可，幕府对你的判断更少疑虑。"}
+fail_result = {"merit_delta": 0, "fame_delta": 0, "trust_delta": -1, "failure_note": "举荐线索未能坐实，虽未伤名望，却让上意暂缓进一步倚重。"}
+followup_tags = Array[String](["central_affairs"])
+ui_priority = 40
+is_phase2_1_available = true
