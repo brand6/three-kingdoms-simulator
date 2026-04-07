@@ -65,6 +65,8 @@ const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 @onready var _xun_summary_dialog: AcceptDialog = get_node("XunSummaryDialog")
 @onready var _xun_summary_body: Label = get_node("XunSummaryDialog/XunSummaryMargin/XunSummaryBody")
 @onready var _task_select_panel: PopupPanel = get_node("TaskSelectPanel")
+@onready var _month_report_panel = get_node("MonthReportPanel")
+@onready var _promotion_popup = get_node("PromotionPopup")
 
 var _selected_action_category: String = "成长"
 
@@ -90,6 +92,7 @@ func _ready() -> void:
 	_character_selector_dialog.row_chosen.connect(_on_character_selector_row_chosen)
 	_end_xun_dialog.confirmed.connect(_on_end_xun_confirmed)
 	_task_select_panel.task_confirmed.connect(_on_month_task_confirmed)
+	_month_report_panel.confirmed_report.connect(_on_month_report_confirmed)
 	_end_xun_dialog.get_ok_button().text = "确认"
 	_end_xun_dialog.get_cancel_button().text = "取消"
 	if Engine.is_editor_hint():
@@ -598,6 +601,8 @@ func _show_action_result(result: Variant) -> void:
 
 
 func _on_end_turn_button_pressed() -> void:
+	if _xun_summary_dialog.visible:
+		_xun_summary_dialog.hide()
 	_end_xun_dialog.reset_size()
 	_end_xun_dialog.size = END_XUN_DIALOG_SIZE
 	_end_xun_dialog.popup_centered(END_XUN_DIALOG_SIZE)
@@ -608,7 +613,12 @@ func _on_end_xun_confirmed() -> void:
 	_end_xun_dialog.hide()
 	var summary = _game_root().call("end_current_xun")
 	show_success_state(_game_root().current_session)
-	_show_xun_summary(summary)
+	var evaluation = _game_root().call("get_last_month_evaluation")
+	if evaluation != null:
+		_xun_summary_dialog.hide()
+		_show_month_end_feedback(evaluation)
+	else:
+		_show_xun_summary(summary)
 
 
 func _show_xun_summary(summary: Variant) -> void:
@@ -700,6 +710,82 @@ func _sync_month_task_ui_state() -> void:
 	else:
 		if _task_select_panel.visible:
 			_task_select_panel.hide()
+
+
+func _show_month_end_feedback(evaluation: MonthlyEvaluationResult) -> void:
+	_month_report_panel.show_report(_build_month_report_text(evaluation))
+
+
+func _on_month_report_confirmed() -> void:
+	var evaluation: MonthlyEvaluationResult = _game_root().call("get_last_month_evaluation")
+	if evaluation == null:
+		return
+	_promotion_popup.show_promotion(_build_promotion_text(evaluation))
+
+
+func _build_month_report_text(evaluation: MonthlyEvaluationResult) -> String:
+	var session: GameSession = _game_root().current_session
+	var task_state: MonthlyTaskState = session.current_month_task as MonthlyTaskState if session != null else null
+	var task_template = _data_repository().call("get_task_template", task_state.task_template_id if task_state != null else "")
+	var task_name := str(task_template.name if task_template != null else "—")
+	var progress_snapshot = task_state.progress_snapshot if task_state != null else null
+	var progress_text := "0/0"
+	if progress_snapshot != null:
+		progress_text = "%d/%d（优秀 %d）" % [progress_snapshot.current_value, progress_snapshot.target_value, progress_snapshot.bonus_value]
+	var political_line := "政治含义：暂无"
+	for line in evaluation.summary_lines:
+		if str(line).begins_with("政治含义："):
+			political_line = str(line)
+			break
+	return "任务名称：%s\n结果：%s\n进度：%s\n功绩变化：%+d\n名望变化：%+d\n信任变化：%+d\n%s" % [
+		task_name,
+		str(evaluation.task_result),
+		progress_text,
+		evaluation.merit_delta,
+		evaluation.fame_delta,
+		evaluation.trust_delta,
+		political_line,
+	]
+
+
+func _build_promotion_text(evaluation: MonthlyEvaluationResult) -> String:
+	var repository := _data_repository()
+	if evaluation.office_changed:
+		var office = repository.call("get_office", evaluation.new_office_id)
+		var issuer = repository.call("get_character", "cao_cao")
+		return "%s\n任命人：%s\n任命缘由：%s" % [
+			str(office.name if office != null else evaluation.new_office_id),
+			str(issuer.name if issuer != null else "—"),
+			_display_value(evaluation.next_goal_hint)
+		]
+	return "未获任命\n%s\n%s" % [
+		evaluation.promotion_failure_label,
+		_build_promotion_shortfall_line(evaluation)
+	]
+
+
+func _build_promotion_shortfall_line(evaluation: MonthlyEvaluationResult) -> String:
+	var career_state: PlayerCareerState = _game_root().current_session.player_career_state as PlayerCareerState
+	var current_office = _data_repository().call("get_office", career_state.current_office_id if career_state != null else "")
+	var next_office = _data_repository().call("get_office", current_office.next_office_id if current_office != null else "")
+	var office_name := str(next_office.name if next_office != null else "目标官职")
+	match evaluation.promotion_failure_label:
+		"功绩不足":
+			var required_merit := int(evaluation.promotion_missing_values.get("required_merit", 0))
+			var current_merit := int(evaluation.promotion_missing_values.get("current_merit", 0))
+			return "距离%s仍差 %d 功绩" % [office_name, max(0, required_merit - current_merit)]
+		"名望不足":
+			var required_fame := int(evaluation.promotion_missing_values.get("required_fame", 0))
+			var current_fame := int(evaluation.promotion_missing_values.get("current_fame", 0))
+			return "距离%s仍差 %d 名望" % [office_name, max(0, required_fame - current_fame)]
+		"无空缺":
+			return "当前无空缺"
+		_:
+			var task_state: MonthlyTaskState = _game_root().current_session.current_month_task as MonthlyTaskState
+			var snapshot = task_state.progress_snapshot if task_state != null else null
+			if snapshot != null:
+				return "当前进度 %d/%d，未达到成功阈值" % [snapshot.current_value, snapshot.target_value]
+			return "本月主任务未达成功阈值"
 
 
 func _remaining_xun_count(session: GameSession) -> int:

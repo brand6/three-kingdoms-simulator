@@ -3,6 +3,8 @@ extends SceneTree
 const MAIN_SCENE := preload("res://scenes/main/MainScene.tscn")
 const HUD_PATH := NodePath("/root/MainScene")
 const TASK_SELECT_PANEL_PATH := NodePath("/root/MainScene/TaskSelectPanel")
+const MONTH_REPORT_PANEL_PATH := NodePath("/root/MainScene/MonthReportPanel")
+const PROMOTION_POPUP_PATH := NodePath("/root/MainScene/PromotionPopup")
 
 
 func _init() -> void:
@@ -21,8 +23,14 @@ func _run() -> void:
 	var hud: Node = root.get_node(HUD_PATH)
 	var game_root: Node = root.get_node("/root/GameRoot")
 	var picker := root.get_node_or_null(TASK_SELECT_PANEL_PATH)
+	var month_report := root.get_node_or_null(MONTH_REPORT_PANEL_PATH)
+	var promotion_popup := root.get_node_or_null(PROMOTION_POPUP_PATH)
 	if picker == null:
 		_fail("TaskSelectPanel should be mounted under MainScene.")
+	if month_report == null:
+		_fail("MonthReportPanel should be mounted under MainScene.")
+	if promotion_popup == null:
+		_fail("PromotionPopup should be mounted under MainScene.")
 
 	if not game_root.has_method("get_pending_month_tasks"):
 		_fail("GameRoot should expose get_pending_month_tasks for monthly HUD flow.")
@@ -63,6 +71,44 @@ func _run() -> void:
 		_fail("HUD should show current task progress.")
 	if not task_summary.contains("剩余旬数："):
 		_fail("HUD should show remaining xun count.")
+
+	for _i in range(3):
+		hud._on_end_turn_button_pressed()
+		hud._on_end_xun_confirmed()
+		await process_frame
+
+	if not month_report.visible:
+		_fail("Month report should open at month end before promotion popup.")
+	if promotion_popup.visible:
+		_fail("Promotion popup must not open before the month report is confirmed.")
+	var report_text := _label_text(month_report, "PanelMargin/PanelContent/BodyLabel")
+	if not report_text.contains("任务名称："):
+		_fail("Month report should show task name.")
+	if not report_text.contains("结果："):
+		_fail("Month report should show verdict.")
+	if not report_text.contains("进度："):
+		_fail("Month report should show progress versus threshold.")
+	if not report_text.contains("功绩变化：") or not report_text.contains("名望变化：") or not report_text.contains("信任变化："):
+		_fail("Month report should show merit/fame/trust deltas.")
+	if not report_text.contains("政治含义："):
+		_fail("Month report should show political meaning summary.")
+
+	month_report.call("confirm")
+	await process_frame
+	if not promotion_popup.visible:
+		_fail("Promotion popup should open after month report confirmation.")
+	var promotion_text := _label_text(promotion_popup, "PanelMargin/PanelContent/BodyLabel")
+	if not promotion_text.contains("未获任命"):
+		_fail("Promotion popup should show the failed-promotion verdict when no appointment is granted.")
+	if not (promotion_text.contains("功绩不足") or promotion_text.contains("名望不足") or promotion_text.contains("无空缺") or promotion_text.contains("任务未达标")):
+		_fail("Promotion popup should use standardized failure labels.")
+	if not (promotion_text.contains("距离") or promotion_text.contains("仍差") or promotion_text.contains("当前无空缺") or promotion_text.contains("当前进度") or promotion_text.contains("成功阈值")):
+		_fail("Promotion popup should include a concrete missing-value line.")
+
+	promotion_popup.call("confirm")
+	await process_frame
+	if month_report.visible or promotion_popup.visible:
+		_fail("Month-end dialogs should both close cleanly after confirmation.")
 
 	main_scene.queue_free()
 	await process_frame

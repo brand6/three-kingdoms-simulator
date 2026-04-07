@@ -258,7 +258,9 @@ func _process_month_end_evaluation() -> void:
 		var new_office = _data_repository().call("get_office", new_office_id)
 		career_state.office_tier = int(new_office.tier if new_office != null else career_state.office_tier)
 		career_state.unlocked_task_tags = Array(new_office.unlock_task_tags).duplicate() if new_office != null else career_state.unlocked_task_tags
-	var summary_lines: Array[String] = Array(settlement.get("summary_lines", [])).duplicate()
+	var summary_lines: Array[String] = []
+	for line in Array(settlement.get("summary_lines", [])):
+		summary_lines.append(str(line))
 	if office_changed:
 		summary_lines.append("任命结果：已擢升至 %s" % new_office_id)
 	else:

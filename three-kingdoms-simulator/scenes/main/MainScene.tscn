@@ -5,6 +5,8 @@
 [ext_resource type="Script" uid="uid://cq1fdimvnkcgj" path="res://scripts/ui/CharacterSelectorDialog.gd" id="3_selector"]
 [ext_resource type="Script" uid="uid://dl7km7stqvsb1" path="res://scripts/ui/CharacterProfilePanel.gd" id="4_profile"]
 [ext_resource type="Script" path="res://scripts/ui/TaskSelectPanel.gd" id="5_task_select"]
+[ext_resource type="Script" path="res://scripts/ui/MonthReportPanel.gd" id="6_month_report"]
+[ext_resource type="Script" path="res://scripts/ui/PromotionPopup.gd" id="7_promotion"]
 
 [node name="MainScene" type="Control" unique_id=1848903375]
 layout_mode = 3
@@ -629,3 +631,53 @@ custom_minimum_size = Vector2(160, 48)
 layout_mode = 2
 theme_type_variation = &"PrimaryButton"
 text = "领取主任务"
+
+[node name="MonthReportPanel" type="AcceptDialog" parent="." unique_id=1449280101]
+title = "任务结果月报"
+size = Vector2i(620, 420)
+script = ExtResource("6_month_report")
+
+[node name="PanelMargin" type="MarginContainer" parent="MonthReportPanel" unique_id=1449280102]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="PanelContent" type="VBoxContainer" parent="MonthReportPanel/PanelMargin" unique_id=1449280103]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BodyLabel" type="Label" parent="MonthReportPanel/PanelMargin/PanelContent" unique_id=1449280104]
+layout_mode = 2
+autowrap_mode = 3
+text = "任务结果月报"
+
+[node name="PromotionPopup" type="AcceptDialog" parent="." unique_id=1449280201]
+title = "任命结果"
+size = Vector2i(520, 320)
+script = ExtResource("7_promotion")
+
+[node name="PanelMargin" type="MarginContainer" parent="PromotionPopup" unique_id=1449280202]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="PanelContent" type="VBoxContainer" parent="PromotionPopup/PanelMargin" unique_id=1449280203]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BodyLabel" type="Label" parent="PromotionPopup/PanelMargin/PanelContent" unique_id=1449280204]
+layout_mode = 2
+autowrap_mode = 3
+text = "任命结果"
