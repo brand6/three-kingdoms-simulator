@@ -64,7 +64,7 @@ Plans:
 **Goal:** 玩家以荀彧身份在新月领受 1 个主任务，在三旬内用现有基础行动推进任务，并在月末收到可解释的任务结算与简化任命结果；首月至少有 1 条更稳定的升官正反馈路径，trust 也能通过可见叙事反馈参与这一轮仕途体验。
 **Requirements**: CARE-02, CARE-03, CARE-04, CARE-05, UI-03
 **Depends on:** Phase 2
-**Plans:** 6/6 plans complete
+**Plans:** 8 total (6 complete + 2 gap-closure planned)
 
 **Success Criteria** (what must be TRUE):
   1. Player boots as 荀彧, and each new month auto-opens a task picker that requires exactly one main-task selection before any xun actions can proceed, but the gate copy reads as a仕途制度提示 rather than a blunt system lock.
@@ -79,6 +79,8 @@ Plans:
 - [x] 02.1-04-PLAN.md — 扩展仓库与 bootstrap，使荀彧开局与月初任务门控生效
 - [x] 02.1-05-PLAN.md — 实现月任务推进、月末结算与简化任命后端闭环
 - [x] 02.1-06-PLAN.md — 在 MainHUD 接通月初选任务、月报与升官弹窗并补回归
+- [x] 02.1-07-PLAN.md — 修复月初领取按钮即时显现、跨旬任务 HUD 常驻与新月弹窗时序回归
+- [x] 02.1-08-PLAN.md — 修复巡察对荀彧的可用性并补 inspect 推进月任务回归
 
 **Canonical refs**: `.planning/PROJECT.md`; `design/总纲/官职与任务原型部署 Phase 2.1 v1.md`; `design/数据/官职与任务原型部署数据字段设计 v1.md`; `design/数据/Phase 2.1 最小数据录入清单 v1.md`; `design/原型与实现/Phase 2.1 Godot 实现映射表 v1.md`; `design/UIUX/原型 UI 流程图 v1.md` §§4-7, 11-13
 **UI hint**: yes
@@ -130,7 +132,7 @@ Phases execute in numeric order: 1 → 2 → 2.1 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. 190样本数据骨架与单角色入口 | 4/4 | Complete | 01-190-01, 01-190-02, 01-190-03, 01-190-04 |
 | 2. 旬内行动—关系闭环 | 4/7 | Gap closure planned | 02-01, 02-02, 02-03, 02-04 |
-| 2.1. 官职与任务部署 | 0/6 | Planned | - |
+| 2.1. 官职与任务部署 | 8/8 | Executed - pending verification | 02.1-01, 02.1-02, 02.1-03, 02.1-04, 02.1-05, 02.1-06, 02.1-07, 02.1-08 |
 | 3. 仕途、势力与可解释政治 | 0/TBD | Not started | - |
 | 4. 家族门阀、婚姻与历史分歧 | 0/TBD | Not started | - |
 | 5. 持久验证与战争接入口 | 0/TBD | Not started | - |

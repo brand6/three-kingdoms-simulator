@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02.1-06-PLAN.md
-last_updated: "2026-04-07T08:04:41.736Z"
-last_activity: 2026-04-07
+stopped_at: Completed 02.1-08-PLAN.md
+last_updated: "2026-04-07T10:13:01.000Z"
+last_activity: 2026-04-07 -- Completed Phase 02.1 gap-closure plans 07-08
 progress:
   total_phases: 6
-  completed_phases: 3
-  total_plans: 18
-  completed_plans: 18
+  completed_phases: 2
+  total_plans: 20
+  completed_plans: 20
   percent: 0
 ---
 
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 02.1 (官职与任务部署) — EXECUTING
-Plan: 6 of 6
-Status: Ready to execute
-Last activity: 2026-04-07
+Plan: 8 of 8
+Status: Awaiting phase verification
+Last activity: 2026-04-07 -- Completed Phase 02.1 gap-closure plans 07-08
 
-Progress: [████████--] 0% for Phase 02.1 / 33% overall
+Progress: [██████████] 100% for Phase 02.1 / 33% overall
 
 ## Performance Metrics
 
@@ -97,6 +97,9 @@ Recent decisions affecting current work:
 - [Phase 02.1]: 月初任务选择继续复用 MainScene 叠层模式，不切场景。
 - [Phase 02.1]: 月末先展示任务月报，再展示任命结果，保留因果先后。
 - [Phase 02.1]: 失败任命统一四类标签，并补一行具体缺口说明。
+- [Phase 02.1]: 月初“领取主任务”按钮只在明确点击任务卡后显现，并通过 deferred popup relayout 立即刷新布局。
+- [Phase 02.1]: 普通跨旬的旬建议不再覆盖右上角月任务摘要；月报/升官弹窗可见期间禁止提前弹出新月任务选择。
+- [Phase 02.1]: inspect 对默认文官方向主角的可用性由配置层驱动，月任务回归需直接证明 inspect 能推进真实任务进度。
 
 ### Roadmap Evolution
 
