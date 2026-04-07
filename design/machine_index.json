@@ -167,6 +167,36 @@
       "legacy_path": "design/原型 UI 流程图 v1.md"
     },
     {
+      "path": "design/UIUX/主界面改版布局草案 v1.md",
+      "title": "主界面改版布局草案 v1",
+      "category": "uiux",
+      "summary": "主界面从可用骨架到可玩 HUD 的布局与交互改版建议。",
+      "keywords": ["主界面", "HUD", "布局"],
+      "recommended_for": ["界面实现", "开发AI"],
+      "priority": 11,
+      "legacy_path": "design/主界面改版布局草案 v1.md"
+    },
+    {
+      "path": "design/UIUX/行动菜单结构设计 v1.md",
+      "title": "行动菜单结构设计 v1",
+      "category": "uiux",
+      "summary": "定义原型阶段“行动”主入口的菜单结构、分类体系与过滤规则。",
+      "keywords": ["行动", "菜单", "UI"],
+      "recommended_for": ["界面实现", "开发AI"],
+      "priority": 11,
+      "legacy_path": "design/行动菜单结构设计 v1.md"
+    },
+    {
+      "path": "design/UIUX/主界面 UI 评审与修改建议 v1.md",
+      "title": "主界面 UI 评审与修改建议 v1",
+      "category": "uiux",
+      "summary": "评审主界面实现并给出优先级排序的修改建议。",
+      "keywords": ["UI评审", "HUD"],
+      "recommended_for": ["界面实现", "开发AI"],
+      "priority": 11,
+      "legacy_path": "design/主界面 UI 评审与修改建议 v1.md"
+    },
+    {
       "path": "design/剧情与样本/190 剧本原型人物-势力样本表 v1.md",
       "title": "190 剧本原型人物-势力样本表 v1",
       "category": "scenario_samples",

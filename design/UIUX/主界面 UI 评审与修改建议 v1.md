@@ -1,3 +1,13 @@
+---
+title: 主界面 UI 评审与修改建议 v1
+category: uiux
+summary: 评审当前主界面是否满足设计需求，并给出优先级排序的可执行修改建议，面向开发 AI。
+keywords: [UI评审, HUD, 可用性]
+recommended_for: [界面实现, 开发AI]
+priority: 11
+legacy_path: "design/主界面 UI 评审与修改建议 v1.md"
+---
+
 # 主界面 UI 评审与修改建议 v1
 
 #项目设计 #UI评审 #HUD #原型 #Godot
