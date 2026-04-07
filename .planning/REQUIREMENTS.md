@@ -90,7 +90,7 @@
 
 - [x] **UI-01**: Main gameplay flow can be completed through HUD, action panel, detail panels, result dialogs, and summary panels without requiring map-first exploration.
 - [x] **UI-02**: Key actions are reachable within three clicks from the main HUD.
-- [ ] **UI-03**: Event, xun-end, and month-end screens explain the main causes behind important changes or decisions.
+- [x] **UI-03**: Event, xun-end, and month-end screens explain the main causes behind important changes or decisions.
 - [x] **UI-04**: Player can inspect character, relationship, faction, and family or clan context needed to plan the next xun.
 
 ### Persistence And Debug
@@ -187,7 +187,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | WAR-02 | Phase 5 | Pending |
 | UI-01 | Phase 2 | Complete |
 | UI-02 | Phase 2 | Complete |
-| UI-03 | Phase 4 | Pending |
+| UI-03 | Phase 4 | Complete |
 | UI-04 | Phase 2 | Complete |
 | PERS-01 | Phase 5 | Pending |
 | PERS-02 | Phase 5 | Pending |

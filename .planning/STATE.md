@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02.1-05-PLAN.md
-last_updated: "2026-04-07T07:48:06.332Z"
+stopped_at: Completed 02.1-06-PLAN.md
+last_updated: "2026-04-07T08:04:41.736Z"
 last_activity: 2026-04-07
 progress:
   total_phases: 6
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 18
-  completed_plans: 17
+  completed_plans: 18
   percent: 0
 ---
 
@@ -65,6 +65,7 @@ Progress: [████████--] 0% for Phase 02.1 / 33% overall
 | Phase 02.1 P03 | 10 min | 2 tasks | 6 files |
 | Phase 02.1 P04 | 18 min | 2 tasks | 6 files |
 | Phase 02.1 P05 | 24 min | 2 tasks | 5 files |
+| Phase 02.1 P06 | 749 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -93,6 +94,9 @@ Recent decisions affecting current work:
 - [Phase 02-旬内行动—关系闭环]: MainHUD renders action and relation details directly from GameRoot APIs, keeping UI state derived from runtime data rather than duplicated local models.
 - [Phase 02-旬内行动—关系闭环]: Xun summaries are built from accumulated ActionResolution history before time advances, so the summary always describes the finishing xun rather than the next one.
 - [Phase 02-旬内行动—关系闭环]: The end-xun HUD flow uses explicit confirmation and summary dialogs, and the regression closes the summary between loops to mirror real player flow.
+- [Phase 02.1]: 月初任务选择继续复用 MainScene 叠层模式，不切场景。
+- [Phase 02.1]: 月末先展示任务月报，再展示任命结果，保留因果先后。
+- [Phase 02.1]: 失败任命统一四类标签，并补一行具体缺口说明。
 
 ### Roadmap Evolution
 
@@ -116,6 +120,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-07T07:48:06.329Z
-Stopped at: Completed 02.1-05-PLAN.md
+Last session: 2026-04-07T08:04:41.555Z
+Stopped at: Completed 02.1-06-PLAN.md
 Resume file: None
