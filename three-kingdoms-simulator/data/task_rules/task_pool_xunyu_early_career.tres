@@ -18,3 +18,7 @@ max_consecutive_repeats = 0
 required_flags = Array[String](["stable_first_promotion_path:task_document_cleanup"])
 blocked_flags = Array[String]([])
 is_phase2_1_available = true
+required_source_types = Array[String](["faction_order", "relation_request"])
+source_mix_policy = "ensure_diversity"
+related_bloc_bias = ""
+fallback_source_types = Array[String](["faction_order"])

@@ -20,7 +20,16 @@
     "fail_result": {"merit_delta": 0, "fame_delta": 0, "trust_delta": -1, "failure_note": "文案仍有疏漏，上意虽未重责，但对你本月掌事的把握略生疑虑。"},
     "followup_tags": ["admin", "personnel"],
     "ui_priority": 100,
-    "is_phase2_1_available": true
+    "is_phase2_1_available": true,
+    "task_source_type": "faction_order",
+    "request_character_id": "",
+    "related_bloc_id": "",
+    "political_reward_tags": ["上级支持+", "府署认可"],
+    "political_risk_tags": [],
+    "recommendation_hint_tags": ["admin_competence"],
+    "opposition_hint_tags": [],
+    "source_summary": "曹操直接下令，要求幕府文书整顿到位。",
+    "source_priority": 100
   },
   {
     "id": "task_grain_audit",
@@ -43,7 +52,16 @@
     "fail_result": {"merit_delta": 0, "fame_delta": 0, "trust_delta": 0, "failure_note": "账簿仍有漏项，军粮事务虽未酿祸，但未能立功。"},
     "followup_tags": ["admin"],
     "ui_priority": 20,
-    "is_phase2_1_available": true
+    "is_phase2_1_available": true,
+    "task_source_type": "faction_order",
+    "request_character_id": "",
+    "related_bloc_id": "",
+    "political_reward_tags": ["后勤稳固"],
+    "political_risk_tags": [],
+    "recommendation_hint_tags": ["logistics_competence"],
+    "opposition_hint_tags": [],
+    "source_summary": "曹操下令清点军需，确保调度不误。",
+    "source_priority": 20
   },
   {
     "id": "task_clan_pacify",
@@ -66,7 +84,16 @@
     "fail_result": {"merit_delta": 0, "fame_delta": 0, "trust_delta": -1, "failure_note": "安抚效果有限，地方仍有不满之声。"},
     "followup_tags": ["politics_mid"],
     "ui_priority": 40,
-    "is_phase2_1_available": true
+    "is_phase2_1_available": true,
+    "task_source_type": "relation_request",
+    "request_character_id": "chen_gong",
+    "related_bloc_id": "",
+    "political_reward_tags": ["地方人心+", "宗族好感"],
+    "political_risk_tags": ["旧吏阻力↑"],
+    "recommendation_hint_tags": ["social_trust"],
+    "opposition_hint_tags": ["local_friction"],
+    "source_summary": "陈宫建议走访地方宗族，以缓和近期征调带来的摩擦。",
+    "source_priority": 40
   },
   {
     "id": "task_recommend_talent",
@@ -89,6 +116,15 @@
     "fail_result": {"merit_delta": 0, "fame_delta": 0, "trust_delta": 0, "failure_note": "候选名单零散，本月未形成可用的人事建议。"},
     "followup_tags": ["politics_mid", "dispatch"],
     "ui_priority": 60,
-    "is_phase2_1_available": true
+    "is_phase2_1_available": true,
+    "task_source_type": "relation_request",
+    "request_character_id": "xun_you",
+    "related_bloc_id": "",
+    "political_reward_tags": ["人脉拓展+", "识人声望"],
+    "political_risk_tags": ["派系猜忌"],
+    "recommendation_hint_tags": ["personnel_network"],
+    "opposition_hint_tags": ["faction_jealousy"],
+    "source_summary": "荀攸提议整理可用士人名册，为幕府后续用人做准备。",
+    "source_priority": 60
   }
 ]
