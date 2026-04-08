@@ -279,6 +279,16 @@ func _build_generated_task_templates_by_id() -> Dictionary:
 		template.followup_tags = _to_string_array(task_record.get("followup_tags", []))
 		template.ui_priority = int(task_record.get("ui_priority", 0))
 		template.is_phase2_1_available = bool(task_record.get("is_phase2_1_available", true))
+		# Phase 3 政治来源字段
+		template.task_source_type = str(task_record.get("task_source_type", "faction_order"))
+		template.request_character_id = str(task_record.get("request_character_id", ""))
+		template.related_bloc_id = str(task_record.get("related_bloc_id", ""))
+		template.political_reward_tags = _to_string_array(task_record.get("political_reward_tags", []))
+		template.political_risk_tags = _to_string_array(task_record.get("political_risk_tags", []))
+		template.recommendation_hint_tags = _to_string_array(task_record.get("recommendation_hint_tags", []))
+		template.opposition_hint_tags = _to_string_array(task_record.get("opposition_hint_tags", []))
+		template.source_summary = str(task_record.get("source_summary", ""))
+		template.source_priority = int(task_record.get("source_priority", 0))
 		templates_by_id[task_id] = template
 	return templates_by_id
 

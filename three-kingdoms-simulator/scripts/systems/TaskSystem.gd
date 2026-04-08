@@ -50,6 +50,8 @@ func generate_month_candidates(session: GameSession, repository: Node) -> Array:
 					candidates.append(_candidate_payload(fallback_task))
 		while candidates.size() > int(rule.candidate_count):
 			candidates.pop_back()
+		# Phase 3: ensure_diversity — 保证候选集包含规则要求的所有来源类型
+		candidates = _apply_source_mix(candidates, rule, repository)
 		break
 	return candidates
 
@@ -83,6 +85,8 @@ func select_month_task(session: GameSession, repository: Node, selected_index: i
 		"",
 		{}
 	)
+	# Phase 3: 冻结来源快照到月任务状态
+	MonthlyTaskState.freeze_source_snapshot(task_state, candidate)
 	session.current_month_task = task_state
 	session.month_action_locked = false
 	return task_state
@@ -179,6 +183,14 @@ func _candidate_payload(task: Variant) -> Dictionary:
 		"issuer_character_id": str(task.issuer_character_id),
 		"description": str(task.description),
 		"base_rewards": Dictionary(task.base_rewards).duplicate(true),
+		# Phase 3 政治来源字段
+		"task_source_type": str(task.task_source_type),
+		"request_character_id": str(task.request_character_id),
+		"related_bloc_id": str(task.related_bloc_id),
+		"source_summary": str(task.source_summary),
+		"source_priority": int(task.source_priority),
+		"political_reward_tags": Array(task.political_reward_tags).duplicate(),
+		"political_risk_tags": Array(task.political_risk_tags).duplicate(),
 	}
 
 
@@ -215,3 +227,49 @@ func _political_summary_line(trust_delta: int, note: String) -> String:
 	if trust_delta < 0:
 		return "政治含义：疑虑未消，%s" % note
 	return "政治含义：评价持平，%s" % note
+
+
+## Phase 3: ensure_diversity source-mix — 保证候选集包含规则要求的所有来源类型
+## 如果当前候选集缺少某类来源，从全量模板中补充；超出上限时裁剪低优先级候选
+func _apply_source_mix(candidates: Array, rule: Variant, repository: Node) -> Array:
+	var required_types: Array = Array(rule.required_source_types) if rule.get("required_source_types") != null else []
+	var mix_policy: String = str(rule.get("source_mix_policy")) if rule.get("source_mix_policy") != null else ""
+	if required_types.is_empty() or mix_policy != "ensure_diversity":
+		return candidates
+	# 统计当前已有的来源类型
+	var present_types: Dictionary = {}
+	for c in candidates:
+		var st: String = str(Dictionary(c).get("task_source_type", ""))
+		if not st.is_empty():
+			present_types[st] = true
+	# 找出缺失的来源类型
+	var missing_types: Array[String] = []
+	for rt in required_types:
+		if not present_types.has(str(rt)):
+			missing_types.append(str(rt))
+	if missing_types.is_empty():
+		return candidates
+	# 从全量模板中查找能补充缺失来源的任务
+	var existing_ids: Dictionary = {}
+	for c in candidates:
+		existing_ids[str(Dictionary(c).get("task_template_id", ""))] = true
+	for missing_type in missing_types:
+		for task in repository.call("get_task_templates"):
+			if task == null:
+				continue
+			if str(task.task_source_type) != missing_type:
+				continue
+			if existing_ids.has(str(task.id)):
+				continue
+			candidates.append(_candidate_payload(task))
+			existing_ids[str(task.id)] = true
+			break  # 每种缺失类型只补一个
+	# 按 source_priority 降序排列
+	candidates.sort_custom(func(a: Variant, b: Variant) -> bool:
+		return int(Dictionary(a).get("source_priority", 0)) > int(Dictionary(b).get("source_priority", 0))
+	)
+	# 裁剪到 candidate_count 上限
+	var max_count := int(rule.candidate_count) if rule.get("candidate_count") != null else 3
+	while candidates.size() > max_count:
+		candidates.pop_back()
+	return candidates
