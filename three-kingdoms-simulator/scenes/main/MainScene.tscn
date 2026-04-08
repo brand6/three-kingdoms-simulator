@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://qqi5vjdpcfbs" path="res://scripts/ui/TaskSelectPanel.gd" id="5_task_select"]
 [ext_resource type="Script" uid="uid://r7cm1vwd0qbu" path="res://scripts/ui/MonthReportPanel.gd" id="6_month_report"]
 [ext_resource type="Script" uid="uid://f8yran4qbxi2" path="res://scripts/ui/PromotionPopup.gd" id="7_promotion"]
+[ext_resource type="Script" path="res://scripts/ui/FactionPanel.gd" id="8_faction_panel"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hi3im"]
 content_margin_left = 16.0
@@ -174,9 +175,15 @@ layout_mode = 2
 theme_type_variation = &"HeadingLabel"
 text = "关键关系摘要"
 
-[node name="RelationSummaryBody" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/RelationSummaryCard/RelationSummaryContent" unique_id=248215343]
+[node name="RelationSummaryPrimary" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/RelationSummaryCard/RelationSummaryContent" unique_id=248215343]
 layout_mode = 2
-text = "关键关系摘要：主公、亲近者与高戒备对象会在这里短句显示。"
+text = "近期暂无明显失温的人情，但仍该留意谁正在远离你。"
+autowrap_mode = 3
+
+[node name="RelationSummarySecondary" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/RelationSummaryCard/RelationSummaryContent" unique_id=248215344]
+visible = false
+layout_mode = 2
+text = ""
 autowrap_mode = 3
 
 [node name="FactionSummaryCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary" unique_id=485221929]
@@ -192,9 +199,15 @@ layout_mode = 2
 theme_type_variation = &"HeadingLabel"
 text = "势力/派系摘要"
 
-[node name="FactionSummaryBody" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/FactionSummaryCard/FactionSummaryContent" unique_id=65454712]
+[node name="FactionSummaryPrimary" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/FactionSummaryCard/FactionSummaryContent" unique_id=65454712]
 layout_mode = 2
-text = "势力/派系摘要：所属派系态势、支持力度与政治风险会在这里短句显示。"
+text = "眼下尚无突出的派系风向，你可继续观察下一轮政务窗口。"
+autowrap_mode = 3
+
+[node name="FactionSummarySecondary" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/FactionSummaryCard/FactionSummaryContent" unique_id=65454713]
+visible = false
+layout_mode = 2
+text = ""
 autowrap_mode = 3
 
 [node name="ClanSummaryCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary" unique_id=813622927]
@@ -210,9 +223,15 @@ layout_mode = 2
 theme_type_variation = &"HeadingLabel"
 text = "家族/士族摘要"
 
-[node name="ClanSummaryBody" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/ClanSummaryCard/ClanSummaryContent" unique_id=1828982060]
+[node name="ClanSummaryPrimary" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/ClanSummaryCard/ClanSummaryContent" unique_id=1828982060]
 layout_mode = 2
-text = "家族/士族摘要：家族声望、门第压力与当前诉求会在这里短句显示。"
+text = "家族近期未抛出新压力，但你仍在被宗族持续观察。"
+autowrap_mode = 3
+
+[node name="ClanSummarySecondary" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/ClanSummaryCard/ClanSummaryContent" unique_id=1828982061]
+visible = false
+layout_mode = 2
+text = ""
 autowrap_mode = 3
 
 [node name="RightContext" type="VBoxContainer" parent="MarginContainer/VBoxContainer/MainContent" unique_id=1818091653]
@@ -309,7 +328,6 @@ custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Phase 3 开放势力页"
-disabled = true
 text = "势力"
 
 [node name="ClanButton" type="Button" parent="MarginContainer/VBoxContainer/BottomBar/BottomBarContent" unique_id=1648185897]
@@ -770,6 +788,45 @@ layout_mode = 2
 alignment = 2
 
 [node name="ConfirmButton" type="Button" parent="PromotionPopup/PanelMargin/PanelContent/ActionRow" unique_id=1449280206]
+custom_minimum_size = Vector2(160, 48)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "确认"
+
+[node name="FactionPanel" type="PopupPanel" parent="." unique_id=1449280301]
+size = Vector2i(760, 520)
+script = ExtResource("8_faction_panel")
+
+[node name="PanelMargin" type="MarginContainer" parent="FactionPanel" unique_id=1449280302]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="PanelContent" type="VBoxContainer" parent="FactionPanel/PanelMargin" unique_id=1449280303]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BodyLabel" type="Label" parent="FactionPanel/PanelMargin/PanelContent" unique_id=1449280304]
+layout_mode = 2
+size_flags_vertical = 3
+text = "势力总览"
+autowrap_mode = 3
+
+[node name="OfficerList" type="VBoxContainer" parent="FactionPanel/PanelMargin/PanelContent" unique_id=1449280305]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ActionRow" type="HBoxContainer" parent="FactionPanel/PanelMargin/PanelContent" unique_id=1449280306]
+layout_mode = 2
+alignment = 2
+
+[node name="ConfirmButton" type="Button" parent="FactionPanel/PanelMargin/PanelContent/ActionRow" unique_id=1449280307]
 custom_minimum_size = Vector2(160, 48)
 layout_mode = 2
 theme_type_variation = &"PrimaryButton"
