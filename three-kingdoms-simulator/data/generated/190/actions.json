@@ -1,0 +1,72 @@
+[
+  {
+    "id": "train",
+    "display_name": "训练",
+    "category_id": "成长",
+    "ap_cost": 1,
+    "energy_delta": -10,
+    "target_type": "none",
+    "effect_summary": "效果: 武艺历练 +6，压力 +3，功绩 +1",
+    "required_permission_tags": [],
+    "allowed_identity_types": ["ruler", "civil_official", "military_officer", "free_agent"],
+    "locked_reason": "当前身份不可执行",
+    "menu_order": 10,
+    "hidden_when_locked": false
+  },
+  {
+    "id": "study",
+    "display_name": "读书",
+    "category_id": "成长",
+    "ap_cost": 1,
+    "energy_delta": -8,
+    "target_type": "none",
+    "effect_summary": "效果: 智略历练 +6，压力 +2，名望 +1",
+    "required_permission_tags": [],
+    "allowed_identity_types": ["ruler", "civil_official", "military_officer", "free_agent"],
+    "locked_reason": "当前身份不可执行",
+    "menu_order": 20,
+    "hidden_when_locked": false
+  },
+  {
+    "id": "rest",
+    "display_name": "休整",
+    "category_id": "成长",
+    "ap_cost": 1,
+    "energy_delta": 20,
+    "target_type": "none",
+    "effect_summary": "效果: 精力 +20，压力 -12",
+    "required_permission_tags": [],
+    "allowed_identity_types": ["ruler", "civil_official", "military_officer", "free_agent"],
+    "locked_reason": "当前身份不可执行",
+    "menu_order": 30,
+    "hidden_when_locked": false
+  },
+  {
+    "id": "visit",
+    "display_name": "拜访",
+    "category_id": "关系",
+    "ap_cost": 1,
+    "energy_delta": -8,
+    "target_type": "character",
+    "effect_summary": "效果: 好感 +10，信任 +6，敬重 +2，戒备 -4",
+    "required_permission_tags": [],
+    "allowed_identity_types": ["ruler", "civil_official", "military_officer", "free_agent"],
+    "locked_reason": "当前身份不可执行",
+    "menu_order": 40,
+    "hidden_when_locked": false
+  },
+  {
+    "id": "inspect",
+    "display_name": "巡察",
+    "category_id": "政务",
+    "ap_cost": 1,
+    "energy_delta": -10,
+    "target_type": "none",
+    "effect_summary": "效果: 功绩 +5，政务历练 +4，压力 +4",
+    "required_permission_tags": [],
+    "allowed_identity_types": ["ruler", "civil_official", "military_officer"],
+    "locked_reason": "当前身份不可执行",
+    "menu_order": 50,
+    "hidden_when_locked": false
+  }
+]

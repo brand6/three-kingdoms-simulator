@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definition>
+  <table name="Office" bean="OfficeRecord">
+    <field name="id" type="string" />
+    <field name="name" type="string" />
+    <field name="tier" type="int" />
+    <field name="description" type="string" />
+    <field name="unlock_task_tags" type="string[]" />
+    <field name="blocked_task_tags" type="string[]" />
+    <field name="merit_threshold" type="int" />
+    <field name="next_office_id" type="string" />
+    <field name="prev_office_id" type="string" />
+    <field name="address_title" type="string" />
+    <field name="stipend_text" type="string" />
+    <field name="is_phase2_1_available" type="bool" />
+    <field name="sort_order" type="int" />
+  </table>
+</definition>

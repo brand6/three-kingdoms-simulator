@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definition>
+  <table name="Task" bean="TaskRecord">
+    <field name="id" type="string" />
+    <field name="name" type="string" />
+    <field name="issuer_character_id" type="string" />
+    <field name="issuer_role_tag" type="string" />
+    <field name="task_type" type="string" />
+    <field name="task_tags" type="string[]" />
+    <field name="min_office_tier" type="int" />
+    <field name="max_office_tier" type="int" />
+    <field name="description" type="string" />
+    <field name="objective_summary" type="string" />
+    <field name="duration_months" type="int" />
+    <field name="difficulty" type="int" />
+    <field name="progress_rule_id" type="string" />
+    <field name="success_condition" type="string" />
+    <field name="excellent_condition" type="string" />
+    <field name="base_rewards" type="string" />
+    <field name="bonus_rewards" type="string" />
+    <field name="fail_result" type="string" />
+    <field name="followup_tags" type="string[]" />
+    <field name="ui_priority" type="int" />
+    <field name="is_phase2_1_available" type="bool" />
+  </table>
+</definition>

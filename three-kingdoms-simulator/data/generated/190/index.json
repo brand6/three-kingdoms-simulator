@@ -3,6 +3,9 @@
     "scenario": "scenario_190_smoke.json",
     "characters": "characters.json",
     "factions": "factions.json",
-    "cities": "cities.json"
+    "cities": "cities.json",
+    "actions": "actions.json",
+    "task_templates": "task_templates.json",
+    "offices": "offices.json"
   }
 }

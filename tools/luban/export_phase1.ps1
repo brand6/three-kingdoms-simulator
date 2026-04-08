@@ -5,7 +5,7 @@ param(
     [string]$OutputDataDir = "./three-kingdoms-simulator/data/generated/190"
 )
 
-$tables = "Scenario,Character,Faction,City"
+$tables = "Scenario,Character,Faction,City,Action,Task,Office"
 
 Write-Host "Exporting Phase 1 smoke sample JSON via Luban..."
 Write-Host "Input workbook dir: $InputDataDir"
@@ -32,6 +32,9 @@ Write-Host "- scenario_190_smoke.json"
 Write-Host "- characters.json"
 Write-Host "- factions.json"
 Write-Host "- cities.json"
+Write-Host "- actions.json"
+Write-Host "- task_templates.json"
+Write-Host "- offices.json"
 Write-Host "- index.json"
 
 if (Test-Path $LubanClient) {

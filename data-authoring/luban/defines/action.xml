@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definition>
+  <table name="Action" bean="ActionRecord">
+    <field name="id" type="string" />
+    <field name="display_name" type="string" />
+    <field name="category_id" type="string" />
+    <field name="ap_cost" type="int" />
+    <field name="energy_delta" type="int" />
+    <field name="target_type" type="string" />
+    <field name="effect_summary" type="string" />
+    <field name="required_permission_tags" type="string[]" />
+    <field name="allowed_identity_types" type="string[]" />
+    <field name="locked_reason" type="string" />
+    <field name="menu_order" type="int" />
+    <field name="hidden_when_locked" type="bool" />
+  </table>
+</definition>

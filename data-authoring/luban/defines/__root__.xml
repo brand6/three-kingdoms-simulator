@@ -57,13 +57,74 @@
     <var name="values" type="string" />
   </bean>
 
+  <bean name="ActionRecord">
+    <var name="id" type="string" />
+    <var name="display_name" type="string" />
+    <var name="category_id" type="string" />
+    <var name="ap_cost" type="int" />
+    <var name="energy_delta" type="int" />
+    <var name="target_type" type="string" />
+    <var name="effect_summary" type="string" />
+    <var name="required_permission_tags" type="string[]" />
+    <var name="allowed_identity_types" type="string[]" />
+    <var name="locked_reason" type="string" />
+    <var name="menu_order" type="int" />
+    <var name="hidden_when_locked" type="bool" />
+  </bean>
+
+  <bean name="TaskRecord">
+    <var name="id" type="string" />
+    <var name="name" type="string" />
+    <var name="issuer_character_id" type="string" />
+    <var name="issuer_role_tag" type="string" />
+    <var name="task_type" type="string" />
+    <var name="task_tags" type="string[]" />
+    <var name="min_office_tier" type="int" />
+    <var name="max_office_tier" type="int" />
+    <var name="description" type="string" />
+    <var name="objective_summary" type="string" />
+    <var name="duration_months" type="int" />
+    <var name="difficulty" type="int" />
+    <var name="progress_rule_id" type="string" />
+    <var name="success_condition" type="string" />
+    <var name="excellent_condition" type="string" />
+    <var name="base_rewards" type="string" />
+    <var name="bonus_rewards" type="string" />
+    <var name="fail_result" type="string" />
+    <var name="followup_tags" type="string[]" />
+    <var name="ui_priority" type="int" />
+    <var name="is_phase2_1_available" type="bool" />
+  </bean>
+
+  <bean name="OfficeRecord">
+    <var name="id" type="string" />
+    <var name="name" type="string" />
+    <var name="tier" type="int" />
+    <var name="description" type="string" />
+    <var name="unlock_task_tags" type="string[]" />
+    <var name="blocked_task_tags" type="string[]" />
+    <var name="merit_threshold" type="int" />
+    <var name="next_office_id" type="string" />
+    <var name="prev_office_id" type="string" />
+    <var name="address_title" type="string" />
+    <var name="stipend_text" type="string" />
+    <var name="is_phase2_1_available" type="bool" />
+    <var name="sort_order" type="int" />
+  </bean>
+
   <table name="Scenario" value="ScenarioRecord" input="Scenario@190_smoke_sample.xlsx" />
   <table name="Character" value="CharacterRecord" input="Character@190_smoke_sample.xlsx" />
   <table name="Faction" value="FactionRecord" input="Faction@190_smoke_sample.xlsx" />
   <table name="City" value="CityRecord" input="City@190_smoke_sample.xlsx" />
+  <table name="Action" value="ActionRecord" input="Action@190_smoke_sample.xlsx" />
+  <table name="Task" value="TaskRecord" input="Task@190_smoke_sample.xlsx" />
+  <table name="Office" value="OfficeRecord" input="Office@190_smoke_sample.xlsx" />
 
   <include file="scenario.xml" />
   <include file="character.xml" />
   <include file="faction.xml" />
   <include file="city.xml" />
+  <include file="action.xml" />
+  <include file="task.xml" />
+  <include file="office.xml" />
 </module>

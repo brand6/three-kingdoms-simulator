@@ -1,0 +1,62 @@
+[
+  {
+    "id": "office_commoner",
+    "name": "白身",
+    "tier": 0,
+    "description": "尚未正式入仕，只能通过零散事务证明自己可被纳入幕府秩序。",
+    "unlock_task_tags": ["logistics"],
+    "blocked_task_tags": ["admin", "politics_basic", "politics_mid", "dispatch"],
+    "merit_threshold": 0,
+    "next_office_id": "office_congshi",
+    "prev_office_id": "",
+    "address_title": "布衣",
+    "stipend_text": "暂无正式俸给，以临时差事建立功绩。",
+    "is_phase2_1_available": true,
+    "sort_order": 0
+  },
+  {
+    "id": "office_congshi",
+    "name": "从事",
+    "tier": 1,
+    "description": "正式进入势力政务链条的基础幕僚官，开始接受月度考评与正式事务指派。",
+    "unlock_task_tags": ["logistics", "admin", "politics_basic"],
+    "blocked_task_tags": ["central_affairs"],
+    "merit_threshold": 10,
+    "next_office_id": "office_zhubu",
+    "prev_office_id": "office_commoner",
+    "address_title": "从事君",
+    "stipend_text": "列属幕府，食禄有定，须以月度公事自证才干。",
+    "is_phase2_1_available": true,
+    "sort_order": 10
+  },
+  {
+    "id": "office_zhubu",
+    "name": "主簿级辅官",
+    "tier": 2,
+    "description": "可直接接触更稳定的内政与人事事务，开始拥有更明确的政治可见度。",
+    "unlock_task_tags": ["logistics", "admin", "politics_basic", "personnel", "politics_mid", "dispatch"],
+    "blocked_task_tags": [],
+    "merit_threshold": 25,
+    "next_office_id": "office_central_aide",
+    "prev_office_id": "office_congshi",
+    "address_title": "主簿",
+    "stipend_text": "秉掌案牍与调度，已入可被主君直接考察的辅官序列。",
+    "is_phase2_1_available": true,
+    "sort_order": 20
+  },
+  {
+    "id": "office_central_aide",
+    "name": "中枢佐官",
+    "tier": 3,
+    "description": "开始接触势力中枢决策与高级人事安排，成为政治运转中的稳定节点。",
+    "unlock_task_tags": ["admin", "personnel", "politics_mid", "dispatch", "central_affairs"],
+    "blocked_task_tags": [],
+    "merit_threshold": 40,
+    "next_office_id": "",
+    "prev_office_id": "office_zhubu",
+    "address_title": "中枢佐官",
+    "stipend_text": "参与更高层的幕府事务，已被视作可长期培养的核心幕僚。",
+    "is_phase2_1_available": true,
+    "sort_order": 30
+  }
+]
