@@ -17,6 +17,9 @@ var _actions_by_id: Dictionary = {}
 var _task_pool_rules_by_id: Dictionary = {}
 var _promotion_rules_by_id: Dictionary = {}
 var _setup_patches_by_id: Dictionary = {}
+var _recommendation_rules_by_id: Dictionary = {}
+var _opposition_rules_by_id: Dictionary = {}
+var _faction_blocs_by_id: Dictionary = {}
 
 
 func load_phase1_smoke_sample() -> void:
@@ -30,6 +33,7 @@ func load_phase1_smoke_sample() -> void:
 
 	_repository.ingest_dataset(dataset)
 	_load_phase21_resources()
+	_load_phase3_political_rules()
 	_is_loaded = true
 
 
@@ -383,3 +387,43 @@ func _seed_phase2_relations(session: GameSession) -> void:
 
 func _build_relation_key(source_character_id: String, target_character_id: String) -> String:
 	return "%s->%s" % [source_character_id, target_character_id]
+
+
+# ── Phase 3 政治规则加载 ──────────────────────────────────────
+
+func _load_phase3_political_rules() -> void:
+	_recommendation_rules_by_id = _load_resources_by_id("res://data/politics/recommendations")
+	_opposition_rules_by_id = _load_resources_by_id("res://data/politics/oppositions")
+	_faction_blocs_by_id = _load_resources_by_id("res://data/factions/blocs")
+
+
+func get_recommendation_rules() -> Array:
+	return _recommendation_rules_by_id.values()
+
+
+func get_recommendation_rule(id: String) -> Variant:
+	return _recommendation_rules_by_id.get(id)
+
+
+func get_opposition_rules() -> Array:
+	return _opposition_rules_by_id.values()
+
+
+func get_opposition_rule(id: String) -> Variant:
+	return _opposition_rules_by_id.get(id)
+
+
+func get_faction_blocs_for_faction(faction_id: String) -> Array:
+	var blocs: Array = []
+	for bloc in _faction_blocs_by_id.values():
+		if bloc != null and str(bloc.faction_id) == faction_id:
+			blocs.append(bloc)
+	return blocs
+
+
+func get_faction_bloc(id: String) -> Variant:
+	return _faction_blocs_by_id.get(id)
+
+
+func get_all_faction_blocs() -> Array:
+	return _faction_blocs_by_id.values()
