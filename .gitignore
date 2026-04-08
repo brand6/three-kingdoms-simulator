@@ -13,6 +13,9 @@ export_presets.cfg.user
 # Godot editor UID files (editor-generated identifiers) - keep source assets tracked
 **/*.uid
 
+# Node modules (local deps)
+node_modules/
+
 # OS files
 Thumbs.db
 ehthumbs.db

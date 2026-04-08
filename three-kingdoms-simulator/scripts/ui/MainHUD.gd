@@ -26,6 +26,7 @@ const XUN_SUMMARY_STATS := "主要数值变化"
 const XUN_SUMMARY_RELATIONS := "关系变化摘要"
 const XUN_SUMMARY_PROMPTS := "新提示"
 const ACTION_POPUP_SIZE := Vector2i(240, 0)
+const ACTION_RESULT_DIALOG_SIZE := Vector2i(560, 360)
 const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 const XUN_SUMMARY_DIALOG_SIZE := Vector2i(620, 420)
 
@@ -61,7 +62,8 @@ const XUN_SUMMARY_DIALOG_SIZE := Vector2i(620, 420)
 @onready var _character_selector_dialog: ConfirmationDialog = get_node("CharacterSelectorDialog")
 @onready var _character_profile_panel: PopupPanel = get_node("CharacterProfilePanel")
 @onready var _action_result_dialog: AcceptDialog = get_node("ActionResultDialog")
-@onready var _action_result_body: Label = get_node("ActionResultDialog/ActionResultMargin/ActionResultBody")
+@onready var _action_result_body: Label = get_node("ActionResultDialog/ActionResultMargin/ActionResultContent/ActionResultBody")
+@onready var _action_result_confirm_button: Button = get_node("ActionResultDialog/ActionResultMargin/ActionResultContent/ActionRow/ConfirmButton")
 @onready var _end_xun_dialog: ConfirmationDialog = get_node("EndXunDialog")
 @onready var _xun_summary_dialog: AcceptDialog = get_node("XunSummaryDialog")
 @onready var _xun_summary_body: Label = get_node("XunSummaryDialog/XunSummaryMargin/XunSummaryContent/XunSummaryBody")
@@ -95,6 +97,15 @@ func _ready() -> void:
 	_end_xun_dialog.confirmed.connect(_on_end_xun_confirmed)
 	_task_select_panel.task_confirmed.connect(_on_month_task_confirmed)
 	_month_report_panel.confirmed_report.connect(_on_month_report_confirmed)
+	_action_result_dialog.canceled.connect(func() -> void:
+		_action_result_dialog.hide()
+	)
+	_action_result_dialog.min_size = ACTION_RESULT_DIALOG_SIZE
+	_action_result_dialog.max_size = ACTION_RESULT_DIALOG_SIZE
+	_action_result_dialog.get_ok_button().hide()
+	_action_result_confirm_button.pressed.connect(func() -> void:
+		_action_result_dialog.hide()
+	)
 	var xun_summary_confirm := get_node_or_null("XunSummaryDialog/XunSummaryMargin/XunSummaryContent/ActionRow/ConfirmButton") as Button
 	if xun_summary_confirm != null:
 		xun_summary_confirm.pressed.connect(func() -> void:
@@ -602,10 +613,19 @@ func _show_action_result(result: Variant) -> void:
 		RESULT_LABEL_CLUE,
 		clue_text if not clue_text.is_empty() else "无"
 	]
-	_action_result_dialog.popup_centered_ratio(0.45)
+	_action_result_dialog.reset_size()
+	_action_result_dialog.min_size = ACTION_RESULT_DIALOG_SIZE
+	_action_result_dialog.max_size = ACTION_RESULT_DIALOG_SIZE
+	_action_result_dialog.size = ACTION_RESULT_DIALOG_SIZE
+	call_deferred("_popup_action_result_dialog")
 	_task_list.text = _build_task_summary(_game_root().current_session)
 	_event_list.text = "- 结果反馈：%s\n- %s：%s\n- %s：%s" % [result.summary_line, RESULT_LABEL_STATS, _format_stat_delta_text(result.stat_deltas), RESULT_LABEL_RELATIONS, relation_text]
 	_relation_summary_body.text = "关键关系摘要：%s" % relation_text
+
+
+func _popup_action_result_dialog() -> void:
+	_action_result_dialog.popup_centered(ACTION_RESULT_DIALOG_SIZE)
+	_action_result_dialog.size = ACTION_RESULT_DIALOG_SIZE
 
 
 func _on_end_turn_button_pressed() -> void:

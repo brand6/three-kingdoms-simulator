@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-04-07",
+  "updated_at": "2026-04-08",
   "root": "design",
   "entrypoints": {
     "human": "design/Agent.md",
@@ -87,6 +87,16 @@
       "legacy_path": ""
     },
     {
+      "path": "design/总纲/Phase 3 仕途、势力与可解释政治 详细规划 v1.md",
+      "title": "Phase 3 仕途、势力与可解释政治 详细规划 v1",
+      "category": "overview",
+      "summary": "定义 Phase 3 的正式 GDD 章节，冻结单角色视角下的仕途推进、势力信息可见性、推荐/反对链、派系支持、任命解释、官职权限变化与月末政治结算。",
+      "keywords": ["Phase 3", "仕途", "势力", "推荐", "反对", "派系", "任命", "月末政治结算"],
+      "recommended_for": ["阶段设计", "可解释政治", "仕途系统扩展", "反SLG边界校验"],
+      "priority": 4,
+      "legacy_path": ""
+    },
+    {
       "path": "design/系统设计/核心系统详细设计 v1.md",
       "title": "核心系统详细设计 v1",
       "category": "systems",
@@ -147,12 +157,42 @@
       "legacy_path": ""
     },
     {
+      "path": "design/数据/Phase 3 政治与任命数据字段设计 v1.md",
+      "title": "Phase 3 政治与任命数据字段设计 v1",
+      "category": "data",
+      "summary": "冻结 Phase 3 所需的推荐规则、反对规则、派系块、政治支持快照、候选评估、原因行与月末政治结果字段设计。",
+      "keywords": ["Phase 3", "数据结构", "政治系统", "任命", "推荐", "反对", "派系", "原因行"],
+      "recommended_for": ["字段设计", "政治系统实现", "月报解释", "任命竞争建模"],
+      "priority": 8,
+      "legacy_path": ""
+    },
+    {
       "path": "design/数据/Phase 2.1 最小数据录入清单 v1.md",
       "title": "Phase 2.1 最小数据录入清单 v1",
       "category": "data",
       "summary": "明确 Phase 2.1 先录什么、至少录多少、按什么顺序录、录完如何验收。",
       "keywords": ["Phase 2.1", "数据录入", "样本", "Resource", "剧本", "验收"],
       "recommended_for": ["数据录入", "样本准备", "最小闭环", "实现前准备"],
+      "priority": 8,
+      "legacy_path": ""
+    },
+    {
+      "path": "design/数据/Phase 3 最小数据录入清单 v1.md",
+      "title": "Phase 3 最小数据录入清单 v1",
+      "category": "data",
+      "summary": "明确 Phase 3 为跑通最小 explainable-politics 闭环，哪些政治规则、世界样本、竞争样本与成功/失败月报样本必须先录。",
+      "keywords": ["Phase 3", "数据录入", "政治系统", "推荐", "反对", "派系", "任命", "月报样本"],
+      "recommended_for": ["数据录入", "样本准备", "可解释政治联调", "实现前准备"],
+      "priority": 8,
+      "legacy_path": ""
+    },
+    {
+      "path": "design/数据/Phase 3 ID 与样本命名冻结表 v1.md",
+      "title": "Phase 3 ID 与样本命名冻结表 v1",
+      "category": "data",
+      "summary": "冻结 Phase 3 首批样本 ID 命名与交叉引用，解决命名漂移与样本未冻结的问题，供 Godot 原型数据录入直接使用。",
+      "keywords": ["Phase 3", "ID", "命名", "样本冻结", "数据录入"],
+      "recommended_for": ["数据录入", "样本命名", "Phase 3 实现准备"],
       "priority": 8,
       "legacy_path": ""
     },
@@ -193,6 +233,16 @@
       "summary": "将 Phase 2.1 的设计内容映射到 Godot 模块、Resource、运行时状态、UI 面板与验收点。",
       "keywords": ["Phase 2.1", "Godot", "实现映射", "模块职责", "UI", "状态"],
       "recommended_for": ["实现前对齐", "模块拆解", "开发顺序", "AI 开发桥接"],
+      "priority": 10,
+      "legacy_path": ""
+    },
+    {
+      "path": "design/原型与实现/Phase 3 Godot 实现映射表 v1.md",
+      "title": "Phase 3 Godot 实现映射表 v1",
+      "category": "implementation",
+      "summary": "将 Phase 3 的政治设计内容映射到 Godot 模块、Resource、运行时状态、UI 面板、月度时序与验收点。",
+      "keywords": ["Phase 3", "Godot", "实现映射", "政治系统", "任命", "UI", "时序"],
+      "recommended_for": ["实现前对齐", "政治系统拆解", "开发顺序", "AI 开发桥接"],
       "priority": 10,
       "legacy_path": ""
     },
@@ -255,6 +305,16 @@
       "recommended_for": ["事件录入", "事件验证", "测试事件"],
       "priority": 13,
       "legacy_path": "design/190 剧本原型事件样本表 v1.md"
+    },
+    {
+      "path": "design/剧情与样本/Phase 3 首批政治样本名单 v1.md",
+      "title": "Phase 3 首批政治样本名单 v1",
+      "category": "scenario_samples",
+      "summary": "将 Phase 3 首批推荐规则、反对规则、派系块、关键人物、竞争样本、任务来源样本与成功/失败月报样本具体化为可直接录入的名单。",
+      "keywords": ["Phase 3", "政治样本", "推荐规则", "反对规则", "派系块", "关键人物", "竞争样本", "月报样本"],
+      "recommended_for": ["样本录入", "Phase 3 数据准备", "命名冻结", "可解释政治联调"],
+      "priority": 13,
+      "legacy_path": ""
     }
   ],
   "lookup_routes": {
@@ -268,13 +328,17 @@
       "design/总纲/GDD 框架 v1.md",
       "design/总纲/项目总设计方案 v1.md",
       "design/总纲/官职与任务原型部署 Phase 2.1 v1.md",
+      "design/总纲/Phase 3 仕途、势力与可解释政治 详细规划 v1.md",
       "design/系统设计/核心系统详细设计 v1.md"
     ],
     "system_implementation": [
       "design/系统设计/核心系统详细设计 v1.md",
       "design/总纲/官职与任务原型部署 Phase 2.1 v1.md",
+      "design/总纲/Phase 3 仕途、势力与可解释政治 详细规划 v1.md",
       "design/数据/官职与任务原型部署数据字段设计 v1.md",
+      "design/数据/Phase 3 政治与任命数据字段设计 v1.md",
       "design/原型与实现/Phase 2.1 Godot 实现映射表 v1.md",
+      "design/原型与实现/Phase 3 Godot 实现映射表 v1.md",
       "design/数据/Godot 数据结构草案 v1.md",
       "design/原型与实现/原型任务拆解清单 v1.md"
     ],
@@ -290,7 +354,9 @@
     "scenario_data_entry": [
       "design/剧情与样本/190 剧本原型人物-势力样本表 v1.md",
       "design/剧情与样本/190 剧本原型事件样本表 v1.md",
+      "design/剧情与样本/Phase 3 首批政治样本名单 v1.md",
       "design/数据/Phase 2.1 最小数据录入清单 v1.md",
+      "design/数据/Phase 3 最小数据录入清单 v1.md",
       "design/数据/Godot 数据结构草案 v1.md"
     ],
     "phase_2_1_career_prototype": [
@@ -299,6 +365,30 @@
       "design/数据/Phase 2.1 最小数据录入清单 v1.md",
       "design/原型与实现/Phase 2.1 Godot 实现映射表 v1.md",
       "design/原型与实现/Godot 原型开发拆解 v1.md"
+    ],
+    "phase_3_explainable_politics": [
+      "design/总纲/Phase 3 仕途、势力与可解释政治 详细规划 v1.md",
+      "design/数据/Phase 3 政治与任命数据字段设计 v1.md",
+      "design/数据/Phase 3 最小数据录入清单 v1.md",
+      "design/原型与实现/Phase 3 Godot 实现映射表 v1.md",
+      "design/总纲/官职与任务原型部署 Phase 2.1 v1.md",
+      "design/原型与实现/Phase 2.1 Godot 实现映射表 v1.md",
+      ".planning/ROADMAP.md",
+      ".planning/phases/03-仕途、势力与可解释政治/03-01-PLAN.md",
+      ".planning/phases/03-仕途、势力与可解释政治/03-02-PLAN.md",
+      ".planning/phases/03-仕途、势力与可解释政治/03-03-PLAN.md",
+      ".planning/phases/03-仕途、势力与可解释政治/03-04-PLAN.md",
+      ".planning/phases/03-仕途、势力与可解释政治/03-05-PLAN.md",
+      ".planning/phases/03-仕途、势力与可解释政治/03-06-PLAN.md",
+      ".planning/phases/03-仕途、势力与可解释政治/03-07-PLAN.md"
+    ],
+    "phase_3_data_entry": [
+      "design/数据/Phase 3 政治与任命数据字段设计 v1.md",
+      "design/数据/Phase 3 最小数据录入清单 v1.md",
+      "design/剧情与样本/Phase 3 首批政治样本名单 v1.md",
+      "design/总纲/Phase 3 仕途、势力与可解释政治 详细规划 v1.md",
+      "design/原型与实现/Phase 3 Godot 实现映射表 v1.md",
+      "design/剧情与样本/190 剧本原型人物-势力样本表 v1.md"
     ]
   }
 }

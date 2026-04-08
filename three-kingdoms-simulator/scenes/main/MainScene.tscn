@@ -469,8 +469,18 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="ActionResultBody" type="Label" parent="ActionResultDialog/ActionResultMargin" unique_id=461438951]
+[node name="ActionResultContent" type="VBoxContainer" parent="ActionResultDialog/ActionResultMargin" unique_id=461438950]
 layout_mode = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="ActionResultBody" type="Label" parent="ActionResultDialog/ActionResultMargin/ActionResultContent" unique_id=461438951]
+layout_mode = 2
+size_flags_vertical = 3
 text = "行动名
 成败结论
 原因说明
@@ -478,6 +488,16 @@ text = "行动名
 关系变化 / 新线索"
 vertical_alignment = 1
 autowrap_mode = 3
+
+[node name="ActionRow" type="HBoxContainer" parent="ActionResultDialog/ActionResultMargin/ActionResultContent" unique_id=461438952]
+layout_mode = 2
+alignment = 2
+
+[node name="ConfirmButton" type="Button" parent="ActionResultDialog/ActionResultMargin/ActionResultContent/ActionRow" unique_id=461438953]
+custom_minimum_size = Vector2(160, 48)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "确认"
 
 [node name="EndXunDialog" type="ConfirmationDialog" parent="." unique_id=863586741]
 title = "结束本旬"

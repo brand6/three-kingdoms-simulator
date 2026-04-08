@@ -11,11 +11,13 @@
   },
   "model": "github-copilot/gpt-5.4",
   "small_model": "github-copilot/gpt-5-mini",
+  "default_agent": "game_designer",
   "agent":{
     "build": {
       "prompt": "始终以中文（简体，zh-CN）与用户交流。用中文进行回答。"
     }
   },
+  "plugin": ["oh-my-openagent"],
   "command": {
     "update": {
       "agent": "document",

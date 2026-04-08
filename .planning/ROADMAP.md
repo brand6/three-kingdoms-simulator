@@ -87,15 +87,23 @@ Plans:
 
 ### Phase 3: 仕途、势力与可解释政治
 **Goal**: 玩家的行动与关系会进入月末仕途结算，形成任务、任命、权限变化和派系博弈的可解释政治循环。
-**Depends on**: Phase 2
+**Depends on**: Phase 2.1
 **Requirements**: RELA-04, CARE-01, CARE-02, CARE-03, CARE-04, CARE-05, FACT-01, FACT-02, FACT-03, POLI-01, POLI-02, POLI-03
 **Success Criteria** (what must be TRUE):
   1. Player can receive at least two prototype task sources, complete relevant work, and see merit and fame move in response.
   2. Month-end evaluation can result in appointment, promotion, rejection, or missed opportunity, with visible reasons such as merit, trust, support, opposition, or blockers.
   3. Office changes alter what the player is allowed to do or how they are treated politically, while preserving the same single-character rule set.
   4. Player can inspect faction leadership, cities, major officers, resources, and internal political groups, and relationship strength can influence later recommendations or appointment outcomes.
-**Plans**: TBD
-**Canonical refs**: `design/总纲/项目总设计方案 v1.md` §§5.5-5.7; `design/系统设计/核心系统详细设计 v1.md` §§6-7; `design/原型与实现/Godot 原型开发拆解 v1.md` §§5.5-5.7, 8C-8D; `design/原型与实现/原型任务拆解清单 v1.md` T09-T12
+**Plans**: 7 plans
+Plans:
+- [ ] 03-01-PLAN.md — 冻结推荐 / 反对 / 派系支持 / 任命解释的静态与运行时契约
+- [ ] 03-02-PLAN.md — 将月任务来源从上级指派扩展到至少两类可解释政治来源
+- [ ] 03-03-PLAN.md — 建立关系、功绩与任务结果驱动的推荐 / 反对累积链
+- [ ] 03-04-PLAN.md — 实现派系支持修正、多候选竞争与任命原因分解
+- [ ] 03-05-PLAN.md — 让官职变化真正影响权限、待遇反馈与政治后果
+- [ ] 03-06-PLAN.md — 接通势力总览、派系摘要、人物政治支持与月报解释 UI
+- [ ] 03-07-PLAN.md — 完成 Phase 3 联调、政治失败结果与 explainable-politics 回归验收
+**Canonical refs**: `design/总纲/项目总设计方案 v1.md` §§5.5-5.7; `design/总纲/官职与任务原型部署 Phase 2.1 v1.md` §§12-16; `design/总纲/Phase 3 仕途、势力与可解释政治 详细规划 v1.md`; `design/系统设计/核心系统详细设计 v1.md` §§3, 6-7; `design/数据/官职与任务原型部署数据字段设计 v1.md` §§16; `design/原型与实现/Phase 2.1 Godot 实现映射表 v1.md` §§14-16; `design/原型与实现/Godot 原型开发拆解 v1.md` §§5.5-5.7, 8C-8D; `design/原型与实现/原型任务拆解清单 v1.md` T09-T12
 **UI hint**: yes
 
 ### Phase 4: 家族门阀、婚姻与历史分歧
@@ -133,6 +141,6 @@ Phases execute in numeric order: 1 → 2 → 2.1 → 3 → 4 → 5
 | 1. 190样本数据骨架与单角色入口 | 4/4 | Complete | 01-190-01, 01-190-02, 01-190-03, 01-190-04 |
 | 2. 旬内行动—关系闭环 | 4/7 | Gap closure planned | 02-01, 02-02, 02-03, 02-04 |
 | 2.1. 官职与任务部署 | 8/8 | Executed - pending verification | 02.1-01, 02.1-02, 02.1-03, 02.1-04, 02.1-05, 02.1-06, 02.1-07, 02.1-08 |
-| 3. 仕途、势力与可解释政治 | 0/TBD | Not started | - |
+| 3. 仕途、势力与可解释政治 | 0/7 | Planned | - |
 | 4. 家族门阀、婚姻与历史分歧 | 0/TBD | Not started | - |
 | 5. 持久验证与战争接入口 | 0/TBD | Not started | - |

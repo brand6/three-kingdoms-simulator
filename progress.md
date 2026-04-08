@@ -160,6 +160,57 @@
   - design/machine_index.json
   - design/CHANGELOG.md
 
+## 会话：2026-04-08
+
+### 阶段 12：Phase 3 规划落盘
+- **状态：** complete
+- 执行的操作：
+  - 按用户要求先读取 `task_plan.md`、`findings.md`、`progress.md`、`.planning/ROADMAP.md`
+  - 复核 `design/` 检索索引，确认本次无需更新 `design/Agent.md`、`design/machine_index.json`、`design/CHANGELOG.md`
+  - 将 `.planning/ROADMAP.md` 的 Phase 3 从阶段级描述细化为 7 个可执行 plans
+  - 新建 `.planning/phases/03-仕途、势力与可解释政治/03-01-PLAN.md` 至 `03-07-PLAN.md`
+  - 将根规划文件 `task_plan.md`、`findings.md`、`progress.md` 切换到 Phase 3 规划上下文
+- 创建/修改的文件：
+  - task_plan.md
+  - findings.md
+  - progress.md
+  - .planning/ROADMAP.md
+  - .planning/phases/03-仕途、势力与可解释政治/03-01-PLAN.md
+  - .planning/phases/03-仕途、势力与可解释政治/03-02-PLAN.md
+  - .planning/phases/03-仕途、势力与可解释政治/03-03-PLAN.md
+  - .planning/phases/03-仕途、势力与可解释政治/03-04-PLAN.md
+  - .planning/phases/03-仕途、势力与可解释政治/03-05-PLAN.md
+  - .planning/phases/03-仕途、势力与可解释政治/03-06-PLAN.md
+  - .planning/phases/03-仕途、势力与可解释政治/03-07-PLAN.md
+
+### 阶段 13：Phase 3 执行准备
+- **状态：** in_progress
+- 执行的操作：
+  - 按用户要求读取 `task_plan.md`、`findings.md`、`progress.md`、`.planning/ROADMAP.md` 与 Phase 3 的 7 个计划文件
+  - 读取 `design/总纲/官职与任务原型部署 Phase 2.1 v1.md` 作为文风与章节结构基准
+  - 输出 `design/总纲/Phase 3 仕途、势力与可解释政治 详细规划 v1.md`
+  - 输出 `design/数据/Phase 3 政治与任命数据字段设计 v1.md`
+  - 输出 `design/原型与实现/Phase 3 Godot 实现映射表 v1.md`
+  - 输出 `design/数据/Phase 3 最小数据录入清单 v1.md`
+  - 输出 `design/剧情与样本/Phase 3 首批政治样本名单 v1.md`
+  - 同步更新 `design/Agent.md`、`design/machine_index.json`、`design/CHANGELOG.md`
+  - 同步更新 `design/Agent.md`、`design/machine_index.json`、`design/CHANGELOG.md` 并新增 `design/数据/Phase 3 ID 与样本命名冻结表 v1.md` 用于 ID 冻结与样本命名规则。
+  - 在 `.planning/ROADMAP.md` 挂接新文档引用，并在 `task_plan.md`、`findings.md`、`progress.md` 记录本次文档落盘
+- 创建/修改的文件：
+  - task_plan.md
+  - findings.md
+  - progress.md
+  - .planning/ROADMAP.md
+  - design/总纲/Phase 3 仕途、势力与可解释政治 详细规划 v1.md
+  - design/数据/Phase 3 政治与任命数据字段设计 v1.md
+  - design/数据/Phase 3 最小数据录入清单 v1.md
+  - design/剧情与样本/Phase 3 首批政治样本名单 v1.md
+  - design/原型与实现/Phase 3 Godot 实现映射表 v1.md
+  - design/Agent.md
+  - design/machine_index.json
+  - design/CHANGELOG.md
+  - design/数据/Phase 3 ID 与样本命名冻结表 v1.md
+
 ## 测试结果
 | 测试 | 输入 | 预期结果 | 实际结果 | 状态 |
 |------|------|---------|---------|------|
@@ -168,6 +219,11 @@
 | 会话恢复脚本执行 | `.agents` 实际脚本路径 | 输出恢复报告或无未同步上下文 | 已执行，未发现需额外同步内容 | passed |
 | Phase 2.1 实现映射文档创建 | 新增实现桥接文档 | 文件成功落盘并可读 | 已创建并校验 | passed |
 | Phase 2.1 数据录入清单创建 | 新增最小录入执行文档 | 文件成功落盘并可读 | 已创建并校验 | passed |
+| Phase 3 规划文件创建 | ROADMAP + 7 个 Phase 3 plans | 文件成功落盘且依赖包含 Phase 2.1 | 已创建并校验 | passed |
+| Phase 3 总纲文档创建 | 新增正式 GDD 章节稿与 design 索引同步 | 文件成功落盘并可通过 design 索引检索 | 已创建并校验 | passed |
+| Phase 3 字段稿与实现映射表创建 | 新增字段合同与实现桥接文档并同步 design 索引 | 文件成功落盘并可通过 design 索引检索 | 已创建并校验 | passed |
+| Phase 3 数据录入清单创建 | 新增最小录入执行文档并同步 design 索引 | 文件成功落盘并可通过 design 索引检索 | 已创建并校验 | passed |
+| Phase 3 首批政治样本名单创建 | 新增可直接录入的政治样本名单并同步 design 索引 | 文件成功落盘并可通过 design 索引检索 | 已创建并校验 | passed |
 
 ## 错误日志
 | 时间戳 | 错误 | 尝试次数 | 解决方案 |
@@ -178,10 +234,10 @@
 | 问题 | 答案 |
 |------|------|
 | 我在哪里？ | 阶段 8 已开始，当前处于最小数据录入准备阶段 |
-| 我要去哪里？ | 完成首批 Resource 样本录入、月度任务闭环实现与联调验收 |
-| 目标是什么？ | 把 Phase 2.1 从“文档已齐”推进到“最小样本已可录入” |
+| 我要去哪里？ | 从 Phase 2.1 过渡到 Phase 3 的政治系统执行计划，并按 03-01 ~ 03-07 开始实施 |
+| 目标是什么？ | 把 Phase 3 从“只有阶段说明”推进到“既有完整可执行 plans，也有正式总纲文档” |
 | 我学到了什么？ | 见 findings.md |
-| 我做了什么？ | 已补齐 Phase 2.1 的最小数据录入清单，并同步更新 design 索引与规划文件 |
+| 我做了什么？ | 已补齐 Phase 3 的路线图与 7 个执行 plans，输出正式总纲文档，并同步更新 design 索引与根规划记录 |
 
 ---
 *每个阶段完成后或遇到错误时更新此文件*
