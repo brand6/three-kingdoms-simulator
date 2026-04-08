@@ -2,7 +2,6 @@ extends RefCounted
 class_name Phase2ActionCatalog
 
 const PHASE2_ACTION_SPEC_SCRIPT := preload("res://scripts/runtime/Phase2ActionSpec.gd")
-const PHASE2_ACTION_MENU_CONFIG := preload("res://data/config/phase2_action_menu_config.tres")
 
 const CATEGORY_GROWTH := "成长"
 const CATEGORY_RELATION := "关系"
@@ -37,49 +36,52 @@ func get_available_actions(
 	visit_targets: Array[CharacterDefinition]
 ) -> Array:
 	var actions: Array = []
-	var base_specs := _build_base_specs_by_id()
-	for rule in _get_menu_rules():
-		var action_id := str(rule.get("action_id", ""))
-		if not base_specs.has(action_id):
+	for action_record in _get_action_records():
+		var action_id := str(action_record.get("id", ""))
+		if action_id.is_empty():
 			continue
-		var base_spec = base_specs[action_id]
-		var spec = PHASE2_ACTION_SPEC_SCRIPT.create(
-			base_spec.id,
-			base_spec.display_name,
-			base_spec.category_id,
-			base_spec.ap_cost,
-			base_spec.energy_delta,
-			base_spec.target_type,
-			base_spec.effect_summary,
-			base_spec.required_permission_tags,
-			"",
-			false
-		)
-		spec.disabled_reason = _get_disabled_reason(spec, protagonist, runtime_state, visit_targets, rule)
+		var spec = _build_spec_from_record(action_record)
+		if spec == null:
+			continue
+		spec.disabled_reason = _get_disabled_reason(spec, protagonist, runtime_state, visit_targets, action_record)
 		actions.append(spec)
 	return actions
 
 
-func _build_base_specs_by_id() -> Dictionary:
-	var specs := {}
-	specs["train"] = PHASE2_ACTION_SPEC_SCRIPT.create("train", "训练", CATEGORY_GROWTH, 1, -10, "none", "效果: 武艺历练 +6，压力 +3，功绩 +1")
-	specs["study"] = PHASE2_ACTION_SPEC_SCRIPT.create("study", "读书", CATEGORY_GROWTH, 1, -8, "none", "效果: 智略历练 +6，压力 +2，名望 +1")
-	specs["rest"] = PHASE2_ACTION_SPEC_SCRIPT.create("rest", "休整", CATEGORY_GROWTH, 1, 20, "none", "效果: 精力 +20，压力 -12")
-	specs["visit"] = PHASE2_ACTION_SPEC_SCRIPT.create("visit", "拜访", CATEGORY_RELATION, 1, -8, "character", "效果: 好感 +10，信任 +6，敬重 +2，戒备 -4")
-	specs["inspect"] = PHASE2_ACTION_SPEC_SCRIPT.create("inspect", "巡察", CATEGORY_GOVERNANCE, 1, -10, "none", "效果: 功绩 +5，政务历练 +4，压力 +4")
-	return specs
+func _data_repository() -> Node:
+	return Engine.get_main_loop().root.get_node("/root/DataRepository")
 
 
-func _get_menu_rules() -> Array:
-	if PHASE2_ACTION_MENU_CONFIG != null and PHASE2_ACTION_MENU_CONFIG.has_method("get_sorted_rules"):
-		return PHASE2_ACTION_MENU_CONFIG.get_sorted_rules()
-	return []
+func _build_spec_from_record(action_record: Dictionary) -> Variant:
+	var action_id := str(action_record.get("id", ""))
+	if action_id.is_empty():
+		return null
+	var spec = PHASE2_ACTION_SPEC_SCRIPT.create(
+		action_id,
+		str(action_record.get("display_name", "")),
+		str(action_record.get("category_id", CATEGORY_GROWTH)),
+		int(action_record.get("ap_cost", 0)),
+		int(action_record.get("energy_delta", 0)),
+		str(action_record.get("target_type", "none")),
+		str(action_record.get("effect_summary", "")),
+		_to_string_array(action_record.get("required_permission_tags", [])),
+		"",
+		bool(action_record.get("hidden_when_locked", false))
+	)
+	return spec
+
+
+func _get_action_records() -> Array[Dictionary]:
+	var records: Array[Dictionary] = []
+	for item in _data_repository().call("get_actions"):
+		records.append(Dictionary(item).duplicate(true))
+	return records
 
 
 func _is_identity_locked(rule: Dictionary, protagonist: CharacterDefinition) -> bool:
 	if protagonist == null:
 		return true
-	var allowed_identities: PackedStringArray = PackedStringArray(rule.get("allowed_identity_types", PackedStringArray()))
+	var allowed_identities := _to_string_array(rule.get("allowed_identity_types", []))
 	if allowed_identities.is_empty():
 		return false
 	return not allowed_identities.has(protagonist.identity_type)
@@ -105,3 +107,10 @@ func _get_disabled_reason(
 	if spec.id == "inspect" and protagonist != null and runtime_state.current_city_id != protagonist.city_id:
 		return REASON_WRONG_LOCATION
 	return ""
+
+
+func _to_string_array(value: Variant) -> Array[String]:
+	var result: Array[String] = []
+	for item in Array(value):
+		result.append(str(item))
+	return result

@@ -3,6 +3,8 @@ extends Node
 const RUNTIME_RELATION_STATE_SCRIPT := preload("res://scripts/runtime/RuntimeRelationState.gd")
 const GAME_SESSION_SCRIPT := preload("res://scripts/runtime/GameSession.gd")
 const PLAYER_CAREER_STATE_SCRIPT := preload("res://scripts/runtime/PlayerCareerState.gd")
+const OFFICE_DATA_SCRIPT := preload("res://scripts/data/resources/OfficeData.gd")
+const TASK_TEMPLATE_DATA_SCRIPT := preload("res://scripts/data/resources/TaskTemplateData.gd")
 
 const PHASE1_SCENARIO_ID := "scenario_190_smoke"
 
@@ -11,6 +13,7 @@ var _repository := ScenarioRepository.new()
 var _is_loaded: bool = false
 var _offices_by_id: Dictionary = {}
 var _task_templates_by_id: Dictionary = {}
+var _actions_by_id: Dictionary = {}
 var _task_pool_rules_by_id: Dictionary = {}
 var _promotion_rules_by_id: Dictionary = {}
 var _setup_patches_by_id: Dictionary = {}
@@ -54,6 +57,10 @@ func get_task_template(id: String) -> Variant:
 	return _task_templates_by_id.get(id)
 
 
+func get_action(id: String) -> Dictionary:
+	return Dictionary(_actions_by_id.get(id, {})).duplicate(true)
+
+
 func get_task_pool_rule(id: String) -> Variant:
 	return _task_pool_rules_by_id.get(id)
 
@@ -74,7 +81,21 @@ func get_setup_patch_for_scenario(scenario_id: String) -> Variant:
 
 
 func get_task_templates() -> Array:
-	return _task_templates_by_id.values()
+	var templates: Array = _task_templates_by_id.values()
+	templates.sort_custom(func(a: Variant, b: Variant) -> bool:
+		return int(a.ui_priority) > int(b.ui_priority)
+	)
+	return templates
+
+
+func get_actions() -> Array[Dictionary]:
+	var actions: Array[Dictionary] = []
+	for action in _actions_by_id.values():
+		actions.append(Dictionary(action).duplicate(true))
+	actions.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return int(a.get("menu_order", 0)) < int(b.get("menu_order", 0))
+	)
+	return actions
 
 
 func get_task_pool_rules() -> Array:
@@ -184,11 +205,78 @@ func bootstrap_session(scenario_id: String, protagonist_id: String) -> GameSessi
 
 
 func _load_phase21_resources() -> void:
-	_offices_by_id = _load_resources_by_id("res://data/offices")
+	_offices_by_id = _build_generated_offices_by_id()
+	_task_templates_by_id = _build_generated_task_templates_by_id()
+	_actions_by_id = _build_generated_actions_by_id()
 	_promotion_rules_by_id = _load_resources_by_id("res://data/office_rules")
-	_task_templates_by_id = _load_resources_by_id("res://data/tasks")
 	_task_pool_rules_by_id = _load_resources_by_id("res://data/task_rules")
 	_setup_patches_by_id = _load_resources_by_id("res://data/scenario_patches")
+
+
+func _build_generated_actions_by_id() -> Dictionary:
+	var actions_by_id: Dictionary = {}
+	for action_record in _repository.get_actions():
+		var action_id := str(action_record.get("id", ""))
+		if action_id.is_empty():
+			continue
+		actions_by_id[action_id] = Dictionary(action_record).duplicate(true)
+	return actions_by_id
+
+
+func _build_generated_offices_by_id() -> Dictionary:
+	var offices_by_id: Dictionary = {}
+	for office_record in _repository.get_office_records():
+		var office_id := str(office_record.get("id", ""))
+		if office_id.is_empty():
+			continue
+		var office = OFFICE_DATA_SCRIPT.new()
+		office.id = office_id
+		office.name = str(office_record.get("name", ""))
+		office.tier = int(office_record.get("tier", 0))
+		office.description = str(office_record.get("description", ""))
+		office.unlock_task_tags = _to_string_array(office_record.get("unlock_task_tags", []))
+		office.blocked_task_tags = _to_string_array(office_record.get("blocked_task_tags", []))
+		office.merit_threshold = int(office_record.get("merit_threshold", 0))
+		office.next_office_id = str(office_record.get("next_office_id", ""))
+		office.prev_office_id = str(office_record.get("prev_office_id", ""))
+		office.address_title = str(office_record.get("address_title", ""))
+		office.stipend_text = str(office_record.get("stipend_text", ""))
+		office.is_phase2_1_available = bool(office_record.get("is_phase2_1_available", true))
+		office.sort_order = int(office_record.get("sort_order", 0))
+		offices_by_id[office_id] = office
+	return offices_by_id
+
+
+func _build_generated_task_templates_by_id() -> Dictionary:
+	var templates_by_id: Dictionary = {}
+	for task_record in _repository.get_task_template_records():
+		var task_id := str(task_record.get("id", ""))
+		if task_id.is_empty():
+			continue
+		var template = TASK_TEMPLATE_DATA_SCRIPT.new()
+		template.id = task_id
+		template.name = str(task_record.get("name", ""))
+		template.issuer_character_id = str(task_record.get("issuer_character_id", ""))
+		template.issuer_role_tag = str(task_record.get("issuer_role_tag", ""))
+		template.task_type = str(task_record.get("task_type", ""))
+		template.task_tags = _to_string_array(task_record.get("task_tags", []))
+		template.min_office_tier = int(task_record.get("min_office_tier", 0))
+		template.max_office_tier = int(task_record.get("max_office_tier", 99))
+		template.description = str(task_record.get("description", ""))
+		template.objective_summary = str(task_record.get("objective_summary", ""))
+		template.duration_months = int(task_record.get("duration_months", 1))
+		template.difficulty = int(task_record.get("difficulty", 1))
+		template.progress_rule_id = str(task_record.get("progress_rule_id", ""))
+		template.success_condition = _to_dictionary(task_record.get("success_condition", {}))
+		template.excellent_condition = _to_dictionary(task_record.get("excellent_condition", {}))
+		template.base_rewards = _to_dictionary(task_record.get("base_rewards", {}))
+		template.bonus_rewards = _to_dictionary(task_record.get("bonus_rewards", {}))
+		template.fail_result = _to_dictionary(task_record.get("fail_result", {}))
+		template.followup_tags = _to_string_array(task_record.get("followup_tags", []))
+		template.ui_priority = int(task_record.get("ui_priority", 0))
+		template.is_phase2_1_available = bool(task_record.get("is_phase2_1_available", true))
+		templates_by_id[task_id] = template
+	return templates_by_id
 
 
 func _load_resources_by_id(dir_path: String) -> Dictionary:
@@ -206,6 +294,17 @@ func _load_resources_by_id(dir_path: String) -> Dictionary:
 		file_name = dir.get_next()
 	dir.list_dir_end()
 	return resources_by_id
+
+
+func _to_dictionary(value: Variant) -> Dictionary:
+	return Dictionary(value).duplicate(true)
+
+
+func _to_string_array(value: Variant) -> Array[String]:
+	var result: Array[String] = []
+	for item in Array(value):
+		result.append(str(item))
+	return result
 
 
 func _apply_setup_patch_relations(session: GameSession, setup_patch: Variant) -> void:

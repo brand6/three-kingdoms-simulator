@@ -12,27 +12,37 @@ func load_dataset(dataset_id: String) -> Dictionary:
 
 	var dataset_files: Dictionary = index.get(dataset_id, {}) as Dictionary
 	return {
-		"scenario": _read_json("%s/%s" % [GENERATED_ROOT, str(dataset_files.get("scenario", ""))]),
-		"characters": _read_json("%s/%s" % [GENERATED_ROOT, str(dataset_files.get("characters", ""))]),
-		"factions": _read_json("%s/%s" % [GENERATED_ROOT, str(dataset_files.get("factions", ""))]),
-		"cities": _read_json("%s/%s" % [GENERATED_ROOT, str(dataset_files.get("cities", ""))])
+		"scenario": _read_dataset_file(dataset_files, "scenario", {}),
+		"characters": _read_dataset_file(dataset_files, "characters", []),
+		"factions": _read_dataset_file(dataset_files, "factions", []),
+		"cities": _read_dataset_file(dataset_files, "cities", []),
+		"actions": _read_dataset_file(dataset_files, "actions", []),
+		"task_templates": _read_dataset_file(dataset_files, "task_templates", []),
+		"offices": _read_dataset_file(dataset_files, "offices", [])
 	}
 
 
-func _read_json(path: String) -> Variant:
+func _read_dataset_file(dataset_files: Dictionary, key: String, fallback: Variant) -> Variant:
+	var relative_path := str(dataset_files.get(key, ""))
+	if relative_path.is_empty():
+		return fallback
+	return _read_json("%s/%s" % [GENERATED_ROOT, relative_path], fallback)
+
+
+func _read_json(path: String, fallback: Variant = {}) -> Variant:
 	if path.is_empty() or not FileAccess.file_exists(path):
 		push_error("JSON file not found: %s" % path)
-		return {}
+		return fallback
 
 	var file := FileAccess.open(path, FileAccess.READ)
 	if file == null:
 		push_error("Failed to open JSON file: %s" % path)
-		return {}
+		return fallback
 
 	var parser := JSON.new()
 	var error := parser.parse(file.get_as_text())
 	if error != OK:
 		push_error("Failed to parse JSON file: %s" % path)
-		return {}
+		return fallback
 
 	return parser.data
