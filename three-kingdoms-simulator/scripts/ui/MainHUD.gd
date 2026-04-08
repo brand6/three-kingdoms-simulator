@@ -9,9 +9,9 @@ const MONTH_EMPTY_TASK_BODY := "当前官职暂无匹配事务。请检查任务
 const MONTH_PICKER_TITLE := "领取本月任务"
 const MONTH_GATE_COPY := "本月尚未领受公事，请先择定一项本月任务。"
 const EMPTY_EVENT_BODY := "- 暂无新事件\n- 系统会继续根据你的所在地、势力位置与关键人物关系刷新近期动向"
-const LOADING_RELATION_SUMMARY := "关键关系摘要：正在整理主公、亲近者与高戒备对象的短句摘要。"
-const LOADING_FACTION_SUMMARY := "势力/派系摘要：正在汇总所属势力的支持态势、派系位置与当前风险。"
-const LOADING_CLAN_SUMMARY := "家族/士族摘要：正在读取家族声望、门第期待与当前家门诉求。"
+const LOADING_RELATION_SUMMARY := "正在梳理近期最值得维护的人情往来。"
+const LOADING_FACTION_SUMMARY := "正在辨认眼下最值得留意的政治风向。"
+const LOADING_CLAN_SUMMARY := "正在整理家族与士族最近的牵引。"
 const END_TURN_TEXT := "结束本旬：确认后将立即结算本旬变化并推进到下一旬。"
 const ACTION_MENU_EMPTY_HEADING := "当前暂无可显示行动"
 const ACTION_MENU_EMPTY_BODY := "请确认会话是否已正确载入，再尝试打开行动菜单。"
@@ -29,6 +29,10 @@ const ACTION_POPUP_SIZE := Vector2i(240, 0)
 const ACTION_RESULT_DIALOG_SIZE := Vector2i(560, 360)
 const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 const XUN_SUMMARY_DIALOG_SIZE := Vector2i(620, 420)
+const POLITICS_EMPTY_TEXT := "暂无明确政治线索。先领受一项政治来源任务，或从关系页争取关键人物。"
+const RELATION_SUMMARY_FALLBACK := "近期暂无明显失温的人情，但你仍该留意谁正在慢慢远离。"
+const FACTION_SUMMARY_FALLBACK := "眼下尚无突出的政治窗口，你可继续观察下一轮组织风向。"
+const CLAN_SUMMARY_FALLBACK := "家族近期未抛出新要求，但仍在观察你会把仕途带向哪里。"
 
 @onready var _time_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/TimeLabel")
 @onready var _city_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/CityLabel")
@@ -46,11 +50,15 @@ const XUN_SUMMARY_DIALOG_SIZE := Vector2i(620, 420)
 @onready var _health_info_label: Label = get_node("MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent/HealthInfoLabel")
 @onready var _task_list: Label = get_node("MarginContainer/VBoxContainer/MainContent/RightContext/TaskPanel/TaskPanelContent/TaskListScroll/TaskList")
 @onready var _event_list: Label = get_node("MarginContainer/VBoxContainer/MainContent/RightContext/EventPanel/EventPanelContent/EventListScroll/EventList")
-@onready var _relation_summary_body: Label = get_node("MarginContainer/VBoxContainer/MainContent/CenterSummary/RelationSummaryCard/RelationSummaryContent/RelationSummaryBody")
-@onready var _faction_summary_body: Label = get_node("MarginContainer/VBoxContainer/MainContent/CenterSummary/FactionSummaryCard/FactionSummaryContent/FactionSummaryBody")
-@onready var _clan_summary_body: Label = get_node("MarginContainer/VBoxContainer/MainContent/CenterSummary/ClanSummaryCard/ClanSummaryContent/ClanSummaryBody")
+@onready var _relation_summary_primary: Label = get_node("MarginContainer/VBoxContainer/MainContent/CenterSummary/RelationSummaryCard/RelationSummaryContent/RelationSummaryPrimary")
+@onready var _relation_summary_secondary: Label = get_node("MarginContainer/VBoxContainer/MainContent/CenterSummary/RelationSummaryCard/RelationSummaryContent/RelationSummarySecondary")
+@onready var _faction_summary_primary: Label = get_node("MarginContainer/VBoxContainer/MainContent/CenterSummary/FactionSummaryCard/FactionSummaryContent/FactionSummaryPrimary")
+@onready var _faction_summary_secondary: Label = get_node("MarginContainer/VBoxContainer/MainContent/CenterSummary/FactionSummaryCard/FactionSummaryContent/FactionSummarySecondary")
+@onready var _clan_summary_primary: Label = get_node("MarginContainer/VBoxContainer/MainContent/CenterSummary/ClanSummaryCard/ClanSummaryContent/ClanSummaryPrimary")
+@onready var _clan_summary_secondary: Label = get_node("MarginContainer/VBoxContainer/MainContent/CenterSummary/ClanSummaryCard/ClanSummaryContent/ClanSummarySecondary")
 @onready var _action_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/ActionButton")
 @onready var _relation_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/RelationButton")
+@onready var _faction_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/FactionButton")
 @onready var _end_turn_button: Button = get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/EndTurnButton")
 @onready var _action_menu_popup: PopupPanel = get_node("ActionMenuPopup")
 @onready var _category_list: VBoxContainer = get_node("ActionMenuPopup/ActionMenuMargin/CategoryList")
@@ -70,6 +78,7 @@ const XUN_SUMMARY_DIALOG_SIZE := Vector2i(620, 420)
 @onready var _task_select_panel: PopupPanel = get_node("TaskSelectPanel")
 @onready var _month_report_panel = get_node("MonthReportPanel")
 @onready var _promotion_popup = get_node("PromotionPopup")
+@onready var _faction_panel = get_node("FactionPanel")
 
 var _selected_action_category: String = "成长"
 var _active_month_end_evaluation: MonthlyEvaluationResult = null
@@ -91,12 +100,14 @@ func _ready() -> void:
 	show_loading_state()
 	_action_button.pressed.connect(_on_action_button_pressed)
 	_relation_button.pressed.connect(_on_relation_button_pressed)
+	_faction_button.pressed.connect(_on_faction_button_pressed)
 	_end_turn_button.pressed.connect(_on_end_turn_button_pressed)
 	_target_picker_dialog.confirmed.connect(_on_target_picker_confirmed)
 	_character_selector_dialog.row_chosen.connect(_on_character_selector_row_chosen)
 	_end_xun_dialog.confirmed.connect(_on_end_xun_confirmed)
 	_task_select_panel.task_confirmed.connect(_on_month_task_confirmed)
 	_month_report_panel.confirmed_report.connect(_on_month_report_confirmed)
+	_faction_panel.officer_selected.connect(_on_faction_officer_selected)
 	_action_result_dialog.canceled.connect(func() -> void:
 		_action_result_dialog.hide()
 	)
@@ -127,9 +138,9 @@ func _bootstrap_default_entry() -> void:
 func show_loading_state() -> void:
 	_task_list.text = _empty_task_text()
 	_event_list.text = EMPTY_EVENT_BODY
-	_relation_summary_body.text = LOADING_RELATION_SUMMARY
-	_faction_summary_body.text = LOADING_FACTION_SUMMARY
-	_clan_summary_body.text = LOADING_CLAN_SUMMARY
+	_apply_summary_lines(_relation_summary_primary, _relation_summary_secondary, _make_summary_lines(LOADING_RELATION_SUMMARY))
+	_apply_summary_lines(_faction_summary_primary, _faction_summary_secondary, _make_summary_lines(LOADING_FACTION_SUMMARY))
+	_apply_summary_lines(_clan_summary_primary, _clan_summary_secondary, _make_summary_lines(LOADING_CLAN_SUMMARY))
 	_render_empty_fields()
 
 
@@ -146,14 +157,10 @@ func show_success_state(session: GameSession) -> void:
 	var office_text := _current_office_text(session, protagonist)
 	var clan_text := _localized_clan(protagonist.clan_id if protagonist != null else "")
 	var family_text := _localized_family(protagonist.family_id if protagonist != null else "")
-	var ap_value := _metric_value(runtime_state, &"ap")
-	var merit_value := _metric_value(runtime_state, &"merit")
-
 	_task_list.text = _build_task_summary(session)
 	_event_list.text = _build_event_list(city_name, faction_name, protagonist_name)
-	_relation_summary_body.text = _build_relation_summary(faction_name, merit_value)
-	_faction_summary_body.text = _build_faction_summary(faction_name, city_name)
-	_clan_summary_body.text = _build_clan_summary(family_text, clan_text)
+	var political_summary: Dictionary = Dictionary(_game_root().call("get_hud_political_summary"))
+	_render_political_summaries(Dictionary(political_summary))
 
 	_time_label.text = _time_text(session)
 	_city_label.text = "地点：%s" % city_name
@@ -169,6 +176,7 @@ func show_success_state(session: GameSession) -> void:
 	_office_info_label.text = "官职：%s" % office_text
 	_status_info_label.text = "状态：%s" % _status_text(runtime_state)
 	_health_info_label.text = "健康：%s" % _health_text(runtime_state)
+	_faction_button.disabled = false
 	_apply_month_action_gate(session)
 	_refresh_overlay_data()
 	_open_month_task_picker_if_needed(session)
@@ -177,9 +185,9 @@ func show_success_state(session: GameSession) -> void:
 func show_error_state(message: String) -> void:
 	_task_list.text = "- 入口异常\n- 检查数据文件、确认默认主角，并在修复后重新启动项目"
 	_event_list.text = "- 启动失败\n- %s\n- %s" % [ERROR_TEXT, _display_value(message)]
-	_relation_summary_body.text = "关键关系摘要：数据尚未载入，无法生成可信关系提示。"
-	_faction_summary_body.text = "势力/派系摘要：数据尚未载入，无法判断当前政治环境。"
-	_clan_summary_body.text = "家族/士族摘要：数据尚未载入，无法提供家门与士族背景提示。"
+	_apply_summary_lines(_relation_summary_primary, _relation_summary_secondary, _make_summary_lines("关系脉络尚未载入，暂时还看不清谁最需要你去维护。"))
+	_apply_summary_lines(_faction_summary_primary, _faction_summary_secondary, _make_summary_lines("政治风向尚未载入，当前还无法判断哪里正冒出窗口。"))
+	_apply_summary_lines(_clan_summary_primary, _clan_summary_secondary, _make_summary_lines("家族牵引尚未载入，暂时还不知道宗族正在向你施加什么期待。"))
 	_render_empty_fields()
 
 
@@ -231,19 +239,122 @@ func _build_event_list(city_name: String, faction_name: String, protagonist_name
 	return "- %s城内官员正在观察%s本旬的第一步\n- %s仍处整合期，功绩与关系反馈会被放大\n- 若先巡察，可快速建立秩序；若先拜访，更利于后续政治推进" % [city_name, protagonist_name, faction_name]
 
 
-func _build_relation_summary(faction_name: String, merit_value: String) -> String:
-	var text := "关键关系摘要：优先争取%s阵营中的核心文臣；亲近者提供背书，高戒备者会放大你的失误。" % faction_name
-	if merit_value != "—":
-		text += " 当前功绩 %s。" % merit_value
+func _render_political_summaries(summary: Dictionary) -> void:
+	_apply_summary_lines(_relation_summary_primary, _relation_summary_secondary, _build_relation_summary_lines(summary))
+	_apply_summary_lines(_faction_summary_primary, _faction_summary_secondary, _build_faction_summary_lines(summary))
+	_apply_summary_lines(_clan_summary_primary, _clan_summary_secondary, _build_clan_summary_lines(summary))
+
+
+func _apply_summary_lines(primary_label: Label, secondary_label: Label, lines: Dictionary) -> void:
+	primary_label.text = str(lines.get("summary_line_primary", "")).strip_edges()
+	var secondary_text := str(lines.get("summary_line_secondary", "")).strip_edges()
+	secondary_label.text = secondary_text
+	secondary_label.visible = not secondary_text.is_empty()
+
+
+func _make_summary_lines(primary_text: String, secondary_text: String = "") -> Dictionary:
+	return {
+		"summary_line_primary": primary_text.strip_edges(),
+		"summary_line_secondary": secondary_text.strip_edges(),
+	}
+
+
+func _build_relation_summary_lines(summary: Dictionary) -> Dictionary:
+	var blocker_text := _clean_summary_seed(summary.get("blocker", ""))
+	var recommender_text := _clean_summary_seed(summary.get("recommender", ""))
+	if not blocker_text.is_empty():
+		var blocker_subject := _extract_summary_subject(blocker_text)
+		if not blocker_subject.is_empty():
+			return _make_summary_lines(
+				"%s 这条关系仍偏冷，你若继续不动，短期内很难借到这股人情。" % blocker_subject,
+				"你现在就可从拜访或共事重新把分寸拉近。"
+			)
+		return _make_summary_lines(blocker_text, "这层阻滞若继续放着，会让你更难借人情推进下一步。")
+	if not recommender_text.is_empty():
+		var recommender_subject := _extract_summary_subject(recommender_text)
+		if not recommender_subject.is_empty():
+			var secondary_text := ""
+			if _can_take_immediate_social_action():
+				secondary_text = "你现在就可顺着这层人情继续加深往来。"
+			return _make_summary_lines("%s 仍愿替你出面，这段关系值得继续维系。" % recommender_subject, secondary_text)
+		return _make_summary_lines(recommender_text)
+	return _make_summary_lines(RELATION_SUMMARY_FALLBACK)
+
+
+func _build_faction_summary_lines(summary: Dictionary) -> Dictionary:
+	var opportunity_text := _clean_summary_seed(summary.get("opportunity", ""))
+	var blocker_text := _clean_summary_seed(summary.get("blocker", ""))
+	if not opportunity_text.is_empty():
+		var secondary_text := ""
+		if _should_show_followup_line(opportunity_text):
+			secondary_text = "若你愿意立刻表态或承接事务，这个窗口本轮就能跟进。"
+		elif not blocker_text.is_empty():
+			var blocker_subject := _extract_summary_subject(blocker_text)
+			secondary_text = "%s 仍会影响这股风向，出手前最好先稳住这一侧。" % blocker_subject if not blocker_subject.is_empty() else "这股风向仍伴随阻力，出手前最好先稳住相关关系。"
+		return _make_summary_lines(opportunity_text, secondary_text)
+	if not blocker_text.is_empty():
+		return _make_summary_lines(blocker_text, "若继续回避，这股阻力会让你更难切入下一轮事务。")
+	return _make_summary_lines(FACTION_SUMMARY_FALLBACK)
+
+
+func _build_clan_summary_lines(_summary: Dictionary) -> Dictionary:
+	var session: GameSession = _game_root().current_session
+	if session == null:
+		return _make_summary_lines(CLAN_SUMMARY_FALLBACK)
+	if session.month_action_locked:
+		return _make_summary_lines("家族仍在看你本月会接下哪类事务，这会影响他们后续是否继续押注你的仕途。")
+	if session.current_month_task != null:
+		var remaining_xun := _remaining_xun_count(session)
+		var secondary_text := ""
+		if remaining_xun <= 1:
+			secondary_text = "本月将尽，若仍无起色，宗族对你的评价可能转得更谨慎。"
+		return _make_summary_lines("家族正盯着你这一月能否把公事做出结果，你的仕途表现会直接影响他们的期待。", secondary_text)
+	return _make_summary_lines(CLAN_SUMMARY_FALLBACK)
+
+
+func _clean_summary_seed(value: Variant) -> String:
+	var text := str(value).strip_edges()
+	if text.is_empty() or text == POLITICS_EMPTY_TEXT:
+		return ""
+	var colon_index := text.find("：")
+	if colon_index > 0:
+		var prefix := text.substr(0, colon_index)
+		if prefix.contains("推荐") or prefix.contains("阻力") or prefix.contains("机会") or prefix.contains("资格"):
+			text = text.substr(colon_index + 1).strip_edges()
+	if text == "暂无明确推荐人" or text == "暂无明确阻力":
+		return ""
 	return text
 
 
-func _build_faction_summary(faction_name: String, city_name: String) -> String:
-	return "势力/派系摘要：你正处于%s的核心视线中；当前态度偏支持，但仍需先稳住%s并证明你能持续产出成果。" % [faction_name, city_name]
+func _extract_summary_subject(text: String) -> String:
+	var trimmed := text.strip_edges()
+	if trimmed.is_empty():
+		return ""
+	var separators := [" ", "，", "。", "："]
+	var cut_index := trimmed.length()
+	for separator in separators:
+		var index := trimmed.find(separator)
+		if index >= 0 and index < cut_index:
+			cut_index = index
+	if cut_index <= 0:
+		return ""
+	var subject := trimmed.substr(0, cut_index).strip_edges()
+	if subject.length() > 12:
+		return ""
+	return subject
 
 
-func _build_clan_summary(family_text: String, clan_text: String) -> String:
-	return "家族/士族摘要：家族 %s、士族 %s 正在等待可见成果；若长期忽视家门诉求，后续举荐与联姻机会会减弱。" % [family_text, clan_text]
+func _should_show_followup_line(text: String) -> bool:
+	var normalized := text.strip_edges()
+	for keyword in ["本旬", "本月", "尽快", "立刻", "可", "若", "风险", "下降", "错过", "支持"]:
+		if normalized.contains(keyword):
+			return true
+	return false
+
+
+func _can_take_immediate_social_action() -> bool:
+	var session: GameSession = _game_root().current_session
+	return session != null and not session.month_action_locked
 
 
 func _status_text(runtime_state: RuntimeCharacterState) -> String:
@@ -373,10 +484,22 @@ func _on_relation_button_pressed() -> void:
 	_open_character_selector("relation")
 
 
+func _on_faction_button_pressed() -> void:
+	var payload: Dictionary = Dictionary(_game_root().call("get_faction_overview_payload"))
+	_faction_panel.show_faction(payload, _data_repository())
+
+
+func _on_faction_officer_selected(character_id: String) -> void:
+	var view_data = _game_root().call("get_character_profile_view_data", character_id)
+	_character_profile_panel.show_profile(view_data)
+
+
 func _refresh_overlay_data() -> void:
 	_sync_month_task_ui_state()
 	if _game_root().current_session != null:
 		_task_list.text = _build_task_summary(_game_root().current_session)
+		var political_summary: Dictionary = Dictionary(_game_root().call("get_hud_political_summary"))
+		_render_political_summaries(Dictionary(political_summary))
 	_refresh_action_menu()
 
 
@@ -620,7 +743,8 @@ func _show_action_result(result: Variant) -> void:
 	call_deferred("_popup_action_result_dialog")
 	_task_list.text = _build_task_summary(_game_root().current_session)
 	_event_list.text = "- 结果反馈：%s\n- %s：%s\n- %s：%s" % [result.summary_line, RESULT_LABEL_STATS, _format_stat_delta_text(result.stat_deltas), RESULT_LABEL_RELATIONS, relation_text]
-	_relation_summary_body.text = "关键关系摘要：%s" % relation_text
+	var political_summary: Dictionary = Dictionary(_game_root().call("get_hud_political_summary"))
+	_render_political_summaries(Dictionary(political_summary))
 
 
 func _popup_action_result_dialog() -> void:
@@ -759,14 +883,14 @@ func _sync_month_task_ui_state() -> void:
 func _show_month_end_feedback(evaluation: MonthlyEvaluationResult) -> void:
 	if _task_select_panel.visible:
 		_task_select_panel.hide()
-	_month_report_panel.show_report(_build_month_report_text(evaluation))
+	_month_report_panel.show_evaluation(evaluation)
 
 
 func _on_month_report_confirmed() -> void:
 	var evaluation := _active_month_end_evaluation
 	if evaluation == null:
 		return
-	_promotion_popup.show_promotion(_build_promotion_text(evaluation))
+	_promotion_popup.show_evaluation(evaluation)
 	_active_month_end_evaluation = null
 
 
