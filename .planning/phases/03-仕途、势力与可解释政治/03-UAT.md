@@ -1,5 +1,5 @@
 ---
-status: testing
+status: diagnosed
 phase: 03-仕途、势力与可解释政治
 source:
   - .planning/phases/03-仕途、势力与可解释政治/03-02-SUMMARY.md
@@ -7,8 +7,7 @@ source:
   - .planning/phases/03-仕途、势力与可解释政治/03-06-SUMMARY.md
   - .planning/phases/03-仕途、势力与可解释政治/03-07-SUMMARY.md
 started: 2026-04-08T00:00:00Z
-updated: 2026-04-09T00:20:00Z
-status: complete
+updated: 2026-04-09T00:30:00Z
 ---
 
 ## Current Test
@@ -67,13 +66,35 @@ blocked: 0
 3、“政治标签”改为“机遇和风险”：去掉右侧“机会”、“风险”的字，用不同颜色的字来区分"
   severity: major
   test: 1
-  artifacts: []
-  missing: []
+  root_cause: "TaskSelectPanel.gd 仍使用旧版硬编码多行纯文本模板与 Button.text 渲染任务卡，字段名、字段顺序和政治标签格式都被写死，无法满足新的单行布局与彩色标签需求；同时 phase21_monthly_hud_regression.gd 仍断言旧文案，导致旧展示契约被测试锁定。"
+  artifacts:
+    - path: "three-kingdoms-simulator/scripts/ui/TaskSelectPanel.gd"
+      issue: "_card_text() 和 _render_cards() 仍输出旧版字段与纯文本块式布局"
+    - path: "three-kingdoms-simulator/scripts/tests/phase21_monthly_hud_regression.gd"
+      issue: "回归测试仍要求来源类型/关联派系/政治标签等旧文案"
+  missing:
+    - "将任务卡改为结构化卡片渲染或 RichText 渲染，而不是单个 Button.text 文本块"
+    - "把任务名、来源、请求方放到同一行，并将关联派系文案替换为来源"
+    - "将政治标签改为机遇和风险，并用不同颜色区分而非显示机会/风险前缀"
+    - "同步更新回归测试断言为新的展示契约"
+  debug_session: ".planning/debug/political-task-card-layout.md"
 
 - truth: "点击势力相关按钮后，应在当前主界面内弹出派系总览 popup，而不是切换到新场景。总览里应能看到玩家所在位置、派系块、核心人物/城市、资源摘要等信息；点击其中的重要人物后，还应能继续打开该人物的详情面板。"
   status: failed
   reason: "User reported: 势力面板和人物详情面板需要改成不透明的"
   severity: cosmetic
   test: 3
-  artifacts: []
-  missing: []
+  root_cause: "FactionPanel 和 CharacterProfilePanel 在 MainScene.tscn 中作为裸 PopupPanel 使用，但未像 TaskSelectPanel 那样显式关闭透明背景并绑定不透明 panel 样式；共享主题 PrototypeTheme.tres 也没有提供 PopupPanel 的不透明样式兜底，因此最终呈现为默认半透明外观。"
+  artifacts:
+    - path: "three-kingdoms-simulator/scenes/main/MainScene.tscn"
+      issue: "FactionPanel 与 CharacterProfilePanel 缺少 transparent_bg/transparent/theme_override_styles/panel 的不透明配置"
+    - path: "three-kingdoms-simulator/themes/PrototypeTheme.tres"
+      issue: "未定义 PopupPanel 共享不透明样式"
+    - path: "three-kingdoms-simulator/scripts/ui/FactionPanel.gd"
+      issue: "只处理内容与弹出，不负责视觉样式"
+    - path: "three-kingdoms-simulator/scripts/ui/CharacterProfilePanel.gd"
+      issue: "只处理内容与弹出，不负责视觉样式"
+  missing:
+    - "为 FactionPanel 和 CharacterProfilePanel 补齐不透明 popup 配置"
+    - "复用或上收统一的 PopupPanel 不透明 StyleBox 到共享主题"
+  debug_session: ".planning/debug/opaque-faction-and-character-popups.md"
