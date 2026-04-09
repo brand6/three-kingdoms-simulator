@@ -176,12 +176,14 @@ theme_type_variation = &"HeadingLabel"
 text = "关键关系摘要"
 
 [node name="RelationSummaryPrimary" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/RelationSummaryCard/RelationSummaryContent" unique_id=248215343]
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = "近期暂无明显失温的人情，但仍该留意谁正在远离你。"
 autowrap_mode = 3
 
 [node name="RelationSummarySecondary" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/RelationSummaryCard/RelationSummaryContent" unique_id=248215344]
 visible = false
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = ""
 autowrap_mode = 3
@@ -200,12 +202,14 @@ theme_type_variation = &"HeadingLabel"
 text = "势力/派系摘要"
 
 [node name="FactionSummaryPrimary" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/FactionSummaryCard/FactionSummaryContent" unique_id=65454712]
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = "眼下尚无突出的派系风向，你可继续观察下一轮政务窗口。"
 autowrap_mode = 3
 
 [node name="FactionSummarySecondary" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/FactionSummaryCard/FactionSummaryContent" unique_id=65454713]
 visible = false
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = ""
 autowrap_mode = 3
@@ -224,12 +228,14 @@ theme_type_variation = &"HeadingLabel"
 text = "家族/士族摘要"
 
 [node name="ClanSummaryPrimary" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/ClanSummaryCard/ClanSummaryContent" unique_id=1828982060]
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = "家族近期未抛出新压力，但你仍在被宗族持续观察。"
 autowrap_mode = 3
 
 [node name="ClanSummarySecondary" type="Label" parent="MarginContainer/VBoxContainer/MainContent/CenterSummary/ClanSummaryCard/ClanSummaryContent" unique_id=1828982061]
 visible = false
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 text = ""
 autowrap_mode = 3
@@ -260,6 +266,7 @@ size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
 [node name="TaskList" type="Label" parent="MarginContainer/VBoxContainer/MainContent/RightContext/TaskPanel/TaskPanelContent/TaskListScroll" unique_id=1801262965]
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "- 当前暂无正式任务
@@ -286,6 +293,7 @@ size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
 [node name="EventList" type="Label" parent="MarginContainer/VBoxContainer/MainContent/RightContext/EventPanel/EventPanelContent/EventListScroll" unique_id=894295953]
+custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "- 暂无新事件
@@ -412,6 +420,7 @@ theme_type_variation = &"HeadingLabel"
 text = "选择拜访目标"
 
 [node name="TargetPickerHint" type="Label" parent="TargetPickerDialog/TargetPickerMargin/TargetPickerContent" unique_id=1392610362]
+custom_minimum_size = Vector2(520, 0)
 layout_mode = 2
 theme_type_variation = &"StatusLabel"
 text = "目标名 / 所属势力 / 所在城市 / 关系摘要 / 预估效果"
@@ -456,6 +465,7 @@ theme_type_variation = &"HeadingLabel"
 text = "关系总览"
 
 [node name="RelationColumns" type="Label" parent="RelationPopup/RelationMargin/RelationContent" unique_id=592602283]
+custom_minimum_size = Vector2(780, 0)
 layout_mode = 2
 theme_type_variation = &"StatusLabel"
 text = "人物名 / 关系标签 / 好感 / 信任 / 敬重 / 戒备 / 所属势力 / 可互动状态"
@@ -497,6 +507,7 @@ grow_vertical = 2
 theme_override_constants/separation = 16
 
 [node name="ActionResultBody" type="Label" parent="ActionResultDialog/ActionResultMargin/ActionResultContent" unique_id=461438951]
+custom_minimum_size = Vector2(480, 0)
 layout_mode = 2
 size_flags_vertical = 3
 text = "行动名
@@ -547,6 +558,7 @@ grow_vertical = 2
 theme_override_constants/separation = 16
 
 [node name="XunSummaryBody" type="Label" parent="XunSummaryDialog/XunSummaryMargin/XunSummaryContent" unique_id=2110313373]
+custom_minimum_size = Vector2(540, 0)
 layout_mode = 2
 size_flags_vertical = 3
 text = "本旬行动摘要
@@ -592,6 +604,7 @@ theme_type_variation = &"HeadingLabel"
 text = "角色选择器"
 
 [node name="SelectorHint" type="Label" parent="CharacterSelectorDialog/SelectorMargin/SelectorContent" unique_id=1017806686]
+custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 theme_type_variation = &"StatusLabel"
 text = "角色 / 势力 / 所在地 / 好感 / 信任 / 敬重 / 戒备 / 状态"
@@ -643,16 +656,19 @@ theme_type_variation = &"HeadingLabel"
 text = "角色名"
 
 [node name="MetaLabel" type="Label" parent="CharacterProfilePanel/ProfileMargin/ProfileContent" unique_id=2138192987]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 text = "身份 / 势力 / 地点 / 官职"
 autowrap_mode = 3
 
 [node name="RelationLabel" type="Label" parent="CharacterProfilePanel/ProfileMargin/ProfileContent" unique_id=1570608286]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 text = "favor / trust / respect / vigilance / obligation"
 autowrap_mode = 3
 
 [node name="NotesLabel" type="Label" parent="CharacterProfilePanel/ProfileMargin/ProfileContent" unique_id=1536697356]
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 text = "说明"
 autowrap_mode = 3
@@ -690,6 +706,7 @@ theme_type_variation = &"HeadingLabel"
 text = "领取本月任务"
 
 [node name="GateLabel" type="Label" parent="TaskSelectPanel/PanelMargin/PanelContent" unique_id=1449280005]
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 theme_type_variation = &"StatusLabel"
 visible = false
@@ -709,6 +726,7 @@ theme_override_constants/separation = 8
 
 [node name="SelectedRewardLabel" type="Label" parent="TaskSelectPanel/PanelMargin/PanelContent" unique_id=1449280008]
 visible = false
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 text = "已选任务预期：—"
 autowrap_mode = 3
@@ -744,6 +762,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="BodyLabel" type="Label" parent="MonthReportPanel/PanelMargin/PanelContent" unique_id=1449280104]
+custom_minimum_size = Vector2(540, 0)
 layout_mode = 2
 size_flags_vertical = 3
 text = "任务结果月报"
@@ -780,6 +799,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="BodyLabel" type="Label" parent="PromotionPopup/PanelMargin/PanelContent" unique_id=1449280204]
+custom_minimum_size = Vector2(440, 0)
 layout_mode = 2
 size_flags_vertical = 3
 text = "任命结果"
@@ -817,6 +837,7 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="BodyLabel" type="Label" parent="FactionPanel/PanelMargin/PanelContent" unique_id=1449280304]
+custom_minimum_size = Vector2(680, 0)
 layout_mode = 2
 size_flags_vertical = 3
 text = "势力总览"
