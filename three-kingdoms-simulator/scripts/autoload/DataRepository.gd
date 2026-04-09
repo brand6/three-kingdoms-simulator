@@ -5,6 +5,7 @@ const GAME_SESSION_SCRIPT := preload("res://scripts/runtime/GameSession.gd")
 const PLAYER_CAREER_STATE_SCRIPT := preload("res://scripts/runtime/PlayerCareerState.gd")
 const OFFICE_DATA_SCRIPT := preload("res://scripts/data/resources/OfficeData.gd")
 const TASK_TEMPLATE_DATA_SCRIPT := preload("res://scripts/data/resources/TaskTemplateData.gd")
+const ACTION_MENU_CONFIG_PATH := "res://data/config/phase2_action_menu_config.tres"
 
 const PHASE1_SCENARIO_ID := "scenario_190_smoke"
 
@@ -20,6 +21,7 @@ var _setup_patches_by_id: Dictionary = {}
 var _recommendation_rules_by_id: Dictionary = {}
 var _opposition_rules_by_id: Dictionary = {}
 var _faction_blocs_by_id: Dictionary = {}
+var _action_menu_config = null
 
 
 func load_phase1_smoke_sample() -> void:
@@ -82,6 +84,10 @@ func get_setup_patch_for_scenario(scenario_id: String) -> Variant:
 		if patch != null and str(patch.scenario_id) == scenario_id:
 			return patch
 	return null
+
+
+func get_action_menu_config() -> Variant:
+	return _action_menu_config
 
 
 func get_task_templates() -> Array:
@@ -201,7 +207,13 @@ func bootstrap_session(scenario_id: String, protagonist_id: String) -> GameSessi
 		[],
 		null,
 		Array(office.unlock_task_tags).duplicate() if office != null else [],
-		patched_flags
+		patched_flags,
+		Array(office.office_tags).duplicate() if office != null else [],
+		Array(office.visible_political_panels).duplicate() if office != null else [],
+		int(office.recommendation_power if office != null else 0),
+		Array(office.candidate_office_tags).duplicate() if office != null else [],
+		str(office.political_risk_level if office != null else "low"),
+		Array(office.permission_tags).duplicate() if office != null else []
 	)
 	_seed_phase2_relations(session)
 	_apply_setup_patch_relations(session, setup_patch)
@@ -215,6 +227,7 @@ func _load_phase21_resources() -> void:
 	_promotion_rules_by_id = _load_resources_by_id("res://data/office_rules")
 	_task_pool_rules_by_id = _load_resources_by_id("res://data/task_rules")
 	_setup_patches_by_id = _load_resources_by_id("res://data/scenario_patches")
+	_action_menu_config = ResourceLoader.load(ACTION_MENU_CONFIG_PATH)
 
 
 func _build_generated_actions_by_id() -> Dictionary:
@@ -245,6 +258,12 @@ func _build_generated_offices_by_id() -> Dictionary:
 		office.prev_office_id = str(office_record.get("prev_office_id", ""))
 		office.address_title = str(office_record.get("address_title", ""))
 		office.stipend_text = str(office_record.get("stipend_text", ""))
+		office.office_tags = _to_string_array(office_record.get("office_tags", []))
+		office.visible_political_panels = _to_string_array(office_record.get("visible_political_panels", []))
+		office.recommendation_power = int(office_record.get("recommendation_power", 0))
+		office.candidate_office_tags = _to_string_array(office_record.get("candidate_office_tags", []))
+		office.political_risk_level = str(office_record.get("political_risk_level", "low"))
+		office.permission_tags = _to_string_array(office_record.get("permission_tags", []))
 		office.is_phase2_1_available = bool(office_record.get("is_phase2_1_available", true))
 		office.sort_order = int(office_record.get("sort_order", 0))
 		offices_by_id[office_id] = office
@@ -281,6 +300,7 @@ func _build_generated_task_templates_by_id() -> Dictionary:
 		template.is_phase2_1_available = bool(task_record.get("is_phase2_1_available", true))
 		# Phase 3 政治来源字段
 		template.task_source_type = str(task_record.get("task_source_type", "faction_order"))
+		template.authority_institution_name = str(task_record.get("authority_institution_name", ""))
 		template.request_character_id = str(task_record.get("request_character_id", ""))
 		template.related_bloc_id = str(task_record.get("related_bloc_id", ""))
 		template.political_reward_tags = _to_string_array(task_record.get("political_reward_tags", []))
@@ -423,12 +443,18 @@ func get_opposition_rule(id: String) -> Variant:
 	return _opposition_rules_by_id.get(id)
 
 
-func get_faction_blocs_for_faction(faction_id: String) -> Array:
+func get_faction_blocs(faction_id: String = "") -> Array:
 	var blocs: Array = []
 	for bloc in _faction_blocs_by_id.values():
-		if bloc != null and str(bloc.faction_id) == faction_id:
+		if bloc == null:
+			continue
+		if faction_id.is_empty() or str(bloc.faction_id) == faction_id:
 			blocs.append(bloc)
 	return blocs
+
+
+func get_faction_blocs_for_faction(faction_id: String) -> Array:
+	return get_faction_blocs(faction_id)
 
 
 func get_faction_bloc(id: String) -> Variant:

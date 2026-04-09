@@ -26,6 +26,8 @@ class_name TaskTemplateData
 # Phase 3 政治来源字段
 ## 任务来源类型：faction_order / relation_request / self_initiated / system_routine
 @export var task_source_type: String = "faction_order"
+## 权力机构名称（如 尚书台 / 军功集团 / 宗族长老会）
+@export var authority_institution_name: String = ""
 ## 请求方角色 ID（来源为 relation_request 时为关系发起者）
 @export var request_character_id: String = ""
 ## 关联派系块 ID

@@ -17,6 +17,7 @@ func generate_month_candidates(session: GameSession, repository: Node) -> Array:
 	if session == null or session.player_career_state == null:
 		return candidates
 	var career_state: PlayerCareerState = session.player_career_state as PlayerCareerState
+	var current_office = repository.call("get_office", career_state.current_office_id)
 	for rule in repository.call("get_task_pool_rules"):
 		if rule == null:
 			continue
@@ -37,6 +38,8 @@ func generate_month_candidates(session: GameSession, repository: Node) -> Array:
 			if not stable_task_id.is_empty() and str(task.id) == stable_task_id:
 				continue
 			if int(task.min_office_tier) > career_state.office_tier or int(task.max_office_tier) < career_state.office_tier:
+				continue
+			if not _task_matches_office(task, career_state, current_office):
 				continue
 			if not _task_matches_rule(task, rule):
 				continue
@@ -185,6 +188,7 @@ func _candidate_payload(task: Variant) -> Dictionary:
 		"base_rewards": Dictionary(task.base_rewards).duplicate(true),
 		# Phase 3 政治来源字段
 		"task_source_type": str(task.task_source_type),
+		"authority_institution_name": str(task.authority_institution_name),
 		"request_character_id": str(task.request_character_id),
 		"related_bloc_id": str(task.related_bloc_id),
 		"source_summary": str(task.source_summary),
@@ -200,6 +204,34 @@ func _task_matches_rule(task: Variant, rule: Variant) -> bool:
 		if include_tags.has(task_tag):
 			return true
 	return false
+
+
+func _task_matches_office(task: Variant, career_state: PlayerCareerState, current_office: Variant) -> bool:
+	if career_state == null:
+		return false
+	var unlocked_tags := Array(career_state.unlocked_task_tags)
+	if not unlocked_tags.is_empty():
+		var has_unlocked_tag := false
+		for task_tag in task.task_tags:
+			if unlocked_tags.has(task_tag):
+				has_unlocked_tag = true
+				break
+		if not has_unlocked_tag:
+			return false
+	var blocked_tags := Array(current_office.blocked_task_tags) if current_office != null else []
+	for task_tag in task.task_tags:
+		if blocked_tags.has(task_tag):
+			return false
+	var candidate_office_tags := Array(current_office.candidate_office_tags) if current_office != null else []
+	if task.task_type == "personnel" and not candidate_office_tags.is_empty():
+		var matches_candidate_scope := false
+		for office_tag in candidate_office_tags:
+			if str(office_tag) == "personnel_track" or str(office_tag) == "mid_career":
+				matches_candidate_scope = true
+				break
+		if not matches_candidate_scope:
+			return false
+	return true
 
 
 func _stable_first_month_task_id(flags: Array[String]) -> String:
