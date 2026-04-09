@@ -15,17 +15,17 @@
 
 ### Data Foundation
 
-- [ ] **DATA-01**: Game can load a 190 scenario sample containing characters, factions, cities, clans, families, actions, and events from data-driven definitions.
-- [ ] **DATA-02**: Static scenario definitions are stored separately from runtime game state so gameplay updates do not mutate source definitions.
-- [ ] **DATA-03**: Game can query at least one character, one faction, and one city from the loaded scenario during runtime.
-- [ ] **DATA-04**: Runtime state supports serialization-safe identifiers for characters, factions, cities, clans, families, offices, actions, and events.
+- [x] **DATA-01**: Game can load a 190 scenario sample containing characters, factions, cities, clans, families, actions, and events from data-driven definitions.
+- [x] **DATA-02**: Static scenario definitions are stored separately from runtime game state so gameplay updates do not mutate source definitions.
+- [x] **DATA-03**: Game can query at least one character, one faction, and one city from the loaded scenario during runtime.
+- [x] **DATA-04**: Runtime state supports serialization-safe identifiers for characters, factions, cities, clans, families, offices, actions, and events.
 
 ### Character State
 
-- [ ] **CHAR-01**: Player character has readable core attributes, identity, faction, office, family, clan, personality tags, and location.
-- [ ] **CHAR-02**: Player character tracks AP, energy, stress, health-related state, fame, merit, loyalty, and honor/infamy-style reputation values.
+- [x] **CHAR-01**: Player character has readable core attributes, identity, faction, office, family, clan, personality tags, and location.
+- [x] **CHAR-02**: Player character tracks AP, energy, stress, health-related state, fame, merit, loyalty, and honor/infamy-style reputation values.
 - [x] **CHAR-03**: Gameplay actions can modify player attributes or status values and surface those changes in UI feedback.
-- [ ] **CHAR-04**: Different starting identities use the same underlying time and action rules while exposing different permissions or action availability.
+- [x] **CHAR-04**: Different starting identities use the same underlying time and action rules while exposing different permissions or action availability.
 
 ### Actions
 
@@ -145,14 +145,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CORE-03 | Phase 2 | Complete |
 | CORE-04 | Phase 2 | Complete |
 | CORE-05 | Phase 2 | Complete |
-| DATA-01 | Phase 03.1 | Pending |
-| DATA-02 | Phase 03.1 | Pending |
-| DATA-03 | Phase 03.1 | Pending |
-| DATA-04 | Phase 03.1 | Pending |
-| CHAR-01 | Phase 03.1 | Pending |
-| CHAR-02 | Phase 03.1 | Pending |
+| DATA-01 | Phase 03.1 | Complete |
+| DATA-02 | Phase 03.1 | Complete |
+| DATA-03 | Phase 03.1 | Complete |
+| DATA-04 | Phase 03.1 | Complete |
+| CHAR-01 | Phase 03.1 | Complete |
+| CHAR-02 | Phase 03.1 | Complete |
 | CHAR-03 | Phase 2 | Complete |
-| CHAR-04 | Phase 03.1 | Pending |
+| CHAR-04 | Phase 03.1 | Complete |
 | ACTN-01 | Phase 2 | Complete |
 | ACTN-02 | Phase 2 | Complete |
 | ACTN-03 | Phase 2 | Complete |

@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 1: 190样本数据骨架与单角色入口** - 锁定原型数据边界、主界面入口和统一身份底层规则。
 - [ ] **Phase 2: 旬内行动—关系闭环** - 让玩家在主 HUD 内完成可解释的行动、反馈与关系变化。
 - [ ] **Phase 3: 仕途、势力与可解释政治** - 把行动结果转进任务、任命、派系支持与政治后果。
-- [ ] **Phase 03.1: Phase 1 基线验证与时间契约修复** - 关闭 Phase 1 孤儿需求，并恢复 HUD 时间标签共享契约的可验证证据链。
+- [x] **Phase 03.1: Phase 1 基线验证与时间契约修复** - 关闭 Phase 1 孤儿需求，并恢复 HUD 时间标签共享契约的可验证证据链。 (completed 2026-04-09)
 - [ ] **Phase 03.2: Phase 3 势力总览复验与需求追踪归一** - 正式清除 FACT-01 阻塞，并收敛 inserted phase 的追踪与验证漂移。
 - [ ] **Phase 4: 家族门阀、婚姻与历史分歧** - 接入三国特色的出身网络、联姻政治与事件分歧。
 - [ ] **Phase 5: 持久验证与战争接入口** - 补齐 war stub、存档和调试能力，支持持续验证原型。
@@ -125,7 +125,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 03.1-01-PLAN.md — 重建 Phase 1 时间标签共享契约与双层回归 gate
-- [ ] 03.1-02-PLAN.md — 产出 Phase 1 九项 requirement 的正式 verification 证据表
+- [x] 03.1-02-PLAN.md — 产出 Phase 1 九项 requirement 的正式 verification 证据表
 **Canonical refs**: `.planning/v1.0-v1.0-MILESTONE-AUDIT.md`; `.planning/phases/01-190`; `.planning/REQUIREMENTS.md`; `.planning/ROADMAP.md`
 **UI hint**: yes
 
