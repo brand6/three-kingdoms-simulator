@@ -30,9 +30,9 @@ const ACTION_RESULT_DIALOG_SIZE := Vector2i(560, 360)
 const END_XUN_DIALOG_SIZE := Vector2i(420, 180)
 const XUN_SUMMARY_DIALOG_SIZE := Vector2i(620, 420)
 const POLITICS_EMPTY_TEXT := "暂无明确政治线索。先领受一项政治来源任务，或从关系页争取关键人物。"
-const RELATION_SUMMARY_FALLBACK := "近期暂无明显失温的人情，但你仍该留意谁正在慢慢远离。"
-const FACTION_SUMMARY_FALLBACK := "眼下尚无突出的政治窗口，你可继续观察下一轮组织风向。"
-const CLAN_SUMMARY_FALLBACK := "家族近期未抛出新要求，但仍在观察你会把仕途带向哪里。"
+const RELATION_SUMMARY_FALLBACK := "近期尚无人情骤冷，但谁在慢慢远离仍值得留意。"
+const FACTION_SUMMARY_FALLBACK := "眼下风向尚未明朗，势力内部仍在酝酿下一轮取舍。"
+const CLAN_SUMMARY_FALLBACK := "家中近来无大事催逼，宗族仍在观望你会把仕途带向哪里。"
 
 @onready var _time_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/TimeLabel")
 @onready var _city_label: Label = get_node("MarginContainer/VBoxContainer/TopBar/TopBarContent/CityLabel")
@@ -266,18 +266,18 @@ func _build_relation_summary_lines(summary: Dictionary) -> Dictionary:
 		var blocker_subject := _extract_summary_subject(blocker_text)
 		if not blocker_subject.is_empty():
 			return _make_summary_lines(
-				"%s 这条关系仍偏冷，你若继续不动，短期内很难借到这股人情。" % blocker_subject,
-				"你现在就可从拜访或共事重新把分寸拉近。"
+				"%s近期与你来往渐疏，关系已有转冷迹象。" % blocker_subject,
+				"若本旬内仍无互动，这层关系可能转入停滞。"
 			)
-		return _make_summary_lines(blocker_text, "这层阻滞若继续放着，会让你更难借人情推进下一步。")
+		return _make_summary_lines(_rewrite_relation_primary(blocker_text), "若再拖延一旬，这层照应恐会继续减弱。")
 	if not recommender_text.is_empty():
 		var recommender_subject := _extract_summary_subject(recommender_text)
 		if not recommender_subject.is_empty():
 			var secondary_text := ""
 			if _can_take_immediate_social_action():
-				secondary_text = "你现在就可顺着这层人情继续加深往来。"
-			return _make_summary_lines("%s 仍愿替你出面，这段关系值得继续维系。" % recommender_subject, secondary_text)
-		return _make_summary_lines(recommender_text)
+				secondary_text = "若趁这一旬继续出面，关系还有回暖与升温的余地。"
+			return _make_summary_lines("%s对你当前表现仍愿留意，这层往来值得继续维系。" % recommender_subject, secondary_text)
+		return _make_summary_lines(_rewrite_relation_primary(recommender_text))
 	return _make_summary_lines(RELATION_SUMMARY_FALLBACK)
 
 
@@ -285,15 +285,12 @@ func _build_faction_summary_lines(summary: Dictionary) -> Dictionary:
 	var opportunity_text := _clean_summary_seed(summary.get("opportunity", ""))
 	var blocker_text := _clean_summary_seed(summary.get("blocker", ""))
 	if not opportunity_text.is_empty():
-		var secondary_text := ""
-		if _should_show_followup_line(opportunity_text):
-			secondary_text = "若你愿意立刻表态或承接事务，这个窗口本轮就能跟进。"
-		elif not blocker_text.is_empty():
-			var blocker_subject := _extract_summary_subject(blocker_text)
-			secondary_text = "%s 仍会影响这股风向，出手前最好先稳住这一侧。" % blocker_subject if not blocker_subject.is_empty() else "这股风向仍伴随阻力，出手前最好先稳住相关关系。"
-		return _make_summary_lines(opportunity_text, secondary_text)
+		return _make_summary_lines(
+			_rewrite_faction_primary(opportunity_text, blocker_text),
+			_build_faction_secondary(opportunity_text, blocker_text)
+		)
 	if not blocker_text.is_empty():
-		return _make_summary_lines(blocker_text, "若继续回避，这股阻力会让你更难切入下一轮事务。")
+		return _make_summary_lines(_rewrite_faction_blocker_primary(blocker_text), "若迟迟不表态，这股掣肘还会继续放大。")
 	return _make_summary_lines(FACTION_SUMMARY_FALLBACK)
 
 
@@ -302,13 +299,14 @@ func _build_clan_summary_lines(_summary: Dictionary) -> Dictionary:
 	if session == null:
 		return _make_summary_lines(CLAN_SUMMARY_FALLBACK)
 	if session.month_action_locked:
-		return _make_summary_lines("家族仍在看你本月会接下哪类事务，这会影响他们后续是否继续押注你的仕途。")
+		return _make_summary_lines("宗族仍在看你本月会接下哪类事务，家中暂且按兵观望。")
 	if session.current_month_task != null:
+		var task_state := session.current_month_task as MonthlyTaskState
 		var remaining_xun := _remaining_xun_count(session)
 		var secondary_text := ""
 		if remaining_xun <= 1:
-			secondary_text = "本月将尽，若仍无起色，宗族对你的评价可能转得更谨慎。"
-		return _make_summary_lines("家族正盯着你这一月能否把公事做出结果，你的仕途表现会直接影响他们的期待。", secondary_text)
+			secondary_text = "本月将尽，若仍无起色，宗族对你的评价会转得更谨慎。"
+		return _make_summary_lines(_build_clan_primary(task_state), secondary_text)
 	return _make_summary_lines(CLAN_SUMMARY_FALLBACK)
 
 
@@ -344,12 +342,56 @@ func _extract_summary_subject(text: String) -> String:
 	return subject
 
 
-func _should_show_followup_line(text: String) -> bool:
-	var normalized := text.strip_edges()
-	for keyword in ["本旬", "本月", "尽快", "立刻", "可", "若", "风险", "下降", "错过", "支持"]:
-		if normalized.contains(keyword):
-			return true
-	return false
+func _rewrite_relation_primary(seed_text: String) -> String:
+	if seed_text.contains("观望") or seed_text.contains("反对"):
+		return "这层人情眼下尚未回暖，你在对方心中的分量仍有些发冷。"
+	if seed_text.contains("出面") or seed_text.contains("留意"):
+		return "眼下仍有人愿替你说话，这层往来尚可继续养热。"
+	return seed_text
+
+
+func _rewrite_faction_primary(opportunity_text: String, blocker_text: String) -> String:
+	if opportunity_text.contains("空缺"):
+		return "势力内已有空缺浮出，围绕任命的风向正在慢慢升温。"
+	if opportunity_text.contains("直接交办") or opportunity_text.contains("可见度"):
+		return "主公交办之事已把目光引来，你在势力中的存在感正在上升。"
+	if opportunity_text.contains("背书") or opportunity_text.contains("请求方"):
+		return "眼下有人情背书在前，你在势力中的话语正有抬头之势。"
+	if not blocker_text.is_empty():
+		return "围绕眼下事务的风向仍未定局，你若介入，多半会被放在立场上审视。"
+	return opportunity_text
+
+
+func _build_faction_secondary(opportunity_text: String, blocker_text: String) -> String:
+	if opportunity_text.contains("空缺"):
+		return "若能顺势把事务办稳，本月仍有被上层看见的机会。"
+	if opportunity_text.contains("直接交办") or opportunity_text.contains("可见度"):
+		return "相关政务与进言，会影响外界对你立场的判断。"
+	if not blocker_text.is_empty():
+		var blocker_subject := _extract_summary_subject(blocker_text)
+		if not blocker_subject.is_empty():
+			return "%s这一侧的态度仍未松动，过早站队也可能招来不满。" % blocker_subject
+		return "这股风向仍伴随掣肘，过早站队也可能招来不满。"
+	return ""
+
+
+func _rewrite_faction_blocker_primary(blocker_text: String) -> String:
+	var blocker_subject := _extract_summary_subject(blocker_text)
+	if not blocker_subject.is_empty():
+		return "%s所代表的一侧仍在观望，势力内部的掣肘尚未散去。" % blocker_subject
+	if blocker_text.contains("观望") or blocker_text.contains("反对"):
+		return "势力内部的掣肘尚未散去，眼下表态稍有不慎便可能卷入争执。"
+	return blocker_text
+
+
+func _build_clan_primary(task_state: MonthlyTaskState) -> String:
+	if task_state == null:
+		return CLAN_SUMMARY_FALLBACK
+	if str(task_state.task_source_type) == "relation_request":
+		return "宗族正留意你能否把眼前这层人情化成实绩，家中的期待已有抬头。"
+	if str(task_state.task_source_type) == "faction_order":
+		return "宗族正在观望你能否借公事站稳位置，你的仕途表现正被家中记着。"
+	return "家中正看你这一月能否把公事做出结果，宗族的期待已慢慢落到仕途成败上。"
 
 
 func _can_take_immediate_social_action() -> bool:
