@@ -26,7 +26,7 @@ func _run() -> void:
 	var hud = root.get_node(HUD_PATH)
 	var game_root = root.get_node("/root/GameRoot")
 	var session: GameSession = game_root.current_session
-	_assert_equal(_time_label(hud).text, "时间：190年 1月 第1旬", "initial HUD time label")
+	_assert_equal(_time_label(hud).text, EXPECTED_TIMES[0], "initial HUD time label")
 
 	for i in range(3):
 		game_root.execute_phase2_action("train")
@@ -46,7 +46,7 @@ func _run() -> void:
 		_assert_equal(game_root.current_session.current_year, 190, "year after xun end")
 		_assert_equal(game_root.current_session.current_month, 2 if i == 2 else 1, "month after xun end")
 		_assert_equal(game_root.current_session.current_xun, 1 if i == 2 else i + 2, "xun after xun end")
-		_assert_equal(_time_label(hud).text, "时间：%s" % expected_time.replace(" /", "").replace(" /", ""), "HUD time label after xun end")
+		_assert_equal(_time_label(hud).text, expected_time, "HUD time label after xun end")
 		_assert_equal(root.get_node("/root/TimeManager").get_current_label(), expected_time, "TimeManager label after xun end")
 		var current_state: RuntimeCharacterState = game_root.current_session.get_character_state(game_root.current_session.protagonist_id)
 		_assert_equal(current_state.ap, 3, "AP reset after xun end")

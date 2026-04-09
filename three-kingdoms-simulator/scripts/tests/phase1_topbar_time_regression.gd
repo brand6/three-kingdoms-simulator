@@ -2,11 +2,11 @@ extends SceneTree
 
 const MAIN_SCENE := preload("res://scenes/main/MainScene.tscn")
 const EXPECTED_TIME := "190年 / 1月 / 第1旬"
-const EXPECTED_CITY := "当前城市：陈留"
-const EXPECTED_IDENTITY := "当前身份：ruler"
-const EXPECTED_FACTION := "所属势力：曹操集团"
-const EXPECTED_OFFICE := "当前官职：lord"
-const DUPLICATE_TIME_FRAGMENT := "190年 / 月 / 旬"
+const EXPECTED_CITY := "地点：陈留"
+const EXPECTED_IDENTITY := "身份：君主"
+const EXPECTED_FACTION := "势力：曹操集团"
+const EXPECTED_CLAN_FAMILY := "士族/家族：谯郡曹氏 / 曹氏"
+const DUPLICATE_TIME_FRAGMENT := "时间："
 const HUD_PATH := NodePath("MarginContainer/VBoxContainer/TopBar/TopBarContent")
 
 
@@ -27,7 +27,7 @@ func _run() -> void:
 	_assert_label(hud_root.get_node("CityLabel") as Label, EXPECTED_CITY)
 	_assert_label(hud_root.get_node("IdentityLabel") as Label, EXPECTED_IDENTITY)
 	_assert_label(hud_root.get_node("FactionLabel") as Label, EXPECTED_FACTION)
-	_assert_label(hud_root.get_node("OfficeLabel") as Label, EXPECTED_OFFICE)
+	_assert_label(hud_root.get_node("ClanFamilyLabel") as Label, EXPECTED_CLAN_FAMILY)
 
 	main_scene.queue_free()
 	await process_frame
