@@ -15,6 +15,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 1: 190样本数据骨架与单角色入口** - 锁定原型数据边界、主界面入口和统一身份底层规则。
 - [ ] **Phase 2: 旬内行动—关系闭环** - 让玩家在主 HUD 内完成可解释的行动、反馈与关系变化。
 - [ ] **Phase 3: 仕途、势力与可解释政治** - 把行动结果转进任务、任命、派系支持与政治后果。
+- [ ] **Phase 03.1: Phase 1 基线验证与时间契约修复** - 关闭 Phase 1 孤儿需求，并恢复 HUD 时间标签共享契约的可验证证据链。
+- [ ] **Phase 03.2: Phase 3 势力总览复验与需求追踪归一** - 正式清除 FACT-01 阻塞，并收敛 inserted phase 的追踪与验证漂移。
 - [ ] **Phase 4: 家族门阀、婚姻与历史分歧** - 接入三国特色的出身网络、联姻政治与事件分歧。
 - [ ] **Phase 5: 持久验证与战争接入口** - 补齐 war stub、存档和调试能力，支持持续验证原型。
 
@@ -110,9 +112,37 @@ Plans:
 **Canonical refs**: `design/总纲/项目总设计方案 v1.md` §§5.5-5.7; `design/总纲/官职与任务原型部署 Phase 2.1 v1.md` §§12-16; `design/总纲/Phase 3 仕途、势力与可解释政治 详细规划 v1.md`; `design/系统设计/核心系统详细设计 v1.md` §§3, 6-7; `design/数据/官职与任务原型部署数据字段设计 v1.md` §§16; `design/原型与实现/Phase 2.1 Godot 实现映射表 v1.md` §§14-16; `design/原型与实现/Godot 原型开发拆解 v1.md` §§5.5-5.7, 8C-8D; `design/原型与实现/原型任务拆解清单 v1.md` T09-T12
 **UI hint**: yes
 
+### Phase 03.1: Phase 1 基线验证与时间契约修复 (INSERTED)
+**Goal**: 为已交付的 Phase 1 入口、数据骨架与角色基线补齐正式验证证据，并把 TimeManager → MainHUD 的时间标签契约重新收敛成可回归、可审计的共享来源。
+**Depends on**: Phase 3
+**Requirements**: CORE-01, CORE-02, DATA-01, DATA-02, DATA-03, DATA-04, CHAR-01, CHAR-02, CHAR-04
+**Gap Closure**: Closes orphaned Phase 1 requirements, the CORE-02 top-bar time contract integration gap, and the cold-start HUD baseline verification flow gap from `v1.0-v1.0-MILESTONE-AUDIT.md`.
+**Success Criteria** (what must be TRUE):
+  1. `01-VERIFICATION.md` exists and covers all nine previously orphaned Phase 1 requirements with explicit evidence links instead of summary-only claims.
+  2. MainHUD again consumes the shared TimeManager-formatted time label through a stable contract that matches Phase 1 baseline expectations and can be regression-tested.
+  3. Cold-start boot → session → HUD baseline verification passes with auditable evidence for the main top bar state, including the time label path.
+  4. `REQUIREMENTS.md` no longer marks the nine Phase 1 requirements as complete until this inserted phase is verified and closed.
+**Plans**: TBD
+**Canonical refs**: `.planning/v1.0-v1.0-MILESTONE-AUDIT.md`; `.planning/phases/01-190`; `.planning/REQUIREMENTS.md`; `.planning/ROADMAP.md`
+**UI hint**: yes
+
+### Phase 03.2: Phase 3 势力总览复验与需求追踪归一 (INSERTED)
+**Goal**: 以最新代码和总结为基准重跑 Phase 3 势力总览验证，正式清除 FACT-01 阻塞，并同步归一 02.1/03 的需求追踪与验证文档漂移。
+**Depends on**: Phase 03.1
+**Requirements**: FACT-01
+**Gap Closure**: Closes the remaining FACT-01 verification blocker and normalizes inserted-phase traceability drift called out by `v1.0-v1.0-MILESTONE-AUDIT.md`.
+**Success Criteria** (what must be TRUE):
+  1. Phase 3 verification is rerun against the current codebase and no longer reports FACT-01 blocked if the strategic posture chain is truly complete.
+  2. If any strategic posture gap remains, the missing data/query/UI evidence is identified and closed within the same inserted phase before verification is marked passed.
+  3. `REQUIREMENTS.md` traceability reflects inserted-phase ownership consistently, especially for UI-03 and the Phase 2.1 career-result requirements.
+  4. Milestone audit noise caused by stale 02.1 / 03 verification artifacts is reduced so the current milestone can be re-audited cleanly.
+**Plans**: TBD
+**Canonical refs**: `.planning/v1.0-v1.0-MILESTONE-AUDIT.md`; `.planning/phases/02.1-`; `.planning/phases/03-仕途、势力与可解释政治`; `.planning/REQUIREMENTS.md`
+**UI hint**: yes
+
 ### Phase 4: 家族门阀、婚姻与历史分歧
 **Goal**: 玩家能感受到家族门第、联姻政治和事件分歧对个人仕途与关系网络的高影响修正，这是原型区别于普通养成器的核心层。
-**Depends on**: Phase 3
+**Depends on**: Phase 03.2
 **Requirements**: CLAN-01, CLAN-02, CLAN-03, MARR-01, MARR-02, MARR-03, EVNT-01, EVNT-02, EVNT-03, EVNT-04, UI-03
 **Success Criteria** (what must be TRUE):
   1. Player can inspect family and clan prestige, wealth or influence, major members, and orientation, and feel visible differences between high-status and low-status starts.
@@ -138,7 +168,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 2.1 → 3 → 4 → 5
+Phases execute in numeric order: 1 → 2 → 2.1 → 3 → 3.1 → 3.2 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -146,5 +176,7 @@ Phases execute in numeric order: 1 → 2 → 2.1 → 3 → 4 → 5
 | 2. 旬内行动—关系闭环 | 4/7 | Gap closure planned | 02-01, 02-02, 02-03, 02-04 |
 | 2.1. 官职与任务部署 | 8/8 | Executed - pending verification | 02.1-01, 02.1-02, 02.1-03, 02.1-04, 02.1-05, 02.1-06, 02.1-07, 02.1-08 |
 | 3. 仕途、势力与可解释政治 | 10/11 | Gap closure planned | 03-01, 03-02, 03-03, 03-04, 03-05, 03-06, 03-07, 03-08, 03-09, 03-10 |
+| 3.1. Phase 1 基线验证与时间契约修复 | 0/TBD | Planned | - |
+| 3.2. Phase 3 势力总览复验与需求追踪归一 | 0/TBD | Planned | - |
 | 4. 家族门阀、婚姻与历史分歧 | 0/TBD | Not started | - |
 | 5. 持久验证与战争接入口 | 0/TBD | Not started | - |

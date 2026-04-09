@@ -7,25 +7,25 @@
 
 ### Core Loop
 
-- [x] **CORE-01**: Player can start a 190 scenario sample and enter the main gameplay screen as a single historical character.
-- [x] **CORE-02**: Player can view the current year, month, xun, city, identity, faction, office, AP, energy, stress, fame, and merit from the main HUD.
+- [ ] **CORE-01**: Player can start a 190 scenario sample and enter the main gameplay screen as a single historical character.
+- [ ] **CORE-02**: Player can view the current year, month, xun, city, identity, faction, office, AP, energy, stress, fame, and merit from the main HUD.
 - [x] **CORE-03**: Player can spend a xun by selecting multiple actions until AP or action availability is exhausted.
 - [x] **CORE-04**: Player can end the current xun and advance time through at least three stable xun transitions.
 - [x] **CORE-05**: Player receives a xun-end summary that explains the major state and relationship changes caused by that xun.
 
 ### Data Foundation
 
-- [x] **DATA-01**: Game can load a 190 scenario sample containing characters, factions, cities, clans, families, actions, and events from data-driven definitions.
-- [x] **DATA-02**: Static scenario definitions are stored separately from runtime game state so gameplay updates do not mutate source definitions.
-- [x] **DATA-03**: Game can query at least one character, one faction, and one city from the loaded scenario during runtime.
-- [x] **DATA-04**: Runtime state supports serialization-safe identifiers for characters, factions, cities, clans, families, offices, actions, and events.
+- [ ] **DATA-01**: Game can load a 190 scenario sample containing characters, factions, cities, clans, families, actions, and events from data-driven definitions.
+- [ ] **DATA-02**: Static scenario definitions are stored separately from runtime game state so gameplay updates do not mutate source definitions.
+- [ ] **DATA-03**: Game can query at least one character, one faction, and one city from the loaded scenario during runtime.
+- [ ] **DATA-04**: Runtime state supports serialization-safe identifiers for characters, factions, cities, clans, families, offices, actions, and events.
 
 ### Character State
 
-- [x] **CHAR-01**: Player character has readable core attributes, identity, faction, office, family, clan, personality tags, and location.
-- [x] **CHAR-02**: Player character tracks AP, energy, stress, health-related state, fame, merit, loyalty, and honor/infamy-style reputation values.
+- [ ] **CHAR-01**: Player character has readable core attributes, identity, faction, office, family, clan, personality tags, and location.
+- [ ] **CHAR-02**: Player character tracks AP, energy, stress, health-related state, fame, merit, loyalty, and honor/infamy-style reputation values.
 - [x] **CHAR-03**: Gameplay actions can modify player attributes or status values and surface those changes in UI feedback.
-- [x] **CHAR-04**: Different starting identities use the same underlying time and action rules while exposing different permissions or action availability.
+- [ ] **CHAR-04**: Different starting identities use the same underlying time and action rules while exposing different permissions or action availability.
 
 ### Actions
 
@@ -52,7 +52,7 @@
 
 ### Factions
 
-- [x] **FACT-01**: Player can view the current faction's ruler, cities, major officers, resources, and broad strategic posture.
+- [ ] **FACT-01**: Player can view the current faction's ruler, cities, major officers, resources, and broad strategic posture.
 - [x] **FACT-02**: Game tracks faction-level resources needed for prototype political and military feedback.
 - [x] **FACT-03**: Player can see the main factions or internal groups influencing current political outcomes.
 
@@ -140,19 +140,19 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CORE-01 | Phase 1 | Complete |
-| CORE-02 | Phase 1 | Complete |
+| CORE-01 | Phase 03.1 | Pending |
+| CORE-02 | Phase 03.1 | Pending |
 | CORE-03 | Phase 2 | Complete |
 | CORE-04 | Phase 2 | Complete |
 | CORE-05 | Phase 2 | Complete |
-| DATA-01 | Phase 1 | Complete |
-| DATA-02 | Phase 1 | Complete |
-| DATA-03 | Phase 1 | Complete |
-| DATA-04 | Phase 1 | Complete |
-| CHAR-01 | Phase 1 | Complete |
-| CHAR-02 | Phase 1 | Complete |
+| DATA-01 | Phase 03.1 | Pending |
+| DATA-02 | Phase 03.1 | Pending |
+| DATA-03 | Phase 03.1 | Pending |
+| DATA-04 | Phase 03.1 | Pending |
+| CHAR-01 | Phase 03.1 | Pending |
+| CHAR-02 | Phase 03.1 | Pending |
 | CHAR-03 | Phase 2 | Complete |
-| CHAR-04 | Phase 1 | Complete |
+| CHAR-04 | Phase 03.1 | Pending |
 | ACTN-01 | Phase 2 | Complete |
 | ACTN-02 | Phase 2 | Complete |
 | ACTN-03 | Phase 2 | Complete |
@@ -163,11 +163,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RELA-03 | Phase 2 | Complete |
 | RELA-04 | Phase 3 | Complete |
 | CARE-01 | Phase 3 | Complete |
-| CARE-02 | Phase 3 | Complete |
-| CARE-03 | Phase 3 | Complete |
-| CARE-04 | Phase 3 | Complete |
-| CARE-05 | Phase 3 | Complete |
-| FACT-01 | Phase 3 | Complete |
+| CARE-02 | Phase 2.1 | Complete |
+| CARE-03 | Phase 2.1 | Complete |
+| CARE-04 | Phase 2.1 | Complete |
+| CARE-05 | Phase 2.1 | Complete |
+| FACT-01 | Phase 03.2 | Pending |
 | FACT-02 | Phase 3 | Complete |
 | FACT-03 | Phase 3 | Complete |
 | CLAN-01 | Phase 4 | Pending |
@@ -187,7 +187,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | WAR-02 | Phase 5 | Pending |
 | UI-01 | Phase 2 | Complete |
 | UI-02 | Phase 2 | Complete |
-| UI-03 | Phase 4 | Complete |
+| UI-03 | Phase 2.1 | Complete |
 | UI-04 | Phase 2 | Complete |
 | PERS-01 | Phase 5 | Pending |
 | PERS-02 | Phase 5 | Pending |
@@ -200,4 +200,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-04-04*
-*Last updated: 2026-04-04 after initial definition*
+*Last updated: 2026-04-09 after milestone gap-closure phase creation*
