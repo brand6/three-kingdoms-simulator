@@ -94,7 +94,7 @@ Plans:
   2. Month-end evaluation can result in appointment, promotion, rejection, or missed opportunity, with visible reasons such as merit, trust, support, opposition, or blockers.
   3. Office changes alter what the player is allowed to do or how they are treated politically, while preserving the same single-character rule set.
   4. Player can inspect faction leadership, cities, major officers, resources, and internal political groups, and relationship strength can influence later recommendations or appointment outcomes.
-**Plans**: 7 plans
+**Plans**: 9 total (7 original + 2 gap-closure planned)
 Plans:
 - [x] 03-01-PLAN.md — 冻结推荐 / 反对 / 派系支持 / 任命解释的静态与运行时契约
 - [x] 03-02-PLAN.md — 将月任务来源从上级指派扩展到至少两类可解释政治来源
@@ -103,6 +103,8 @@ Plans:
 - [ ] 03-05-PLAN.md — 让官职变化真正影响权限、待遇反馈与政治后果
 - [ ] 03-06-PLAN.md — 接通势力总览、派系摘要、人物政治支持与月报解释 UI
 - [ ] 03-07-PLAN.md — 完成 Phase 3 联调、政治失败结果与 explainable-politics 回归验收
+- [ ] 03-08-PLAN.md — 修复月初任务卡单行来源布局与机遇/风险标签契约
+- [ ] 03-09-PLAN.md — 修复势力/人物弹窗不透明样式并补视觉回归
 **Canonical refs**: `design/总纲/项目总设计方案 v1.md` §§5.5-5.7; `design/总纲/官职与任务原型部署 Phase 2.1 v1.md` §§12-16; `design/总纲/Phase 3 仕途、势力与可解释政治 详细规划 v1.md`; `design/系统设计/核心系统详细设计 v1.md` §§3, 6-7; `design/数据/官职与任务原型部署数据字段设计 v1.md` §§16; `design/原型与实现/Phase 2.1 Godot 实现映射表 v1.md` §§14-16; `design/原型与实现/Godot 原型开发拆解 v1.md` §§5.5-5.7, 8C-8D; `design/原型与实现/原型任务拆解清单 v1.md` T09-T12
 **UI hint**: yes
 
