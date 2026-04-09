@@ -61,6 +61,8 @@ func _run() -> void:
 	var first_line := card_text.split("\n")[0]
 	if not first_line.contains(selected_task_name):
 		_fail("Task cards should keep the task name in the first scan line.")
+	if first_line.contains(char(0xff5c)) or first_line.contains("|"):
+		_fail("Task card header should stop using vertical separators between title metadata.")
 	if not first_line.contains("来源："):
 		_fail("Task cards should expose source copy in the first scan line.")
 	if not first_line.contains("请求方："):
@@ -83,6 +85,8 @@ func _run() -> void:
 		_fail("Task cards should include target copy.")
 	if not card_text.contains("机遇和风险"):
 		_fail("Task cards should include the opportunity/risk block.")
+	if card_text.contains("目标：\n\n") or card_text.contains("\n\n\n"):
+		_fail("Task card body should not render extra blank lines after the description block.")
 	if card_text.contains("政治标签："):
 		_fail("Task cards should stop using the old political-tag heading.")
 	if card_text.contains("机会:") or card_text.contains("风险:"):
@@ -229,9 +233,20 @@ func _first_task_card_text(picker: Node) -> String:
 		var content := first_card.get_node_or_null("CardContent")
 		if content != null:
 			var parts: Array[String] = []
-			var header := content.get_node_or_null("HeaderLabel") as Label
-			if header != null and not header.text.strip_edges().is_empty():
-				parts.append(header.text)
+			var header_node := content.get_node_or_null("HeaderLabel")
+			if header_node is Label:
+				var header := header_node as Label
+				if not header.text.strip_edges().is_empty():
+					parts.append(header.text)
+			elif header_node is HBoxContainer:
+				var header_parts: Array[String] = []
+				for child in header_node.get_children():
+					if child is Label:
+						var label := child as Label
+						if not label.text.strip_edges().is_empty():
+							header_parts.append(label.text.strip_edges())
+				if not header_parts.is_empty():
+					parts.append("    ".join(header_parts))
 			var body_node := content.get_node_or_null("BodyLabel")
 			if body_node is RichTextLabel:
 				var rich_body := body_node as RichTextLabel
@@ -265,6 +280,14 @@ func _assert_card_readability_contract(picker: Node) -> void:
 		_fail("Task card should use stronger horizontal content margins.")
 	if normal_style.content_margin_top < 16.0 or normal_style.content_margin_bottom < 16.0:
 		_fail("Task card should use stronger vertical content margins.")
+	var content := first_card.get_node_or_null("CardContent") as VBoxContainer
+	if content == null:
+		_fail("Task card should still expose the content container for layout checks.")
+	var header_row := content.get_node_or_null("HeaderLabel") as HBoxContainer
+	if header_row == null:
+		_fail("Task card should render the header as a dedicated row container.")
+	if header_row.get_theme_constant("separation") < 20:
+		_fail("Task card header row should visibly separate title, source, and requester blocks.")
 
 
 func _fail(message: String) -> void:
