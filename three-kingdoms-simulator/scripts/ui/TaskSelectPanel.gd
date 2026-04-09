@@ -72,7 +72,7 @@ func _render_cards(repository: Node) -> void:
 		button.name = "TaskCard%d" % index
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.custom_minimum_size = Vector2(0, 132)
+		button.custom_minimum_size = Vector2(0, 152)
 		button.text = ""
 		button.focus_mode = Control.FOCUS_NONE
 		button.add_child(_build_card_content(Dictionary(_candidates[index]), repository, index == _selected_index))
@@ -96,11 +96,13 @@ func _build_card_content(candidate: Dictionary, repository: Node, selected: bool
 	content.offset_right = 0
 	content.offset_bottom = 0
 	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.add_theme_constant_override("separation", 10)
 
 	var header := Label.new()
 	header.name = "HeaderLabel"
 	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.text = _card_header_text(candidate, repository)
 	header.add_theme_color_override("font_color", CARD_TEXT_SELECTED if selected else CARD_TEXT_NORMAL)
 	content.add_child(header)
@@ -121,10 +123,9 @@ func _build_card_content(candidate: Dictionary, repository: Node, selected: bool
 
 func _card_header_text(candidate: Dictionary, repository: Node) -> String:
 	var task_name := str(candidate.get("name", "—"))
-	var requester_name := _resolve_character_name(repository, str(candidate.get("request_character_id", "")))
-	var source_type := _localized_source_type(str(candidate.get("task_source_type", "faction_order")))
-	var source_target := _source_target_text(candidate, repository)
-	return "%s｜来源：%s · %s｜请求方：%s" % [task_name, source_type, source_target, requester_name]
+	var requester_name := _requester_text(candidate, repository)
+	var institution_name := _institution_text(candidate)
+	return "%s｜来源：%s｜请求方：%s" % [task_name, institution_name, requester_name]
 
 
 func _card_body_text(candidate: Dictionary) -> String:
@@ -142,22 +143,21 @@ func _resolve_character_name(repository: Node, character_id: String) -> String:
 	return str(character.name if character != null else character_id)
 
 
-func _source_target_text(candidate: Dictionary, repository: Node) -> String:
+func _requester_text(candidate: Dictionary, repository: Node) -> String:
 	var requester_id := str(candidate.get("request_character_id", ""))
 	if not requester_id.is_empty():
 		return _resolve_character_name(repository, requester_id)
 	var issuer_id := str(candidate.get("issuer_character_id", ""))
 	if not issuer_id.is_empty():
 		return _resolve_character_name(repository, issuer_id)
-	return str(candidate.get("source_summary", "幕府中枢"))
+	return "幕府中枢"
 
 
-func _localized_source_type(source_type: String) -> String:
-	match source_type:
-		"relation_request":
-			return "关系请求"
-		_:
-			return "势力指令"
+func _institution_text(candidate: Dictionary) -> String:
+	var institution_name := str(candidate.get("authority_institution_name", "")).strip_edges()
+	if not institution_name.is_empty():
+		return institution_name
+	return "幕府中枢"
 
 
 func _political_tags_text(candidate: Dictionary) -> String:
@@ -227,10 +227,10 @@ func _build_card_style(background: Color, border: Color, border_width: int) -> S
 	style.corner_radius_top_right = 8
 	style.corner_radius_bottom_right = 8
 	style.corner_radius_bottom_left = 8
-	style.content_margin_left = 16
-	style.content_margin_top = 14
-	style.content_margin_right = 16
-	style.content_margin_bottom = 14
+	style.content_margin_left = 20
+	style.content_margin_top = 16
+	style.content_margin_right = 20
+	style.content_margin_bottom = 16
 	return style
 
 
