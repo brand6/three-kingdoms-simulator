@@ -124,7 +124,7 @@ Plans:
   4. `REQUIREMENTS.md` no longer marks the nine Phase 1 requirements as complete until this inserted phase is verified and closed.
 **Plans**: 2 plans
 Plans:
-- [ ] 03.1-01-PLAN.md — 重建 Phase 1 时间标签共享契约与双层回归 gate
+- [x] 03.1-01-PLAN.md — 重建 Phase 1 时间标签共享契约与双层回归 gate
 - [ ] 03.1-02-PLAN.md — 产出 Phase 1 九项 requirement 的正式 verification 证据表
 **Canonical refs**: `.planning/v1.0-v1.0-MILESTONE-AUDIT.md`; `.planning/phases/01-190`; `.planning/REQUIREMENTS.md`; `.planning/ROADMAP.md`
 **UI hint**: yes
