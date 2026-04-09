@@ -33,6 +33,7 @@ func _run() -> void:
 
 	for i in range(3):
 		game_root.execute_phase2_action("train")
+		var expected_merit := session.get_character_state(session.protagonist_id).merit
 		var pre_end_ap := session.get_character_state(session.protagonist_id).ap
 		if pre_end_ap >= 3:
 			_fail("Expected AP to drop after real action before ending xun.")
@@ -53,18 +54,24 @@ func _run() -> void:
 		_assert_equal(root.get_node("/root/TimeManager").get_current_label(), expected_time, "TimeManager label after xun end")
 		var current_state: RuntimeCharacterState = game_root.current_session.get_character_state(game_root.current_session.protagonist_id)
 		_assert_equal(current_state.ap, 3, "AP reset after xun end")
-		if current_state.merit < 76:
+		if current_state.merit < expected_merit:
 			_fail("Expected merit to persist across xun transitions.")
-		if hud._xun_summary_dialog == null or not hud._xun_summary_dialog.visible:
-			_fail("Xun summary dialog should open after confirmation.")
-		var xun_summary_ok := hud.get_node_or_null("XunSummaryDialog/XunSummaryMargin/XunSummaryContent/ActionRow/ConfirmButton") as Button
-		if xun_summary_ok == null or not xun_summary_ok.visible:
-			_fail("Xun summary dialog should expose a visible confirm button on first open.")
-		var summary_text: String = hud._xun_summary_body.text
-		if not summary_text.contains("本旬行动摘要") or not summary_text.contains("主要数值变化") or not summary_text.contains("关系变化摘要"):
-			_fail("Summary dialog omitted required sections: %s" % summary_text)
-		hud._xun_summary_dialog.hide()
-		await process_frame
+		if i < 2:
+			if hud._xun_summary_dialog == null or not hud._xun_summary_dialog.visible:
+				_fail("Xun summary dialog should open after confirmation for non-month-end xun.")
+			var xun_summary_ok := hud.get_node_or_null("XunSummaryDialog/XunSummaryMargin/XunSummaryContent/ActionRow/ConfirmButton") as Button
+			if xun_summary_ok == null or not xun_summary_ok.visible:
+				_fail("Xun summary dialog should expose a visible confirm button on first open.")
+			var summary_text: String = hud._xun_summary_body.text
+			if not summary_text.contains("本旬行动摘要") or not summary_text.contains("主要数值变化") or not summary_text.contains("关系变化摘要"):
+				_fail("Summary dialog omitted required sections: %s" % summary_text)
+			hud._xun_summary_dialog.hide()
+			await process_frame
+		else:
+			if hud._xun_summary_dialog.visible:
+				_fail("Month-end xun should transition into month feedback, not keep the xun summary dialog open.")
+			if hud.get("_active_month_end_evaluation") == null:
+				_fail("Month-end xun should preserve the month evaluation for downstream feedback UI.")
 
 	main_scene.queue_free()
 	await process_frame
