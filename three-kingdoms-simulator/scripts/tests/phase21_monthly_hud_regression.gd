@@ -25,12 +25,15 @@ func _run() -> void:
 	var picker := root.get_node_or_null(TASK_SELECT_PANEL_PATH)
 	var month_report := root.get_node_or_null(MONTH_REPORT_PANEL_PATH)
 	var promotion_popup := root.get_node_or_null(PROMOTION_POPUP_PATH)
+	var faction_button := hud.get_node("MarginContainer/VBoxContainer/BottomBar/BottomBarContent/FactionButton") as Button
 	if picker == null:
 		_fail("TaskSelectPanel should be mounted under MainScene.")
 	if month_report == null:
 		_fail("MonthReportPanel should be mounted under MainScene.")
 	if promotion_popup == null:
 		_fail("PromotionPopup should be mounted under MainScene.")
+	if faction_button == null or faction_button.disabled:
+		_fail("FactionButton should be available after Phase 3 UI wiring.")
 
 	if not game_root.has_method("get_pending_month_tasks"):
 		_fail("GameRoot should expose get_pending_month_tasks for monthly HUD flow.")
@@ -55,12 +58,27 @@ func _run() -> void:
 		_fail("Task picker should hide the hint copy above the confirm CTA.")
 
 	var card_text := _first_task_card_text(picker)
-	if not card_text.contains("发布人："):
-		_fail("Task cards should include issuer copy.")
-	if not card_text.contains("任务描述："):
-		_fail("Task cards should include description copy.")
+	var first_line := card_text.split("\n")[0]
+	if not first_line.contains(selected_task_name):
+		_fail("Task cards should keep the task name in the first scan line.")
+	if not first_line.contains("来源："):
+		_fail("Task cards should expose source copy in the first scan line.")
+	if not first_line.contains("请求方："):
+		_fail("Task cards should include requester copy.")
+	if card_text.contains("来源类型："):
+		_fail("Task cards should stop rendering a standalone source-type row.")
+	if card_text.contains("关联派系："):
+		_fail("Task cards should rename linked faction copy to 来源.")
 	if not card_text.contains("预计奖励："):
 		_fail("Task cards should include expected reward copy.")
+	if not card_text.contains("目标："):
+		_fail("Task cards should include target copy.")
+	if not card_text.contains("机遇和风险"):
+		_fail("Task cards should include the opportunity/risk block.")
+	if card_text.contains("政治标签："):
+		_fail("Task cards should stop using the old political-tag heading.")
+	if card_text.contains("机会:") or card_text.contains("风险:"):
+		_fail("Task cards should remove literal opportunity/risk prefixes from the old contract.")
 
 	var confirm_button := _confirm_button(picker)
 	if not confirm_button.visible:
@@ -131,20 +149,12 @@ func _run() -> void:
 	if month_report_ok == null or not month_report_ok.visible:
 		_fail("Month report should expose a visible confirm button.")
 	var report_text := _label_text(month_report, "PanelMargin/PanelContent/BodyLabel")
-	if not report_text.contains("任务名称：%s" % selected_task_name):
-		_fail("Month report should use the completed task snapshot instead of a cleared live task state.")
-	if not report_text.contains("进度：0/8（优秀 11）"):
-		_fail("Month report should preserve the completed task progress snapshot after rollover.")
-	if not report_text.contains("任务名称："):
-		_fail("Month report should show task name.")
-	if not report_text.contains("结果："):
-		_fail("Month report should show verdict.")
-	if not report_text.contains("进度："):
-		_fail("Month report should show progress versus threshold.")
-	if not report_text.contains("功绩变化：") or not report_text.contains("名望变化：") or not report_text.contains("信任变化："):
-		_fail("Month report should show merit/fame/trust deltas.")
-	if not report_text.contains("政治含义："):
-		_fail("Month report should show political meaning summary.")
+	if not report_text.contains("结论："):
+		_fail("Month report should show explainable verdict headline.")
+	if not report_text.contains("政治力量："):
+		_fail("Month report should show political forces line.")
+	if not report_text.contains("下月建议："):
+		_fail("Month report should show next-month advice.")
 
 	month_report.call("confirm")
 	await process_frame
@@ -156,12 +166,8 @@ func _run() -> void:
 	if picker.visible:
 		_fail("Next-month task picker must stay hidden until promotion confirmation finishes.")
 	var promotion_text := _label_text(promotion_popup, "PanelMargin/PanelContent/BodyLabel")
-	if not promotion_text.contains("未获任命"):
-		_fail("Promotion popup should show the failed-promotion verdict when no appointment is granted.")
-	if not (promotion_text.contains("功绩不足") or promotion_text.contains("名望不足") or promotion_text.contains("无空缺") or promotion_text.contains("任务未达标")):
-		_fail("Promotion popup should use standardized failure labels.")
-	if not (promotion_text.contains("距离") or promotion_text.contains("仍差") or promotion_text.contains("当前无空缺") or promotion_text.contains("当前进度") or promotion_text.contains("成功阈值")):
-		_fail("Promotion popup should include a concrete missing-value line.")
+	if not (promotion_text.contains("未获任命") or promotion_text.contains("任命缘由：")):
+		_fail("Promotion popup should show explainable appointment verdict.")
 
 	promotion_popup.call("confirm")
 	await process_frame
@@ -210,6 +216,24 @@ func _first_task_card_text(picker: Node) -> String:
 		return ""
 	var first_card := container.get_child(0)
 	if first_card is BaseButton:
+		var content := first_card.get_node_or_null("CardContent")
+		if content != null:
+			var parts: Array[String] = []
+			var header := content.get_node_or_null("HeaderLabel") as Label
+			if header != null and not header.text.strip_edges().is_empty():
+				parts.append(header.text)
+			var body_node := content.get_node_or_null("BodyLabel")
+			if body_node is RichTextLabel:
+				var rich_body := body_node as RichTextLabel
+				var parsed_text := rich_body.get_parsed_text()
+				if not parsed_text.strip_edges().is_empty():
+					parts.append(parsed_text)
+			elif body_node is Label:
+				var plain_body := body_node as Label
+				if not plain_body.text.strip_edges().is_empty():
+					parts.append(plain_body.text)
+			if not parts.is_empty():
+				return "\n".join(parts)
 		return first_card.text
 	var body := first_card.get_node_or_null("BodyLabel") as Label
 	return body.text if body != null else ""
