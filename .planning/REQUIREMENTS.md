@@ -40,7 +40,7 @@
 - [x] **RELA-01**: Game stores directional relationship values between characters including favor, trust, respect, vigilance, and obligation.
 - [x] **RELA-02**: Player can view a relationship screen listing key characters, relationship tags, major values, faction, and available interactions.
 - [x] **RELA-03**: Visit-style interactions can change relationship values in ways visible to the player.
-- [ ] **RELA-04**: Relationship values influence later gameplay outcomes such as action success, recommendation chance, task opportunities, or appointment results.
+- [x] **RELA-04**: Relationship values influence later gameplay outcomes such as action success, recommendation chance, task opportunities, or appointment results.
 
 ### Career
 
@@ -53,7 +53,7 @@
 ### Factions
 
 - [x] **FACT-01**: Player can view the current faction's ruler, cities, major officers, resources, and broad strategic posture.
-- [ ] **FACT-02**: Game tracks faction-level resources needed for prototype political and military feedback.
+- [x] **FACT-02**: Game tracks faction-level resources needed for prototype political and military feedback.
 - [x] **FACT-03**: Player can see the main factions or internal groups influencing current political outcomes.
 
 ### Clans And Families
@@ -64,8 +64,8 @@
 
 ### Politics
 
-- [ ] **POLI-01**: Game tracks internal political groups or factional alignments with visible stances toward the player.
-- [ ] **POLI-02**: Political groups can support, oppose, or stay neutral toward appointments or proposals.
+- [x] **POLI-01**: Game tracks internal political groups or factional alignments with visible stances toward the player.
+- [x] **POLI-02**: Political groups can support, oppose, or stay neutral toward appointments or proposals.
 - [x] **POLI-03**: Player-facing feedback identifies which political forces helped or blocked an outcome when relevant.
 
 ### Marriage
@@ -161,20 +161,20 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RELA-01 | Phase 2 | Complete |
 | RELA-02 | Phase 2 | Complete |
 | RELA-03 | Phase 2 | Complete |
-| RELA-04 | Phase 3 | Pending |
+| RELA-04 | Phase 3 | Complete |
 | CARE-01 | Phase 3 | Complete |
 | CARE-02 | Phase 3 | Complete |
 | CARE-03 | Phase 3 | Complete |
 | CARE-04 | Phase 3 | Complete |
 | CARE-05 | Phase 3 | Complete |
 | FACT-01 | Phase 3 | Complete |
-| FACT-02 | Phase 3 | Pending |
+| FACT-02 | Phase 3 | Complete |
 | FACT-03 | Phase 3 | Complete |
 | CLAN-01 | Phase 4 | Pending |
 | CLAN-02 | Phase 4 | Pending |
 | CLAN-03 | Phase 4 | Pending |
-| POLI-01 | Phase 3 | Pending |
-| POLI-02 | Phase 3 | Pending |
+| POLI-01 | Phase 3 | Complete |
+| POLI-02 | Phase 3 | Complete |
 | POLI-03 | Phase 3 | Complete |
 | MARR-01 | Phase 4 | Pending |
 | MARR-02 | Phase 4 | Pending |
