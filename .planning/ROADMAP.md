@@ -122,7 +122,10 @@ Plans:
   2. MainHUD again consumes the shared TimeManager-formatted time label through a stable contract that matches Phase 1 baseline expectations and can be regression-tested.
   3. Cold-start boot → session → HUD baseline verification passes with auditable evidence for the main top bar state, including the time label path.
   4. `REQUIREMENTS.md` no longer marks the nine Phase 1 requirements as complete until this inserted phase is verified and closed.
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 03.1-01-PLAN.md — 重建 Phase 1 时间标签共享契约与双层回归 gate
+- [ ] 03.1-02-PLAN.md — 产出 Phase 1 九项 requirement 的正式 verification 证据表
 **Canonical refs**: `.planning/v1.0-v1.0-MILESTONE-AUDIT.md`; `.planning/phases/01-190`; `.planning/REQUIREMENTS.md`; `.planning/ROADMAP.md`
 **UI hint**: yes
 
@@ -176,7 +179,7 @@ Phases execute in numeric order: 1 → 2 → 2.1 → 3 → 3.1 → 3.2 → 4 →
 | 2. 旬内行动—关系闭环 | 4/7 | Gap closure planned | 02-01, 02-02, 02-03, 02-04 |
 | 2.1. 官职与任务部署 | 8/8 | Executed - pending verification | 02.1-01, 02.1-02, 02.1-03, 02.1-04, 02.1-05, 02.1-06, 02.1-07, 02.1-08 |
 | 3. 仕途、势力与可解释政治 | 10/11 | Gap closure planned | 03-01, 03-02, 03-03, 03-04, 03-05, 03-06, 03-07, 03-08, 03-09, 03-10 |
-| 3.1. Phase 1 基线验证与时间契约修复 | 0/TBD | Planned | - |
+| 3.1. Phase 1 基线验证与时间契约修复 | 0/2 | Planned | - |
 | 3.2. Phase 3 势力总览复验与需求追踪归一 | 0/TBD | Planned | - |
 | 4. 家族门阀、婚姻与历史分歧 | 0/TBD | Not started | - |
 | 5. 持久验证与战争接入口 | 0/TBD | Not started | - |
