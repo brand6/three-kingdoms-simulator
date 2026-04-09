@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 03-08-PLAN.md
-last_updated: "2026-04-09T01:12:09.473Z"
+stopped_at: Completed 03-10-PLAN.md
+last_updated: "2026-04-09T01:43:36.275Z"
 last_activity: 2026-04-09
 progress:
   total_phases: 6
   completed_phases: 3
-  total_plans: 29
-  completed_plans: 27
-  percent: 90
+  total_plans: 30
+  completed_plans: 28
+  percent: 93
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-04)
 ## Current Position
 
 Phase: 03 (仕途、势力与可解释政治) — EXECUTING
-Plan: 3 of 9
+Plan: 2 of 10
 Status: Ready to execute
 Last activity: 2026-04-09
 
@@ -68,6 +68,7 @@ Progress: 7/9 plans complete / 93% overall
 | Phase 02.1 P06 | 749 | 2 tasks | 7 files |
 | Phase 03 P09 | 0 min | 2 tasks | 3 files |
 | Phase 03 P08 | 8 min | 2 tasks | 2 files |
+| Phase 03 P10 | 4 min | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -106,6 +107,9 @@ Recent decisions affecting current work:
 - [Phase 03]: 任务卡继续保留 Button 选择交互，但内容改为 HeaderLabel + RichTextLabel 结构化渲染。
 - [Phase 03]: 来源类型不再独立成行，而是内联到首行的 来源：{来源类型} · {来源对象}。
 - [Phase 03]: 机遇和风险保留单标题，用颜色区分标签，不再输出 机会:/风险: 前缀。
+- [Phase 03]: authority_institution_name 成为来源机构唯一字段，独立于 request_character_id。
+- [Phase 03]: 任务卡首行固定为 任务名｜来源：机构名｜请求方：具体人物，请求方优先使用 request_character_id，缺失时回退 issuer_character_id。
+- [Phase 03]: 任务卡通过更高的最小高度与更强的 content margin 提升可读性，同时保持确认按钮门控不变。
 
 ### Roadmap Evolution
 
@@ -133,6 +137,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-09T01:11:41.565Z
-Stopped at: Completed 03-08-PLAN.md
+Last session: 2026-04-09T01:43:36.269Z
+Stopped at: Completed 03-10-PLAN.md
 Resume file: None
