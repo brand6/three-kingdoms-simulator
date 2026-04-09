@@ -12,13 +12,13 @@ const SECONDARY_NODE_PATHS := {
 	"家族": "MarginContainer/VBoxContainer/MainContent/CenterSummary/ClanSummaryCard/ClanSummaryContent/ClanSummarySecondary",
 }
 const BANNED_PRIMARY_PHRASE_CODES := [
-	PackedInt32Array([0x4e3b, 0x8981, 0x63a8, 0x8350, 0x4eba]),
-	PackedInt32Array([0x4e3b, 0x8981, 0x963b, 0x529b]),
-	PackedInt32Array([0x5f53, 0x524d, 0x673a, 0x4f1a]),
-	PackedInt32Array([0x8d44, 0x683c, 0x77ed, 0x677f]),
-	PackedInt32Array([0x5efa, 0x8bae, 0x4f60]),
-	PackedInt32Array([0x5f53, 0x524d, 0x53d8, 0x5316]),
-	PackedInt32Array([0x5efa, 0x8bae, 0x884c, 0x52a8]),
+	[0x4e3b, 0x8981, 0x63a8, 0x8350, 0x4eba],
+	[0x4e3b, 0x8981, 0x963b, 0x529b],
+	[0x5f53, 0x524d, 0x673a, 0x4f1a],
+	[0x8d44, 0x683c, 0x77ed, 0x677f],
+	[0x5efa, 0x8bae, 0x4f60],
+	[0x5f53, 0x524d, 0x53d8, 0x5316],
+	[0x5efa, 0x8bae, 0x884c, 0x52a8],
 ]
 const SECONDARY_GUIDANCE_KEYWORDS := [
 	"本旬",
@@ -36,6 +36,9 @@ const SECONDARY_GUIDANCE_KEYWORDS := [
 	"站队",
 	"支持",
 ]
+const FACTION_BUTTON_PATH := "MarginContainer/VBoxContainer/BottomBar/BottomBarContent/FactionButton"
+const FACTION_PANEL_PATH := "FactionPanel"
+const CHARACTER_PROFILE_PANEL_PATH := "CharacterProfilePanel"
 
 
 func _init() -> void:
@@ -54,6 +57,7 @@ func _run() -> void:
 	for card_name in PRIMARY_NODE_PATHS.keys():
 		_assert_primary_summary(hud, card_name)
 		_assert_secondary_summary(hud, card_name)
+	await _assert_opaque_faction_drilldown(hud)
 
 	main_scene.queue_free()
 	await process_frame
@@ -89,6 +93,62 @@ func _assert_secondary_summary(hud: Node, card_name: String) -> void:
 			_fail("%s secondary summary should stay empty when hidden." % card_name)
 
 
+func _assert_opaque_faction_drilldown(hud: Node) -> void:
+	var faction_button := hud.get_node_or_null(FACTION_BUTTON_PATH) as Button
+	if faction_button == null:
+		_fail("Faction button should exist for Phase 3 drilldown.")
+	if faction_button.disabled:
+		_fail("Faction button should stay enabled once the main scene boots.")
+	var faction_panel := hud.get_node_or_null(FACTION_PANEL_PATH) as PopupPanel
+	if faction_panel == null:
+		_fail("FactionPanel should exist in MainScene.")
+	var profile_panel := hud.get_node_or_null(CHARACTER_PROFILE_PANEL_PATH) as PopupPanel
+	if profile_panel == null:
+		_fail("CharacterProfilePanel should exist in MainScene.")
+
+	faction_button.pressed.emit()
+	await process_frame
+	await process_frame
+	_assert_popup_is_opaque(faction_panel, "FactionPanel")
+	if not faction_panel.visible:
+		_fail("FactionPanel should open from FactionButton without leaving MainScene.")
+
+	var officer_button := _first_officer_button(faction_panel)
+	if officer_button == null:
+		_fail("FactionPanel should list at least one officer button for drilldown.")
+	officer_button.pressed.emit()
+	await process_frame
+	await process_frame
+	_assert_popup_is_opaque(profile_panel, "CharacterProfilePanel")
+	if not profile_panel.visible:
+		_fail("CharacterProfilePanel should still open from a faction officer row.")
+	var profile_name := profile_panel.get_node_or_null("ProfileMargin/ProfileContent/NameLabel") as Label
+	if profile_name == null or profile_name.text.strip_edges().is_empty() or profile_name.text == "角色名":
+		_fail("CharacterProfilePanel should render the selected officer details after drilldown.")
+
+
+func _first_officer_button(faction_panel: PopupPanel) -> Button:
+	var officer_list := faction_panel.get_node_or_null("PanelMargin/PanelContent/OfficerList") as VBoxContainer
+	if officer_list == null:
+		return null
+	for child in officer_list.get_children():
+		if child is Button:
+			return child as Button
+	return null
+
+
+func _assert_popup_is_opaque(popup: PopupPanel, popup_name: String) -> void:
+	if popup.transparent_bg:
+		_fail("%s should disable transparent_bg so HUD content does not bleed through." % popup_name)
+	if popup.transparent:
+		_fail("%s should disable transparent rendering." % popup_name)
+	var has_local_panel_style := popup.has_theme_stylebox_override("panel")
+	var theme := popup.get_theme()
+	var has_theme_panel_style := theme != null and theme.has_stylebox("panel", &"PopupPanel")
+	if not has_local_panel_style and not has_theme_panel_style:
+		_fail("%s should expose an opaque PopupPanel panel style from the scene or shared theme." % popup_name)
+
+
 func _contains_any_keyword(text: String, keywords: Array) -> bool:
 	for keyword in keywords:
 		if text.contains(str(keyword)):
@@ -103,7 +163,7 @@ func _banned_primary_phrases() -> Array[String]:
 	return phrases
 
 
-func _string_from_codes(codes: PackedInt32Array) -> String:
+func _string_from_codes(codes: Array) -> String:
 	var chars: Array[String] = []
 	for code in codes:
 		chars.append(char(code))
