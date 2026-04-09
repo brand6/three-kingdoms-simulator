@@ -51,6 +51,22 @@ func get_faction(id: String) -> Variant:
 	return _repository.get_faction(id)
 
 
+func get_faction_resource_summary(faction_id: String) -> Dictionary:
+	var faction := get_faction(faction_id) as FactionDefinition
+	if faction == null:
+		return {}
+	var summary := Dictionary(faction.political_resource_summary).duplicate(true)
+	if not summary.is_empty():
+		return summary
+	var resources := Dictionary(faction.resources)
+	return {
+		"military_pressure": _bucket_summary_label(int(resources.get("troops", 0)), 10000, 26000),
+		"governance_load": _bucket_summary_label(int(resources.get("stability", 0)), 50, 72, true),
+		"grain_reserve_level": _bucket_summary_label(int(resources.get("food", 0)), 5000, 20000),
+		"staffing_tension": _bucket_summary_label(faction.officer_ids.size(), 2, 4, true),
+	}
+
+
 func get_city(id: String) -> Variant:
 	return _repository.get_city(id)
 
@@ -339,6 +355,20 @@ func _to_string_array(value: Variant) -> Array[String]:
 	for item in Array(value):
 		result.append(str(item))
 	return result
+
+
+func _bucket_summary_label(value: int, low: int, high: int, reverse: bool = false) -> String:
+	if reverse:
+		if value <= low:
+			return "低"
+		if value >= high:
+			return "高"
+		return "中"
+	if value <= low:
+		return "低"
+	if value >= high:
+		return "高"
+	return "中"
 
 
 func _apply_setup_patch_relations(session: GameSession, setup_patch: Variant) -> void:
