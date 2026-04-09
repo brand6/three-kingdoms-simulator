@@ -42,6 +42,7 @@ func _build_body(payload: Dictionary) -> String:
 	lines.append("核心人物与城市：")
 	lines.append("- 君主：%s" % str(overview.get("ruler_name", "—")))
 	lines.append("- 城池：%s" % _join_values(city_names))
+	lines.append("- 战略态势：%s" % str(overview.get("strategic_posture", "—")))
 	lines.append("资源摘要：")
 	lines.append("- 军务压力：%s｜治务负荷：%s" % [str(resource_summary.get("military_pressure", "中")), str(resource_summary.get("governance_load", "中"))])
 	lines.append("- 粮秣储备：%s｜编制紧张：%s" % [str(resource_summary.get("grain_reserve_level", "中")), str(resource_summary.get("staffing_tension", "中"))])

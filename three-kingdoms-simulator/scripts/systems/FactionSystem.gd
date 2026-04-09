@@ -61,6 +61,7 @@ func get_faction_overview(faction_id: String, session: GameSession) -> Dictionar
 		"capital_city_name": str(capital.name if capital != null else faction.capital_city_id),
 		"major_officer_ids": major_officers,
 		"city_count": faction.city_ids.size(),
+		"strategic_posture": faction.strategic_posture,
 		"resource_summary": get_resource_summary(faction.id),
 		"player_position": get_player_position_summary(session),
 	}

@@ -112,6 +112,14 @@ func _assert_opaque_faction_drilldown(hud: Node) -> void:
 	_assert_popup_is_opaque(faction_panel, "FactionPanel")
 	if not faction_panel.visible:
 		_fail("FactionPanel should open from FactionButton without leaving MainScene.")
+	var body_label := faction_panel.get_node_or_null("PanelMargin/PanelContent/BodyLabel") as Label
+	if body_label == null:
+		_fail("FactionPanel should expose a body label for the overview copy.")
+	var body_text := body_label.text
+	if not body_text.contains("战略态势："):
+		_fail("FactionPanel should render a 战略态势 line in the faction popup body.")
+	if not body_text.contains("东线承压，需稳住兖州与许下通道"):
+		_fail("FactionPanel should render the Cao Cao strategic posture from generated faction data.")
 
 	var officer_button := _first_officer_button(faction_panel)
 	if officer_button == null:

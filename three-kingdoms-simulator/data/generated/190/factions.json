@@ -7,7 +7,8 @@
     "city_ids": ["chenliu", "puyang"],
     "officer_ids": ["cao_cao", "xun_yu", "le_jin"],
     "resources": {"gold": 1800, "food": 24000, "troops": 28000, "morale": 78, "stability": 72},
-    "political_resource_summary": {"military_pressure": "高", "governance_load": "中", "grain_reserve_level": "高", "staffing_tension": "中"}
+    "political_resource_summary": {"military_pressure": "高", "governance_load": "中", "grain_reserve_level": "高", "staffing_tension": "中"},
+    "strategic_posture": "东线承压，需稳住兖州与许下通道"
   },
   {
     "id": "yuan_shao_faction",
@@ -17,7 +18,8 @@
     "city_ids": ["xuchang"],
     "officer_ids": ["yuan_shao"],
     "resources": {"gold": 2200, "food": 26000, "troops": 32000, "morale": 70, "stability": 68},
-    "political_resource_summary": {"military_pressure": "高", "governance_load": "高", "grain_reserve_level": "高", "staffing_tension": "低"}
+    "political_resource_summary": {"military_pressure": "高", "governance_load": "高", "grain_reserve_level": "高", "staffing_tension": "低"},
+    "strategic_posture": "北方强盛，正寻机南压许下"
   },
   {
     "id": "neutral_local_faction",
@@ -27,6 +29,7 @@
     "city_ids": [],
     "officer_ids": ["chen_gong"],
     "resources": {"gold": 300, "food": 1800, "troops": 400, "morale": 45, "stability": 40},
-    "political_resource_summary": {"military_pressure": "低", "governance_load": "高", "grain_reserve_level": "低", "staffing_tension": "高"}
+    "political_resource_summary": {"military_pressure": "低", "governance_load": "高", "grain_reserve_level": "低", "staffing_tension": "高"},
+    "strategic_posture": "夹缝自保，观望曹袁胜负"
   }
 ]
