@@ -65,6 +65,14 @@ func _run() -> void:
 		_fail("Task cards should expose source copy in the first scan line.")
 	if not first_line.contains("请求方："):
 		_fail("Task cards should include requester copy.")
+	if not (first_line.contains("尚书台") or first_line.contains("军功集团") or first_line.contains("宗族长老会")):
+		_fail("Task card source should display an authority institution label.")
+	if first_line.contains("势力指令") or first_line.contains("关系请求"):
+		_fail("Task card source should stop rendering source-type text in the header.")
+	if first_line.contains("来源：陈宫") or first_line.contains("来源：荀攸") or first_line.contains("来源：曹操"):
+		_fail("Task card source should not reuse a person name as the institution.")
+	if not (first_line.contains("请求方：曹操") or first_line.contains("请求方：陈宫") or first_line.contains("请求方：荀攸")):
+		_fail("Task card requester should resolve to the concrete issuing person.")
 	if card_text.contains("来源类型："):
 		_fail("Task cards should stop rendering a standalone source-type row.")
 	if card_text.contains("关联派系："):
@@ -90,6 +98,8 @@ func _run() -> void:
 		_fail("Task picker should expose the selected reward label.")
 	if selected_reward_label.visible or selected_reward_label.text.strip_edges() != "":
 		_fail("Task picker should not show task info above the confirm CTA before a task is selected.")
+
+	_assert_card_readability_contract(picker)
 
 	picker.call("_on_card_pressed", 0, root.get_node("/root/DataRepository"))
 	await process_frame
@@ -237,6 +247,24 @@ func _first_task_card_text(picker: Node) -> String:
 		return first_card.text
 	var body := first_card.get_node_or_null("BodyLabel") as Label
 	return body.text if body != null else ""
+
+
+func _assert_card_readability_contract(picker: Node) -> void:
+	var container := picker.get_node_or_null("PanelMargin/PanelContent/CardScroll/CardList") as VBoxContainer
+	if container == null or container.get_child_count() == 0:
+		_fail("Task picker should render at least one task card for layout assertions.")
+	var first_card := container.get_child(0) as Button
+	if first_card == null:
+		_fail("First task card should be a Button.")
+	if first_card.custom_minimum_size.y < 148.0:
+		_fail("Task card should use a roomier minimum height for readable scanning.")
+	var normal_style := first_card.get_theme_stylebox("normal")
+	if normal_style == null:
+		_fail("Task card should expose a normal stylebox for spacing checks.")
+	if normal_style.content_margin_left < 20.0 or normal_style.content_margin_right < 20.0:
+		_fail("Task card should use stronger horizontal content margins.")
+	if normal_style.content_margin_top < 16.0 or normal_style.content_margin_bottom < 16.0:
+		_fail("Task card should use stronger vertical content margins.")
 
 
 func _fail(message: String) -> void:

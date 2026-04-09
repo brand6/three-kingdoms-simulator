@@ -52,11 +52,13 @@ func _test_candidate_payload_carries_political_fields(session: GameSession, repo
 	for c in candidates:
 		var d := Dictionary(c)
 		_assert_true(d.has("task_source_type"), "candidate should have task_source_type key")
+		_assert_true(d.has("authority_institution_name"), "candidate should have authority_institution_name key")
 		_assert_true(d.has("request_character_id"), "candidate should have request_character_id key")
 		_assert_true(d.has("related_bloc_id"), "candidate should have related_bloc_id key")
 		_assert_true(d.has("source_summary"), "candidate should have source_summary key")
 		_assert_true(d.has("political_reward_tags"), "candidate should have political_reward_tags key")
 		_assert_true(d.has("political_risk_tags"), "candidate should have political_risk_tags key")
+		_assert_true(not str(d.get("authority_institution_name", "")).is_empty(), "candidate authority institution should not be empty")
 	print("  [PASS] all candidates carry Phase 3 political fields")
 
 
@@ -78,6 +80,7 @@ func _test_select_freezes_source_snapshot(session: GameSession, repo: Node) -> v
 	var task_state := task_system.select_month_task(session, repo, target_index)
 	_assert_true(task_state != null, "select_month_task should return non-null state")
 	_assert_equal(task_state.task_source_type, "relation_request", "frozen source type")
+	_assert_true(not task_state.authority_institution_name.is_empty(), "frozen authority institution should not be empty")
 	_assert_true(not task_state.request_character_id.is_empty(), "frozen request_character_id should not be empty")
 	_assert_true(not task_state.source_summary.is_empty(), "frozen source_summary should not be empty")
 	print("  [PASS] selected task correctly freezes source snapshot into MonthlyTaskState")
