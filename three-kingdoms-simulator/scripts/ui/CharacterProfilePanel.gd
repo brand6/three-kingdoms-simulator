@@ -27,5 +27,5 @@ func show_profile(view_data: Variant) -> void:
 		view_data.vigilance,
 		view_data.obligation,
 	]
-	_notes_label.text = "说明：\n%s" % "\n".join(view_data.notes)
+	_notes_label.text = "政治角色：%s\n说明：\n%s" % [view_data.political_role_label, "\n".join(view_data.notes)]
 	popup_centered(Vector2i(480, 320))

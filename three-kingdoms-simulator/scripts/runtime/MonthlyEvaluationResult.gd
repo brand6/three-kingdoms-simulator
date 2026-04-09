@@ -19,6 +19,15 @@ var summary_lines: Array[String] = []
 var next_goal_hint: String = ""
 var promotion_missing_values: Dictionary = {}
 var promotion_failure_label: String = ""
+var appointment_result: String = "pending"
+var candidate_evaluation_results: Array = []
+var primary_support_lines: Array[String] = []
+var primary_blocker_lines: Array[String] = []
+var missed_opportunity_note: String = ""
+var next_month_political_hint: String = ""
+var primary_support_identity: String = ""
+var primary_blocker_identity: String = ""
+var political_forces_summary: String = ""
 
 
 static func create(
@@ -39,7 +48,16 @@ static func create(
 	summary_lines_value: Array[String] = [],
 	next_goal_hint_value: String = "",
 	promotion_missing_values_value: Dictionary = {},
-	promotion_failure_label_value: String = ""
+	promotion_failure_label_value: String = "",
+	appointment_result_value: String = "pending",
+	candidate_evaluation_results_value: Array = [],
+	primary_support_lines_value: Array[String] = [],
+	primary_blocker_lines_value: Array[String] = [],
+	missed_opportunity_note_value: String = "",
+	next_month_political_hint_value: String = "",
+	primary_support_identity_value: String = "",
+	primary_blocker_identity_value: String = "",
+	political_forces_summary_value: String = ""
 ) -> MonthlyEvaluationResult:
 	var result := MonthlyEvaluationResult.new()
 	result.month_key = month_key_value
@@ -60,4 +78,13 @@ static func create(
 	result.next_goal_hint = next_goal_hint_value
 	result.promotion_missing_values = promotion_missing_values_value.duplicate(true)
 	result.promotion_failure_label = promotion_failure_label_value
+	result.appointment_result = appointment_result_value
+	result.candidate_evaluation_results = candidate_evaluation_results_value.duplicate(true)
+	result.primary_support_lines = primary_support_lines_value.duplicate()
+	result.primary_blocker_lines = primary_blocker_lines_value.duplicate()
+	result.missed_opportunity_note = missed_opportunity_note_value
+	result.next_month_political_hint = next_month_political_hint_value
+	result.primary_support_identity = primary_support_identity_value
+	result.primary_blocker_identity = primary_blocker_identity_value
+	result.political_forces_summary = political_forces_summary_value
 	return result

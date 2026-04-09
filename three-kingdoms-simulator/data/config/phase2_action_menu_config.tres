@@ -29,4 +29,20 @@ rules = Array[Dictionary]([{
 "allowed_identity_types": PackedStringArray("ruler", "civil_official", "military_officer"),
 "locked_reason": "当前身份不可执行",
 "menu_order": 50
+}, {
+"action_id": "review_memorials",
+"allowed_identity_types": PackedStringArray("civil_official"),
+"locked_reason": "当前身份不可执行",
+"required_office_tags": PackedStringArray("mid_career"),
+"office_restrictions": PackedStringArray("mid_career"),
+"disabled_reason": "当前不在可审阅中枢文牍的位置",
+"menu_order": 55
+}, {
+"action_id": "inspect_subordinates",
+"allowed_identity_types": PackedStringArray("civil_official"),
+"locked_reason": "当前身份不可执行",
+"required_office_tags": PackedStringArray("personnel_track"),
+"office_restrictions": PackedStringArray("personnel_track"),
+"disabled_reason": "暂无可监察属员",
+"menu_order": 56
 }])

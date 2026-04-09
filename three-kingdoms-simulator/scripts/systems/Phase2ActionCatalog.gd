@@ -31,6 +31,7 @@ func get_categories() -> Array:
 
 
 func get_available_actions(
+	session: GameSession,
 	protagonist: CharacterDefinition,
 	runtime_state: RuntimeCharacterState,
 	visit_targets: Array[CharacterDefinition]
@@ -42,6 +43,8 @@ func get_available_actions(
 			continue
 		var spec = _build_spec_from_record(action_record)
 		if spec == null:
+			continue
+		if _is_office_forbidden(session, action_record):
 			continue
 		spec.disabled_reason = _get_disabled_reason(spec, protagonist, runtime_state, visit_targets, action_record)
 		actions.append(spec)
@@ -73,9 +76,26 @@ func _build_spec_from_record(action_record: Dictionary) -> Variant:
 
 func _get_action_records() -> Array[Dictionary]:
 	var records: Array[Dictionary] = []
+	var menu_config = _data_repository().call("get_action_menu_config")
 	for item in _data_repository().call("get_actions"):
-		records.append(Dictionary(item).duplicate(true))
+		var record := Dictionary(item).duplicate(true)
+		if menu_config != null and menu_config.has_method("get_rule"):
+			record.merge(Dictionary(menu_config.get_rule(str(record.get("id", "")))), true)
+		records.append(record)
 	return records
+
+
+func _is_office_forbidden(session: GameSession, rule: Dictionary) -> bool:
+	if session == null or session.player_career_state == null:
+		return false
+	var required_office_tags := _to_string_array(rule.get("required_office_tags", rule.get("office_restrictions", [])))
+	if required_office_tags.is_empty():
+		return false
+	var current_tags := Array((session.player_career_state as PlayerCareerState).office_tags)
+	for office_tag in required_office_tags:
+		if current_tags.has(str(office_tag)):
+			return false
+	return true
 
 
 func _is_identity_locked(rule: Dictionary, protagonist: CharacterDefinition) -> bool:
@@ -106,6 +126,10 @@ func _get_disabled_reason(
 		return REASON_NO_VISIT_TARGET
 	if spec.id == "inspect" and protagonist != null and runtime_state.current_city_id != protagonist.city_id:
 		return REASON_WRONG_LOCATION
+	if spec.id == "inspect_subordinates" and visit_targets.is_empty():
+		return str(rule.get("disabled_reason", "暂无可监察属员"))
+	if spec.id == "review_memorials" and protagonist != null and runtime_state.current_city_id != protagonist.city_id:
+		return str(rule.get("disabled_reason", REASON_WRONG_LOCATION))
 	return ""
 
 

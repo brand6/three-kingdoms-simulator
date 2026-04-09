@@ -12,6 +12,7 @@ var trust: int = 0
 var respect: int = 0
 var vigilance: int = 0
 var obligation: int = 0
+var political_role_label: String = ""
 var notes: Array[String] = []
 
 
@@ -27,6 +28,7 @@ static func create(
 	respect_value: int,
 	vigilance_value: int,
 	obligation_value: int,
+	political_role_label_value: String,
 	notes_value: Array[String]
 ) -> Variant:
 	var view_data := new()
@@ -41,5 +43,6 @@ static func create(
 	view_data.respect = respect_value
 	view_data.vigilance = vigilance_value
 	view_data.obligation = obligation_value
+	view_data.political_role_label = political_role_label_value
 	view_data.notes = notes_value.duplicate()
 	return view_data

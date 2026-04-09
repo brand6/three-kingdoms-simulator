@@ -2,6 +2,10 @@ extends RefCounted
 class_name CareerSystem
 
 func evaluate_promotion(session: GameSession, repository: Node, settlement: Dictionary) -> Dictionary:
+	return evaluate_qualification(session, repository, settlement)
+
+
+func evaluate_qualification(session: GameSession, repository: Node, settlement: Dictionary) -> Dictionary:
 	var career_state: PlayerCareerState = session.player_career_state as PlayerCareerState
 	if career_state == null:
 		return _failure_result("任务未达标", {}, "当前无有效仕途状态。")
@@ -25,10 +29,14 @@ func evaluate_promotion(session: GameSession, repository: Node, settlement: Dict
 		return _failure_result("无空缺", {}, "尚无正式任命通知来源。")
 	return {
 		"success": true,
+		"qualification_passed": true,
+		"vacancy_available": true,
 		"failure_label": "",
 		"missing_values": {},
 		"hint": str(rule.success_note),
 		"rule_id": str(rule.id),
+		"vacancy_key": str(rule.vacancy_key),
+		"notification_source_character_id": str(rule.notification_source_character_id),
 		"new_office_id": str(rule.to_office_id),
 	}
 
@@ -43,9 +51,13 @@ func _find_rule_for_office(repository: Node, office_id: String) -> Variant:
 func _failure_result(label: String, missing_values: Dictionary, hint: String) -> Dictionary:
 	return {
 		"success": false,
+		"qualification_passed": false,
+		"vacancy_available": false,
 		"failure_label": label,
 		"missing_values": missing_values.duplicate(true),
 		"hint": hint,
 		"rule_id": "",
+		"vacancy_key": "",
+		"notification_source_character_id": "",
 		"new_office_id": "",
 	}

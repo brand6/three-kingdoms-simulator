@@ -92,6 +92,10 @@ func _run() -> void:
 		_fail("Stable first-month task should grant promotion on the positive path.")
 	if evaluation.new_office_id != "office_zhubu":
 		_fail("Expected promotion target to be office_zhubu, got %s." % evaluation.new_office_id)
+	if evaluation.appointment_result != "appointed":
+		_fail("Positive path should carry appointed appointment_result.")
+	if evaluation.primary_support_lines.is_empty():
+		_fail("Positive path should expose primary support reason lines.")
 	if evaluation.promotion_failure_label != "":
 		_fail("Successful promotion should not keep a failure label, got %s." % evaluation.promotion_failure_label)
 
@@ -110,6 +114,8 @@ func _run() -> void:
 		_fail("Expected month-end settlement to write merit/fame/trust back to runtime state.")
 	if session.player_career_state.current_office_id != "office_zhubu":
 		_fail("Expected career office to update after successful promotion.")
+	if not Array((session.player_career_state as PlayerCareerState).office_tags).has("mid_career"):
+		_fail("Promotion should update office consequence tags for later permission gates.")
 	var office_label := (hud.get_node("MarginContainer/VBoxContainer/MainContent/LeftOverview/LeftOverviewContent/OfficeInfoLabel") as Label).text
 	if office_label != "官职：主簿级辅官":
 		_fail("Expected HUD office label to reflect promoted career office, got %s." % office_label)

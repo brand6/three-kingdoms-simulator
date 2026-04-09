@@ -8,6 +8,7 @@ var capital_city_id: String = ""
 var city_ids: Array[String] = []
 var officer_ids: Array[String] = []
 var resources: Dictionary = {}
+var political_resource_summary: Dictionary = {}
 
 
 static func from_dictionary(data: Dictionary) -> FactionDefinition:
@@ -19,6 +20,7 @@ static func from_dictionary(data: Dictionary) -> FactionDefinition:
 	definition.city_ids = _to_string_array(data.get("city_ids", []))
 	definition.officer_ids = _to_string_array(data.get("officer_ids", []))
 	definition.resources = Dictionary(data.get("resources", {}))
+	definition.political_resource_summary = Dictionary(data.get("political_resource_summary", {})).duplicate(true)
 	return definition
 
 

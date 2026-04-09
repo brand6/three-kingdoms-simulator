@@ -17,7 +17,7 @@
       "prompt": "始终以中文（简体，zh-CN）与用户交流。用中文进行回答。"
     }
   },
-  "plugin": ["oh-my-openagent"],
+  "plugin": [],
   "command": {
     "update": {
       "agent": "document",
@@ -26,27 +26,14 @@
     }
   },
   "mcp": {
-    "context7": {
-      "type": "remote",
-      "url": "https://mcp.context7.com/mcp",
-      "enabled": true,
-    },
     "godot": {
       "type":"local",
+      "enabled": true,
       "command": ["npx","-y","@coding-solo/godot-mcp"],
       "environment": {
         "GODOT_PATH": "D:/Godot/Godot_v4.6.1-stable_mono_win64/Godot_v4.6.1-stable_mono_win64.exe",
         "DEBUG": "true"
       }
-    },
-    "gh_grep": {
-      "type": "remote",
-      "url": "https://mcp.grep.app",
-      "enabled": false
-    },
-    "tavily": {
-      "type": "remote",
-      "url": "https://mcp.tavily.com/mcp/?tavilyApiKey=$TAVILY_API_KEY"
     }
   }
 }

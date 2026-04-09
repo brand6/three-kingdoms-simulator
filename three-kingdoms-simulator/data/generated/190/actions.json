@@ -68,5 +68,33 @@
     "locked_reason": "当前身份不可执行",
     "menu_order": 50,
     "hidden_when_locked": false
+  },
+  {
+    "id": "review_memorials",
+    "display_name": "审阅奏牍",
+    "category_id": "政务",
+    "ap_cost": 1,
+    "energy_delta": -6,
+    "target_type": "none",
+    "effect_summary": "效果: 政务历练 +5，功绩 +2，强化中枢可见度",
+    "required_permission_tags": ["review_memorials"],
+    "allowed_identity_types": ["civil_official"],
+    "locked_reason": "当前身份不可执行",
+    "menu_order": 55,
+    "hidden_when_locked": true
+  },
+  {
+    "id": "inspect_subordinates",
+    "display_name": "察看属员",
+    "category_id": "政务",
+    "ap_cost": 1,
+    "energy_delta": -5,
+    "target_type": "character",
+    "effect_summary": "效果: 了解属员状态，巩固人事掌控与推荐基础",
+    "required_permission_tags": ["inspect_subordinates"],
+    "allowed_identity_types": ["civil_official"],
+    "locked_reason": "当前身份不可执行",
+    "menu_order": 56,
+    "hidden_when_locked": true
   }
 ]

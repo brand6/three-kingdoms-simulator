@@ -12,6 +12,12 @@ var promotion_history: Array[Dictionary] = []
 var last_evaluation_result: Variant = null
 var unlocked_task_tags: Array[String] = []
 var career_flags: Array[String] = []
+var office_tags: Array[String] = []
+var visible_political_panels: Array[String] = []
+var recommendation_power: int = 0
+var candidate_office_tags: Array[String] = []
+var political_risk_level: String = "low"
+var action_permission_tags: Array[String] = []
 
 
 static func create(
@@ -25,7 +31,13 @@ static func create(
 	promotion_history_value: Array[Dictionary] = [],
 	last_evaluation_result_value: Variant = null,
 	unlocked_task_tags_value: Array[String] = [],
-	career_flags_value: Array[String] = []
+	career_flags_value: Array[String] = [],
+	office_tags_value: Array[String] = [],
+	visible_political_panels_value: Array[String] = [],
+	recommendation_power_value: int = 0,
+	candidate_office_tags_value: Array[String] = [],
+	political_risk_level_value: String = "low",
+	action_permission_tags_value: Array[String] = []
 ) -> PlayerCareerState:
 	var state := PlayerCareerState.new()
 	state.character_id = character_id_value
@@ -39,4 +51,10 @@ static func create(
 	state.last_evaluation_result = last_evaluation_result_value
 	state.unlocked_task_tags = unlocked_task_tags_value.duplicate()
 	state.career_flags = career_flags_value.duplicate()
+	state.office_tags = office_tags_value.duplicate()
+	state.visible_political_panels = visible_political_panels_value.duplicate()
+	state.recommendation_power = recommendation_power_value
+	state.candidate_office_tags = candidate_office_tags_value.duplicate()
+	state.political_risk_level = political_risk_level_value
+	state.action_permission_tags = action_permission_tags_value.duplicate()
 	return state

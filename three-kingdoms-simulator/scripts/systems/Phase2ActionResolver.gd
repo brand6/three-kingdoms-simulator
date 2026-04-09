@@ -23,6 +23,10 @@ func execute(
 			return _resolve_rest(runtime_state)
 		"inspect":
 			return _resolve_inspect(runtime_state)
+		"review_memorials":
+			return _resolve_review_memorials(runtime_state)
+		"inspect_subordinates":
+			return _resolve_inspect_subordinates(session, runtime_state, protagonist, target_character)
 		"visit":
 			return _resolve_visit(session, runtime_state, protagonist, target_character)
 		_:
@@ -100,6 +104,63 @@ func _resolve_inspect(runtime_state: RuntimeCharacterState) -> Variant:
 		{},
 		"",
 		"巡察完成，政务历练与功绩提升。"
+	)
+
+
+func _resolve_review_memorials(runtime_state: RuntimeCharacterState) -> Variant:
+	runtime_state.ap -= 1
+	runtime_state.energy -= 6
+	runtime_state.governance_exp += 5
+	runtime_state.merit += 2
+	return ACTION_RESOLUTION_SCRIPT.create(
+		"review_memorials",
+		"审阅奏牍",
+		true,
+		"审阅完成。",
+		"",
+		{"ap": -1, "energy": -6, "governance_exp": 5, "merit": 2},
+		{},
+		"中枢案牍得到梳理，你对幕府政务脉络掌握更清楚。",
+		"审阅奏牍完成，中枢事务可见度提高。"
+	)
+
+
+func _resolve_inspect_subordinates(
+	session: GameSession,
+	runtime_state: RuntimeCharacterState,
+	protagonist: CharacterDefinition,
+	target_character: CharacterDefinition
+) -> Variant:
+	if target_character == null or target_character.id == protagonist.id or target_character.city_id != runtime_state.current_city_id:
+		return ACTION_RESOLUTION_SCRIPT.create(
+			"inspect_subordinates",
+			"行动失败",
+			false,
+			"暂无可监察属员。",
+			target_character.id if target_character != null else "",
+			{},
+			{},
+			"需先在同地找到可监察的属员对象。",
+			"察看属员未能执行。"
+		)
+	runtime_state.ap -= 1
+	runtime_state.energy -= 5
+	runtime_state.strategy_exp += 2
+	var relation_key := "%s->%s" % [protagonist.id, target_character.id]
+	var relation = session.get_relation_state(relation_key)
+	if relation != null:
+		relation.trust += 2
+		relation.vigilance -= 1
+	return ACTION_RESOLUTION_SCRIPT.create(
+		"inspect_subordinates",
+		"察看属员",
+		true,
+		"监察完成。",
+		target_character.id,
+		{"ap": -1, "energy": -5, "strategy_exp": 2},
+		{"trust": 2, "vigilance": -1} if relation != null else {},
+		"你已掌握属员近况，可为后续人事建议提供依据。",
+		"察看属员完成，人事掌控略有提升。"
 	)
 
 

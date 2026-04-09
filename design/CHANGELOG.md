@@ -3,14 +3,18 @@
 ## 2026-04-08
 
 ### 新增文件
+- `design/UIUX/中部三摘要修改方案 v1.md`：明确主界面中部三摘要区的职责、信息边界、状态分层与显示原则，将其从静态说明卡调整为动态提醒卡。
+- `design/UIUX/中部三摘要文案模板 v1.md`：为关键关系、势力/派系、家族/士族三摘要提供统一文风、句式模板、状态样本与禁用写法，便于后续数据驱动生成与 Godot 原型联调。
 - `design/总纲/Phase 3 仕途、势力与可解释政治 详细规划 v1.md`：Phase 3 正式 GDD 章节稿，定义单角色视角下的仕途推进、势力信息可见性、推荐 / 反对链、派系支持、任命解释、官职权限变化与月末政治结算范围。
 - `design/数据/Phase 3 政治与任命数据字段设计 v1.md`：Phase 3 配套字段设计稿，冻结推荐规则、反对规则、派系块、政治支持快照、候选评估、原因行与月末政治结果字段。
 - `design/原型与实现/Phase 3 Godot 实现映射表 v1.md`：将 Phase 3 的政治设计内容映射到 Godot 模块、Resource、运行时状态、UI 面板、月度时序与验收点。
 - `design/数据/Phase 3 最小数据录入清单 v1.md`：明确 Phase 3 为跑通最小 explainable-politics 闭环，哪些政治规则、世界样本、竞争样本与成功 / 失败月报样本必须先录。
 - `design/剧情与样本/Phase 3 首批政治样本名单 v1.md`：将 Phase 3 首批推荐规则、反对规则、派系块、关键人物、竞争样本、任务来源样本与成功 / 失败月报样本压缩成可直接录入的名单，并冻结荀彧—曹操势力内部政治圈的最小样本范围。
- - `design/数据/Phase 3 ID 与样本命名冻结表 v1.md`：冻结 Phase 3 首批样本 ID 命名、交叉引用与支撑占位 ID，解决命名漂移、ID 不统一与样本条目未冻结的问题，供 Godot 原型数据录入直接使用。
+  - `design/数据/Phase 3 ID 与样本命名冻结表 v1.md`：冻结 Phase 3 首批样本 ID 命名、交叉引用与支撑占位 ID，解决命名漂移、ID 不统一与样本条目未冻结的问题，供 Godot 原型数据录入直接使用。
 
 ### 索引更新
+- 更新 `design/Agent.md`：补充中部三摘要修改方案与文案模板的说明，并将其纳入 UI 检索路径。
+- 更新 `design/machine_index.json`：新增两份 UIUX 文档索引，并补充 `hud_summary_cards` 检索路线。
 - 更新 `design/Agent.md`：补充 Phase 3 最小数据录入清单与 `场景 I：Phase 3 数据录入` 检索路径。
 - 更新 `design/machine_index.json`：新增 Phase 3 最小数据录入清单索引，并补充 `scenario_data_entry`、`phase_3_explainable_politics`、`phase_3_data_entry` 检索路线。
 - 更新 `design/Agent.md`：补充 `design/剧情与样本/Phase 3 首批政治样本名单 v1.md` 的说明，并将其纳入 `场景 I：Phase 3 数据录入` 路径。

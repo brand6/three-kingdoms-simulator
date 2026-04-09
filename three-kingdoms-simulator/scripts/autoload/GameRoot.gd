@@ -10,6 +10,9 @@ const CHARACTER_PROFILE_VIEW_DATA_SCRIPT := preload("res://scripts/runtime/Chara
 const ACTION_RESOLUTION_SCRIPT := preload("res://scripts/runtime/ActionResolution.gd")
 const TASK_SYSTEM_SCRIPT := preload("res://scripts/systems/TaskSystem.gd")
 const CAREER_SYSTEM_SCRIPT := preload("res://scripts/systems/CareerSystem.gd")
+const POLITICAL_SYSTEM_SCRIPT := preload("res://scripts/systems/PoliticalSystem.gd")
+const FACTION_SYSTEM_SCRIPT := preload("res://scripts/systems/FactionSystem.gd")
+const APPOINTMENT_RESOLVER_SCRIPT := preload("res://scripts/systems/AppointmentResolver.gd")
 const MONTHLY_EVALUATION_RESULT_SCRIPT := preload("res://scripts/runtime/MonthlyEvaluationResult.gd")
 
 var current_session: GameSession
@@ -19,6 +22,9 @@ var _phase2_action_catalog: Variant = PHASE2_ACTION_CATALOG_SCRIPT.new()
 var _phase2_action_resolver: Variant = PHASE2_ACTION_RESOLVER_SCRIPT.new()
 var _task_system: Variant = TASK_SYSTEM_SCRIPT.new()
 var _career_system: Variant = CAREER_SYSTEM_SCRIPT.new()
+var _political_system: Variant = POLITICAL_SYSTEM_SCRIPT.new()
+var _faction_system: Variant = FACTION_SYSTEM_SCRIPT.new()
+var _appointment_resolver: Variant = APPOINTMENT_RESOLVER_SCRIPT.new()
 var _latest_action_resolution: Variant = null
 
 
@@ -68,7 +74,7 @@ func get_available_phase2_actions() -> Array:
 	var protagonist := _data_repository().call("get_character", current_session.protagonist_id) as CharacterDefinition
 	var runtime_state := current_session.get_character_state(current_session.protagonist_id)
 	var visit_targets := _get_visit_targets(protagonist, runtime_state)
-	return _phase2_action_catalog.get_available_actions(protagonist, runtime_state, visit_targets)
+	return _phase2_action_catalog.get_available_actions(current_session, protagonist, runtime_state, visit_targets)
 
 
 func get_phase2_action_categories() -> Array:
@@ -136,8 +142,10 @@ func get_character_profile_view_data(character_id: String) -> Variant:
 	var faction = _data_repository().call("get_faction", character.faction_id)
 	var city = _data_repository().call("get_city", character.city_id)
 	var notes: Array[String] = []
+	var political_role_label := _political_role_label(character.id)
 	notes.append("当前所在地：%s" % str(city.name if city != null else "未知"))
 	notes.append("与主角关系可直接用于拜访、观察与后续政治判断。")
+	notes.append("政治角色：%s" % political_role_label)
 	return CHARACTER_PROFILE_VIEW_DATA_SCRIPT.create(
 		character.id,
 		character.name,
@@ -150,8 +158,102 @@ func get_character_profile_view_data(character_id: String) -> Variant:
 		int(relation.respect if relation != null else 0),
 		int(relation.vigilance if relation != null else 0),
 		int(relation.obligation if relation != null else 0),
+		political_role_label,
 		notes
 	)
+
+
+func get_hud_political_summary() -> Dictionary:
+	if current_session == null:
+		return {}
+	var repository := _data_repository()
+	var snapshot = _current_political_snapshot()
+	var recommender_name := "暂无明确推荐人"
+	var blocker_name := "暂无明确阻力"
+	var opportunity_text := "当前机会：先领受一项政治来源任务。"
+	if snapshot != null:
+		if not snapshot.primary_recommender_ids.is_empty():
+			recommender_name = "%s 愿意继续出面。" % _character_name(snapshot.primary_recommender_ids[0])
+		if not snapshot.primary_opposer_ids.is_empty():
+			blocker_name = "%s 仍在观望甚至反对。" % _character_name(snapshot.primary_opposer_ids[0])
+		elif not snapshot.blocker_tags.is_empty():
+			blocker_name = "主要阻力：%s" % str(snapshot.blocker_tags[0])
+		if not snapshot.opportunity_tags.is_empty():
+			opportunity_text = "当前机会：%s" % _localized_opportunity(str(snapshot.opportunity_tags[0]))
+		elif not snapshot.qualification_tags.is_empty():
+			opportunity_text = "资格短板：尚需继续稳固 %s。" % str(snapshot.qualification_tags[0])
+	return {
+		"recommender": recommender_name,
+		"blocker": blocker_name,
+		"opportunity": opportunity_text,
+	}
+
+
+func get_faction_overview_payload() -> Dictionary:
+	if current_session == null:
+		return {}
+	var protagonist := _data_repository().call("get_character", current_session.protagonist_id) as CharacterDefinition
+	var faction_id := str(protagonist.faction_id if protagonist != null else "")
+	var snapshot: Variant = _current_political_snapshot()
+	var overview: Dictionary = _faction_system.get_faction_overview(faction_id, current_session)
+	var bloc_rows: Array[Dictionary] = _faction_system.get_bloc_rows(faction_id, current_session, snapshot)
+	var resource_summary: Dictionary = _faction_system.get_resource_summary(faction_id)
+	var city_names: Array[String] = []
+	var faction = _data_repository().call("get_faction", faction_id) as FactionDefinition
+	if faction != null:
+		for city_id in faction.city_ids:
+			city_names.append(_city_name(str(city_id)))
+	return {
+		"overview": overview,
+		"bloc_rows": bloc_rows,
+		"resource_summary": resource_summary,
+		"major_officer_ids": Array(overview.get("major_officer_ids", [])).duplicate(),
+		"city_names": city_names,
+		"political_summary": get_hud_political_summary(),
+	}
+
+
+func _current_political_snapshot() -> Variant:
+	if current_session == null:
+		return null
+	if current_session.current_month_political_snapshot != null:
+		return current_session.current_month_political_snapshot
+	if current_session.current_month_task != null:
+		return _political_system.build_snapshot(current_session, _data_repository(), {"task_result": str((current_session.current_month_task as MonthlyTaskState).status)})
+	return null
+
+
+func _character_name(character_id: String) -> String:
+	var character = _data_repository().call("get_character", character_id) as CharacterDefinition
+	return str(character.name if character != null else character_id)
+
+
+func _city_name(city_id: String) -> String:
+	var city = _data_repository().call("get_city", city_id) as CityDefinition
+	return str(city.name if city != null else city_id)
+
+
+func _localized_opportunity(tag: String) -> String:
+	match tag:
+		"relation_backing":
+			return "关系请求已形成背书，可继续巩固请求方。"
+		"direct_order_visibility":
+			return "主公直接交办，当前可见度已经打开。"
+		"vacancy_open":
+			return "当前确有空缺，可争取本月任命。"
+		_:
+			return tag
+
+
+func _political_role_label(character_id: String) -> String:
+	var snapshot = _current_political_snapshot()
+	if snapshot == null:
+		return "观察者"
+	if snapshot.primary_recommender_ids.has(character_id):
+		return "推荐人"
+	if snapshot.primary_opposer_ids.has(character_id):
+		return "阻力来源"
+	return "观察者"
 
 
 func execute_phase2_action(action_id: String, target_character_id: String = "") -> Variant:
@@ -257,25 +359,38 @@ func _process_month_end_evaluation() -> void:
 		career_state.current_fame = runtime_state.fame if runtime_state != null else career_state.current_fame
 		career_state.current_trust = runtime_state.trust if runtime_state != null else career_state.current_trust
 		career_state.months_in_current_office += 1
-	var promotion_result: Dictionary = _career_system.evaluate_promotion(current_session, _data_repository(), settlement)
+	var qualification_result: Dictionary = _career_system.evaluate_qualification(current_session, _data_repository(), settlement)
+	var political_snapshot: PoliticalSupportSnapshot = _political_system.finalize_month_snapshot(current_session, _data_repository(), settlement)
+	var appointment_result: Dictionary = _appointment_resolver.evaluate_month_end(current_session, _data_repository(), _faction_system, political_snapshot, qualification_result, settlement)
+	current_session.current_month_candidate_evaluations = Array(appointment_result.get("candidate_evaluations", [])).duplicate(true)
+	var player_evaluation: AppointmentCandidateEvaluation = appointment_result.get("player_evaluation") as AppointmentCandidateEvaluation
 	var old_office_id := career_state.current_office_id if career_state != null else ""
 	var new_office_id := old_office_id
 	var office_changed := false
-	if bool(promotion_result.get("success", false)) and career_state != null:
-		new_office_id = str(promotion_result.get("new_office_id", old_office_id))
+	if player_evaluation != null and str(player_evaluation.final_decision) == "appointed" and career_state != null:
+		new_office_id = str(qualification_result.get("new_office_id", old_office_id))
 		office_changed = new_office_id != old_office_id
 		career_state.current_office_id = new_office_id
 		career_state.months_in_current_office = 0
 		var new_office = _data_repository().call("get_office", new_office_id)
 		career_state.office_tier = int(new_office.tier if new_office != null else career_state.office_tier)
 		career_state.unlocked_task_tags = Array(new_office.unlock_task_tags).duplicate() if new_office != null else career_state.unlocked_task_tags
+		career_state.office_tags = Array(new_office.office_tags).duplicate() if new_office != null else career_state.office_tags
+		career_state.visible_political_panels = Array(new_office.visible_political_panels).duplicate() if new_office != null else career_state.visible_political_panels
+		career_state.recommendation_power = int(new_office.recommendation_power if new_office != null else career_state.recommendation_power)
+		career_state.candidate_office_tags = Array(new_office.candidate_office_tags).duplicate() if new_office != null else career_state.candidate_office_tags
+		career_state.political_risk_level = str(new_office.political_risk_level if new_office != null else career_state.political_risk_level)
+		career_state.action_permission_tags = Array(new_office.permission_tags).duplicate() if new_office != null else career_state.action_permission_tags
 	var summary_lines: Array[String] = []
 	for line in Array(settlement.get("summary_lines", [])):
 		summary_lines.append(str(line))
 	if office_changed:
 		summary_lines.append("任命结果：已擢升至 %s" % new_office_id)
 	else:
-		summary_lines.append("任命结果：%s" % str(promotion_result.get("failure_label", "")))
+		summary_lines.append("任命结果：%s" % str(player_evaluation.final_decision if player_evaluation != null else qualification_result.get("failure_label", "")))
+	var visible_reason_lines: Array = Array(appointment_result.get("visible_reason_lines", []))
+	var support_lines: Array[String] = Array(appointment_result.get("primary_support_lines", []))
+	var blocker_lines: Array[String] = Array(appointment_result.get("primary_blocker_lines", []))
 	current_session.set_last_month_evaluation(MONTHLY_EVALUATION_RESULT_SCRIPT.create(
 		"%d-%02d" % [current_session.current_year, current_session.current_month],
 		current_session.protagonist_id,
@@ -286,15 +401,24 @@ func _process_month_end_evaluation() -> void:
 		office_changed,
 		old_office_id,
 		new_office_id,
-		str(promotion_result.get("rule_id", "")),
+		str(qualification_result.get("rule_id", "")),
 		str(task_template.name if task_template != null else task_state.task_template_id if task_state != null else "—"),
 		int(progress_snapshot.current_value if progress_snapshot != null else 0),
 		int(progress_snapshot.target_value if progress_snapshot != null else 0),
 		int(progress_snapshot.bonus_value if progress_snapshot != null else 0),
 		summary_lines,
-		str(promotion_result.get("hint", "")),
-		Dictionary(promotion_result.get("missing_values", {})).duplicate(true),
-		str(promotion_result.get("failure_label", ""))
+		str(player_evaluation.next_goal_hint if player_evaluation != null else qualification_result.get("hint", "")),
+		Dictionary(qualification_result.get("missing_values", {})).duplicate(true),
+		str(qualification_result.get("failure_label", "")),
+		str(appointment_result.get("appointment_result", "pending")),
+		Array(appointment_result.get("candidate_evaluations", [])).duplicate(true),
+		support_lines,
+		blocker_lines,
+		str(appointment_result.get("missed_opportunity_note", "")),
+		str(appointment_result.get("next_month_political_hint", "")),
+		str(appointment_result.get("primary_support_identity", "")),
+		str(appointment_result.get("primary_blocker_identity", "")),
+		str(appointment_result.get("political_forces_summary", ""))
 	))
 
 

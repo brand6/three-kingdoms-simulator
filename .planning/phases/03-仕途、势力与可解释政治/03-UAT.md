@@ -7,7 +7,7 @@ source:
   - .planning/phases/03-仕途、势力与可解释政治/03-06-SUMMARY.md
   - .planning/phases/03-仕途、势力与可解释政治/03-07-SUMMARY.md
 started: 2026-04-08T00:00:00Z
-updated: 2026-04-09T00:30:00Z
+updated: 2026-04-09T01:25:00Z
 ---
 
 ## Current Test
@@ -98,3 +98,31 @@ blocked: 0
     - "为 FactionPanel 和 CharacterProfilePanel 补齐不透明 popup 配置"
     - "复用或上收统一的 PopupPanel 不透明 StyleBox 到共享主题"
   debug_session: ".planning/debug/opaque-faction-and-character-popups.md"
+
+- truth: "月初任务卡中的来源应显示权力机构（如 尚书台 / 军功集团 / 宗族长老会），请求方应显示具体下达任务的人，且整体文字排版需要进一步优化边距与可读性。"
+  status: failed
+  reason: "User reported: 任务信息显示不对:\n1、来源应该显示的是：尚书台（势力的权力机构）/军功集团（派系的权力机构）/宗族长老会（家族的权力机构）\n2、请求方显示的是：具体下达任务的人\n3、另外重新排版一下任务的文字，如边距等"
+  severity: major
+  test: 1
+  root_cause: "03-08 把任务卡来源设计成了‘来源类型 + 来源对象’而不是独立的权力机构字段；当前 schema、运行时快照和生成 payload 都没有 authority institution 字段，TaskSelectPanel 还把 request_character_id 同时用于来源与请求方渲染，导致来源/请求方语义混淆。与此同时，phase21_monthly_hud_regression.gd 只校验是否有来源/请求方文案，没有锁定来源必须是机构、请求方必须是具体下达人，也未覆盖新的排版质量要求。"
+  artifacts:
+    - path: "three-kingdoms-simulator/scripts/ui/TaskSelectPanel.gd"
+      issue: "header 渲染把 request_character_id 同时用于来源对象与请求方，且当前边距/排版仅为基础结构化版本"
+    - path: "three-kingdoms-simulator/scripts/systems/TaskSystem.gd"
+      issue: "候选任务 payload 未提供独立来源机构字段"
+    - path: "three-kingdoms-simulator/scripts/runtime/MonthlyTaskState.gd"
+      issue: "冻结的来源快照缺少来源机构字段"
+    - path: "three-kingdoms-simulator/scripts/data/resources/TaskTemplateData.gd"
+      issue: "任务模板 schema 没有 authority institution 字段"
+    - path: "three-kingdoms-simulator/scripts/autoload/DataRepository.gd"
+      issue: "数据加载层未加载来源机构字段"
+    - path: "three-kingdoms-simulator/data/generated/190/task_templates.json"
+      issue: "生成数据本身缺少机构名，只提供人物与摘要"
+    - path: "three-kingdoms-simulator/scripts/tests/phase21_monthly_hud_regression.gd"
+      issue: "回归测试未锁定来源机构/请求方语义与新版排版质量"
+  missing:
+    - "增加独立的来源机构字段，并在 schema、数据加载、运行时快照、任务 payload 中贯通"
+    - "明确区分来源机构与请求方（具体下达人）的映射，不再复用 request_character_id"
+    - "更新 TaskSelectPanel 以来源机构 + 请求方正确渲染 header，并优化卡片边距/排版"
+    - "补充回归测试，锁定机构名、请求方语义及新版文字排版契约"
+  debug_session: ".planning/debug/task-card-source-requester-layout.md"
