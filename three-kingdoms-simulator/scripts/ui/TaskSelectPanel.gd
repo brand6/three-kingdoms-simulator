@@ -17,6 +17,10 @@ const CARD_TEXT_NORMAL := Color(0.200, 0.180, 0.160, 1.0)
 const CARD_TEXT_SELECTED := Color(0.258, 0.149, 0.055, 1.0)
 const TAG_OPPORTUNITY := Color(0.239, 0.467, 0.286, 1.0)
 const TAG_RISK := Color(0.659, 0.212, 0.180, 1.0)
+const CARD_INSET_X := 20
+const CARD_INSET_Y := 16
+const CARD_CONTENT_GAP := 8
+const CARD_HEADER_GAP := 16
 
 @onready var _title_label: Label = get_node("PanelMargin/PanelContent/TitleLabel")
 @onready var _gate_label: Label = get_node("PanelMargin/PanelContent/GateLabel")
@@ -26,6 +30,7 @@ const TAG_RISK := Color(0.659, 0.212, 0.180, 1.0)
 
 var _candidates: Array = []
 var _selected_index: int = -1
+var _card_height_refresh_queued := false
 
 
 func _ready() -> void:
@@ -72,10 +77,12 @@ func _render_cards(repository: Node) -> void:
 		button.name = "TaskCard%d" % index
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.custom_minimum_size = Vector2(0, 152)
 		button.text = ""
 		button.focus_mode = Control.FOCUS_NONE
-		button.add_child(_build_card_content(Dictionary(_candidates[index]), repository, index == _selected_index))
+		var card_content := _build_card_content(Dictionary(_candidates[index]), repository, index == _selected_index)
+		button.add_child(card_content)
+		button.custom_minimum_size = card_content.get_combined_minimum_size()
+		button.resized.connect(_queue_card_height_refresh)
 		button.pressed.connect(_on_card_pressed.bind(index, repository))
 		_apply_card_style(button, index == _selected_index)
 		_card_list.add_child(button)
@@ -86,23 +93,32 @@ func _render_selected_reward(_repository: Node) -> void:
 	_selected_reward_label.visible = false
 
 
-func _build_card_content(candidate: Dictionary, repository: Node, selected: bool) -> VBoxContainer:
+func _build_card_content(candidate: Dictionary, repository: Node, selected: bool) -> MarginContainer:
+	var padding := MarginContainer.new()
+	padding.name = "CardPadding"
+	padding.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	padding.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	padding.offset_left = 0
+	padding.offset_top = 0
+	padding.offset_right = 0
+	padding.offset_bottom = 0
+	padding.add_theme_constant_override("margin_left", CARD_INSET_X)
+	padding.add_theme_constant_override("margin_top", CARD_INSET_Y)
+	padding.add_theme_constant_override("margin_right", CARD_INSET_X)
+	padding.add_theme_constant_override("margin_bottom", CARD_INSET_Y)
+
 	var content := VBoxContainer.new()
 	content.name = "CardContent"
 	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	content.offset_left = 0
-	content.offset_top = 0
-	content.offset_right = 0
-	content.offset_bottom = 0
 	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content.add_theme_constant_override("separation", 8)
+	content.add_theme_constant_override("separation", CARD_CONTENT_GAP)
+	padding.add_child(content)
 
 	var header_row := HBoxContainer.new()
 	header_row.name = "HeaderLabel"
 	header_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	header_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header_row.add_theme_constant_override("separation", 24)
+	header_row.add_theme_constant_override("separation", CARD_HEADER_GAP)
 	content.add_child(header_row)
 
 	var font_color := CARD_TEXT_SELECTED if selected else CARD_TEXT_NORMAL
@@ -127,7 +143,7 @@ func _build_card_content(candidate: Dictionary, repository: Node, selected: bool
 	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.add_theme_color_override("default_color", font_color)
 	content.add_child(body)
-	return content
+	return padding
 
 
 
@@ -145,12 +161,14 @@ func _card_header_segments(candidate: Dictionary, repository: Node) -> Array[Dic
 		{
 			"name": "SourceLabel",
 			"text": "来源：%s" % institution_name,
-			"alignment": HORIZONTAL_ALIGNMENT_LEFT,
+			"size_flags_horizontal": Control.SIZE_EXPAND_FILL,
+			"alignment": HORIZONTAL_ALIGNMENT_CENTER,
 		},
 		{
 			"name": "RequesterLabel",
 			"text": "请求方：%s" % requester_name,
-			"alignment": HORIZONTAL_ALIGNMENT_LEFT,
+			"size_flags_horizontal": Control.SIZE_EXPAND_FILL,
+			"alignment": HORIZONTAL_ALIGNMENT_RIGHT,
 		},
 	]
 
@@ -256,6 +274,49 @@ func _refresh_popup_layout() -> void:
 	max_size = Vector2i(PANEL_MIN_WIDTH, PANEL_MIN_HEIGHT)
 	size = Vector2i(PANEL_MIN_WIDTH, PANEL_MIN_HEIGHT)
 	popup_centered(size)
+	_queue_card_height_refresh()
+
+
+func _queue_card_height_refresh() -> void:
+	if _card_height_refresh_queued:
+		return
+	_card_height_refresh_queued = true
+	call_deferred("_refresh_card_minimum_heights")
+
+
+func _refresh_card_minimum_heights() -> void:
+	_card_height_refresh_queued = false
+	for child in _card_list.get_children():
+		var card := child as Button
+		if card == null:
+			continue
+		_refresh_single_card_minimum_height(card)
+	_card_list.queue_sort()
+
+
+func _refresh_single_card_minimum_height(card: Button) -> void:
+	var padding := card.get_node_or_null("CardPadding") as MarginContainer
+	if padding == null:
+		return
+	var content := padding.get_node_or_null("CardContent") as VBoxContainer
+	if content == null:
+		return
+	var header_row := content.get_node_or_null("HeaderLabel") as HBoxContainer
+	var body := content.get_node_or_null("BodyLabel") as RichTextLabel
+	if header_row == null or body == null:
+		return
+	var body_height := float(body.get_content_height())
+	if body_height <= 0.0:
+		body_height = body.get_combined_minimum_size().y
+	var target_height := float(CARD_INSET_Y * 2)
+	target_height += float(content.get_theme_constant("separation"))
+	target_height += header_row.get_combined_minimum_size().y
+	target_height += body_height
+	target_height = max(target_height, padding.get_combined_minimum_size().y)
+	target_height = ceil(target_height)
+	if absf(card.custom_minimum_size.y - target_height) <= 0.5:
+		return
+	card.custom_minimum_size = Vector2(0.0, target_height)
 
 
 func _apply_card_style(button: Button, selected: bool) -> void:
@@ -283,10 +344,10 @@ func _build_card_style(background: Color, border: Color, border_width: int) -> S
 	style.corner_radius_top_right = 8
 	style.corner_radius_bottom_right = 8
 	style.corner_radius_bottom_left = 8
-	style.content_margin_left = 20
-	style.content_margin_top = 16
-	style.content_margin_right = 20
-	style.content_margin_bottom = 16
+	style.content_margin_left = CARD_INSET_X
+	style.content_margin_top = CARD_INSET_Y
+	style.content_margin_right = CARD_INSET_X
+	style.content_margin_bottom = CARD_INSET_Y
 	return style
 
 

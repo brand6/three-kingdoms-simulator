@@ -230,7 +230,8 @@ func _first_task_card_text(picker: Node) -> String:
 		return ""
 	var first_card := container.get_child(0)
 	if first_card is BaseButton:
-		var content := first_card.get_node_or_null("CardContent")
+		var content_root := first_card.get_node_or_null("CardPadding")
+		var content := content_root.get_node_or_null("CardContent") if content_root != null else first_card.get_node_or_null("CardContent")
 		if content != null:
 			var parts: Array[String] = []
 			var header_node := content.get_node_or_null("HeaderLabel")
@@ -271,8 +272,6 @@ func _assert_card_readability_contract(picker: Node) -> void:
 	var first_card := container.get_child(0) as Button
 	if first_card == null:
 		_fail("First task card should be a Button.")
-	if first_card.custom_minimum_size.y < 148.0:
-		_fail("Task card should use a roomier minimum height for readable scanning.")
 	var normal_style := first_card.get_theme_stylebox("normal")
 	if normal_style == null:
 		_fail("Task card should expose a normal stylebox for spacing checks.")
@@ -280,14 +279,42 @@ func _assert_card_readability_contract(picker: Node) -> void:
 		_fail("Task card should use stronger horizontal content margins.")
 	if normal_style.content_margin_top < 16.0 or normal_style.content_margin_bottom < 16.0:
 		_fail("Task card should use stronger vertical content margins.")
-	var content := first_card.get_node_or_null("CardContent") as VBoxContainer
+	var padding := first_card.get_node_or_null("CardPadding") as MarginContainer
+	if padding == null:
+		_fail("Task card should expose a dedicated inner padding container.")
+	if padding.get_theme_constant("margin_left") < 20 or padding.get_theme_constant("margin_right") < 20:
+		_fail("Task card inner padding should enforce readable horizontal breathing room.")
+	if padding.get_theme_constant("margin_top") < 16 or padding.get_theme_constant("margin_bottom") < 16:
+		_fail("Task card inner padding should enforce readable vertical breathing room.")
+	var content := padding.get_node_or_null("CardContent") as VBoxContainer
 	if content == null:
 		_fail("Task card should still expose the content container for layout checks.")
 	var header_row := content.get_node_or_null("HeaderLabel") as HBoxContainer
 	if header_row == null:
 		_fail("Task card should render the header as a dedicated row container.")
-	if header_row.get_theme_constant("separation") < 20:
+	if header_row.get_theme_constant("separation") < 12:
 		_fail("Task card header row should visibly separate title, source, and requester blocks.")
+	var title_label := header_row.get_node_or_null("TitleLabel") as Label
+	var source_label := header_row.get_node_or_null("SourceLabel") as Label
+	var requester_label := header_row.get_node_or_null("RequesterLabel") as Label
+	if title_label == null or source_label == null or requester_label == null:
+		_fail("Task card header should expose title, source, and requester labels explicitly.")
+	if title_label.size_flags_horizontal != Control.SIZE_EXPAND_FILL or source_label.size_flags_horizontal != Control.SIZE_EXPAND_FILL or requester_label.size_flags_horizontal != Control.SIZE_EXPAND_FILL:
+		_fail("Task card header columns should all expand so the three title blocks distribute evenly.")
+	if requester_label.horizontal_alignment != HORIZONTAL_ALIGNMENT_RIGHT:
+		_fail("Task card requester column should align to the right edge within its third.")
+	var body := content.get_node_or_null("BodyLabel") as RichTextLabel
+	if body == null:
+		_fail("Task card should keep the rich-text body for multiline sizing checks.")
+	var body_height := float(body.get_content_height())
+	if body_height <= 0.0:
+		body_height = body.get_combined_minimum_size().y
+	var expected_min_height := float(padding.get_theme_constant("margin_top") + padding.get_theme_constant("margin_bottom"))
+	expected_min_height += float(content.get_theme_constant("separation"))
+	expected_min_height += header_row.get_combined_minimum_size().y
+	expected_min_height += body_height
+	if float(first_card.size.y) + 1.0 < expected_min_height:
+		_fail("Task card height should expand to fit wrapped multiline body content.")
 
 
 func _fail(message: String) -> void:
