@@ -5,3 +5,4 @@
 - When a command says to spawn a subagent, prefer a matching custom agent from `.github/agents`.
 - Do not apply GSD workflows unless the user explicitly asks for them.
 - After completing any `gsd-*` command (or any deliverable it triggers: feature, bug fix, tests, docs, etc.), ALWAYS: (1) offer the user the next step by prompting via `ask_user`; repeat this feedback loop until the user explicitly indicates they are done.
+- 所有 GSD agents 与用户交流时请使用中文（简体，zh-CN）。

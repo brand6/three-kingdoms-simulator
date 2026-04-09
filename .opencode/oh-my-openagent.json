@@ -1,7 +1,0 @@
-{
-  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-openagent.schema.json",
-  "agents": {
-    "sisyphus": { "model": "github-copilot/gpt-5.4" }
-    },
-  "note": "自动添加的 oh-my-openagent 插件配置。根据需要修改 agents 配置和 fallback 模型链。"
-}
