@@ -96,16 +96,25 @@ func _build_card_content(candidate: Dictionary, repository: Node, selected: bool
 	content.offset_right = 0
 	content.offset_bottom = 0
 	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	content.add_theme_constant_override("separation", 10)
+	content.add_theme_constant_override("separation", 8)
 
-	var header := Label.new()
-	header.name = "HeaderLabel"
-	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	header.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	header.text = _card_header_text(candidate, repository)
-	header.add_theme_color_override("font_color", CARD_TEXT_SELECTED if selected else CARD_TEXT_NORMAL)
-	content.add_child(header)
+	var header_row := HBoxContainer.new()
+	header_row.name = "HeaderLabel"
+	header_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header_row.add_theme_constant_override("separation", 24)
+	content.add_child(header_row)
+
+	var font_color := CARD_TEXT_SELECTED if selected else CARD_TEXT_NORMAL
+	for header_meta in _card_header_segments(candidate, repository):
+		var header_label := Label.new()
+		header_label.name = str(header_meta.get("name", "HeaderSegment"))
+		header_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		header_label.size_flags_horizontal = int(header_meta.get("size_flags_horizontal", 0))
+		header_label.horizontal_alignment = int(header_meta.get("alignment", HORIZONTAL_ALIGNMENT_LEFT))
+		header_label.text = str(header_meta.get("text", ""))
+		header_label.add_theme_color_override("font_color", font_color)
+		header_row.add_child(header_label)
 
 	var body := RichTextLabel.new()
 	body.name = "BodyLabel"
@@ -114,26 +123,73 @@ func _build_card_content(candidate: Dictionary, repository: Node, selected: bool
 	body.fit_content = true
 	body.scroll_active = false
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	body.bbcode_text = _card_body_text(candidate)
 	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	body.add_theme_color_override("default_color", CARD_TEXT_SELECTED if selected else CARD_TEXT_NORMAL)
-	body.text = _card_body_text(candidate)
+	body.add_theme_color_override("default_color", font_color)
 	content.add_child(body)
 	return content
 
 
-func _card_header_text(candidate: Dictionary, repository: Node) -> String:
+
+func _card_header_segments(candidate: Dictionary, repository: Node) -> Array[Dictionary]:
 	var task_name := str(candidate.get("name", "—"))
 	var requester_name := _requester_text(candidate, repository)
 	var institution_name := _institution_text(candidate)
-	return "%s｜来源：%s｜请求方：%s" % [task_name, institution_name, requester_name]
+	return [
+		{
+			"name": "TitleLabel",
+			"text": task_name,
+			"size_flags_horizontal": Control.SIZE_EXPAND_FILL,
+			"alignment": HORIZONTAL_ALIGNMENT_LEFT,
+		},
+		{
+			"name": "SourceLabel",
+			"text": "来源：%s" % institution_name,
+			"alignment": HORIZONTAL_ALIGNMENT_LEFT,
+		},
+		{
+			"name": "RequesterLabel",
+			"text": "请求方：%s" % requester_name,
+			"alignment": HORIZONTAL_ALIGNMENT_LEFT,
+		},
+	]
+
+
+func _card_header_text(candidate: Dictionary, repository: Node) -> String:
+	var segments: Array[String] = []
+	for segment in _card_header_segments(candidate, repository):
+		segments.append(str(segment.get("text", "")).strip_edges())
+	return "    ".join(segments)
 
 
 func _card_body_text(candidate: Dictionary) -> String:
 	var lines: Array[String] = []
-	lines.append("目标：%s" % str(candidate.get("description", "")))
+	lines.append("目标：%s" % _normalize_card_text(str(candidate.get("description", "")), "—"))
 	lines.append("预计奖励：%s" % _reward_text(Dictionary(candidate.get("base_rewards", {}))))
 	lines.append(_political_tags_text(candidate))
 	return "\n".join(lines)
+
+
+func _normalize_card_text(value: String, fallback: String = "") -> String:
+	var normalized_lines: Array[String] = []
+	var previous_blank := false
+	for raw_line in value.replace("\r\n", "\n").split("\n", false):
+		var line := raw_line.strip_edges()
+		if line.is_empty():
+			if previous_blank:
+				continue
+			previous_blank = true
+			normalized_lines.append("")
+			continue
+		previous_blank = false
+		normalized_lines.append(line)
+	while not normalized_lines.is_empty() and normalized_lines[0].is_empty():
+		normalized_lines.remove_at(0)
+	while not normalized_lines.is_empty() and normalized_lines[normalized_lines.size() - 1].is_empty():
+		normalized_lines.remove_at(normalized_lines.size() - 1)
+	if normalized_lines.is_empty():
+		return fallback
+	return "\n".join(normalized_lines)
 
 
 func _resolve_character_name(repository: Node, character_id: String) -> String:
