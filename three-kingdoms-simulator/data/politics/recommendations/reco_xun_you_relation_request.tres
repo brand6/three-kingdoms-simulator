@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="RecommendationRuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/RecommendationRuleData.gd" id="1_rule"]
+
+[resource]
+script = ExtResource("1_rule")
+id = "reco_xun_you_relation_request"
+source_type = "relation_request"
+trigger_phase = "month_end"
+target_scope = "player"
+relation_threshold = 20
+trust_threshold = 20
+merit_threshold = 8
+bloc_filter_tags = Array[String](["personnel_track"])
+support_delta = 5
+reason_text_key = "xun_you_relation_request"
+priority = 80
+sort_order = 20

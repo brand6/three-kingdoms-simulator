@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="FactionBlocData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/FactionBlocData.gd" id="1_bloc"]
+
+[resource]
+script = ExtResource("1_bloc")
+id = "bloc_frontline_hawks"
+faction_id = "cao_cao_faction"
+name = "前线主战派"
+bloc_type = "military_hawk"
+core_character_ids = Array[String](["le_jin"])
+influence_weight = 2
+agenda_tags = Array[String](["dispatch", "campaign"])
+default_attitude = "neutral"

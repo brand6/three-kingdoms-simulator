@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="OppositionRuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/OppositionRuleData.gd" id="1_rule"]
+
+[resource]
+script = ExtResource("1_rule")
+id = "opp_old_guard_low_trust"
+source_type = "old_guard"
+trigger_phase = "month_end"
+relation_lower_bound = 25
+trust_lower_bound = 8
+competition_tags = Array[String](["admin_track"])
+opposition_delta = 6
+blocker_tags = Array[String](["old_guard_resistance"])
+reason_text_key = "old_guard_low_trust"
+priority = 90

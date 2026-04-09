@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="FactionBlocData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/FactionBlocData.gd" id="1_bloc"]
+
+[resource]
+script = ExtResource("1_bloc")
+id = "bloc_qiao_old_guard"
+faction_id = "cao_cao_faction"
+name = "谯郡旧吏"
+bloc_type = "old_guard"
+core_character_ids = Array[String](["cao_cao"])
+influence_weight = 2
+agenda_tags = Array[String](["stability", "seniority"])
+default_attitude = "neutral"

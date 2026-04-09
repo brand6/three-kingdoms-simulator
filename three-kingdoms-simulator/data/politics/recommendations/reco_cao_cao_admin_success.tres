@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="RecommendationRuleData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/resources/RecommendationRuleData.gd" id="1_rule"]
+
+[resource]
+script = ExtResource("1_rule")
+id = "reco_cao_cao_admin_success"
+source_type = "faction_order"
+trigger_phase = "month_end"
+target_scope = "player"
+relation_threshold = 40
+trust_threshold = 40
+merit_threshold = 10
+bloc_filter_tags = Array[String](["admin_track"])
+support_delta = 6
+reason_text_key = "cao_cao_admin_success"
+priority = 100
+sort_order = 10
