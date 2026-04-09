@@ -192,7 +192,7 @@ func show_error_state(message: String) -> void:
 
 
 func _render_empty_fields() -> void:
-	_time_label.text = "时间：190年 1月 第1旬"
+	_time_label.text = "—"
 	_city_label.text = "地点：—"
 	_identity_label.text = "身份：—"
 	_faction_label.text = "势力：—"
@@ -423,8 +423,11 @@ func _health_text(runtime_state: RuntimeCharacterState) -> String:
 
 func _time_text(session: GameSession) -> String:
 	if session == null:
-		return "时间：190年 1月 第1旬"
-	return "时间：%d年 %d月 第%d旬" % [session.current_year, session.current_month, session.current_xun]
+		return "—"
+	var time_manager := _time_manager()
+	if time_manager == null:
+		return "—"
+	return str(_time_manager().call("get_current_label"))
 
 
 func _localized_identity(value: String) -> String:

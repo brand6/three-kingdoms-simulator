@@ -64,7 +64,7 @@ theme_override_constants/separation = 32
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"StatusLabel"
-text = "时间：190年 1月 第1旬"
+text = "—"
 
 [node name="CityLabel" type="Label" parent="MarginContainer/VBoxContainer/TopBar/TopBarContent" unique_id=1370225919]
 layout_mode = 2

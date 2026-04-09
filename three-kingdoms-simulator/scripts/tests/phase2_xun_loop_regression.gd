@@ -26,6 +26,9 @@ func _run() -> void:
 	var hud = root.get_node(HUD_PATH)
 	var game_root = root.get_node("/root/GameRoot")
 	var session: GameSession = game_root.current_session
+	if session.month_action_locked:
+		hud._on_month_task_confirmed(0)
+		await process_frame
 	_assert_equal(_time_label(hud).text, EXPECTED_TIMES[0], "initial HUD time label")
 
 	for i in range(3):
