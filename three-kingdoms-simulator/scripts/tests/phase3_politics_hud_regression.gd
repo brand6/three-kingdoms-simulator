@@ -143,8 +143,7 @@ func _assert_popup_is_opaque(popup: PopupPanel, popup_name: String) -> void:
 	if popup.transparent:
 		_fail("%s should disable transparent rendering." % popup_name)
 	var has_local_panel_style := popup.has_theme_stylebox_override("panel")
-	var theme := popup.get_theme()
-	var has_theme_panel_style := theme != null and theme.has_stylebox("panel", &"PopupPanel")
+	var has_theme_panel_style := popup.has_theme_stylebox("panel")
 	if not has_local_panel_style and not has_theme_panel_style:
 		_fail("%s should expose an opaque PopupPanel panel style from the scene or shared theme." % popup_name)
 
