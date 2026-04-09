@@ -11,7 +11,7 @@ func evaluate_month_end(
 	faction_system: FactionSystem,
 	snapshot: PoliticalSupportSnapshot,
 	qualification_result: Dictionary,
-	settlement: Dictionary
+	_settlement: Dictionary
 ) -> Dictionary:
 	var protagonist_id := session.protagonist_id
 	var protagonist = repository.call("get_character", protagonist_id) as CharacterDefinition
@@ -92,7 +92,7 @@ func _build_player_evaluation(session: GameSession, snapshot: PoliticalSupportSn
 	)
 
 
-func _build_rival_evaluations(session: GameSession, repository: Node, snapshot: PoliticalSupportSnapshot, office_id: String, player_position: Dictionary, bloc_rows: Array[Dictionary]) -> Array:
+func _build_rival_evaluations(_session: GameSession, repository: Node, _snapshot: PoliticalSupportSnapshot, office_id: String, _player_position: Dictionary, bloc_rows: Array[Dictionary]) -> Array:
 	var rivals: Array = []
 	if office_id == "office_zhubu":
 		return rivals
@@ -106,7 +106,7 @@ func _build_rival_evaluations(session: GameSession, repository: Node, snapshot: 
 		var merit_score := int(rival.reputation_values.get("merit", 0))
 		var trust_score := int(rival.reputation_values.get("fame", 0) / 2)
 		var bloc_score := _rival_bloc_score(rival_id, bloc_rows)
-		var recommendation_score := merit_score / 4 + bloc_score + (4 if rival_id == "cao_cao" else 2)
+		var recommendation_score := int(merit_score / 4.0) + bloc_score + (4 if rival_id == "cao_cao" else 2)
 		var opposition_score := 1 if rival_id == "le_jin" else 0
 		var reason_lines := [
 			_reason("qualification", "qualification", "system", "", "", "support", "major", "%s 资格满足当前职位争夺。" % rival.name, "资格", 1, true),

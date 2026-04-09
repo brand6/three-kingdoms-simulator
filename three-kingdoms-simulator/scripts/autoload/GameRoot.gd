@@ -166,7 +166,6 @@ func get_character_profile_view_data(character_id: String) -> Variant:
 func get_hud_political_summary() -> Dictionary:
 	if current_session == null:
 		return {}
-	var repository := _data_repository()
 	var snapshot = _current_political_snapshot()
 	var recommender_name := "暂无明确推荐人"
 	var blocker_name := "暂无明确阻力"
@@ -388,7 +387,6 @@ func _process_month_end_evaluation() -> void:
 		summary_lines.append("任命结果：已擢升至 %s" % new_office_id)
 	else:
 		summary_lines.append("任命结果：%s" % str(player_evaluation.final_decision if player_evaluation != null else qualification_result.get("failure_label", "")))
-	var visible_reason_lines: Array = Array(appointment_result.get("visible_reason_lines", []))
 	var support_lines: Array[String] = Array(appointment_result.get("primary_support_lines", []))
 	var blocker_lines: Array[String] = Array(appointment_result.get("primary_blocker_lines", []))
 	current_session.set_last_month_evaluation(MONTHLY_EVALUATION_RESULT_SCRIPT.create(

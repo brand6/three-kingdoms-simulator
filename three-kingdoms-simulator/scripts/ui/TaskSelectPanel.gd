@@ -81,7 +81,7 @@ func _render_cards(repository: Node) -> void:
 		_card_list.add_child(button)
 
 
-func _render_selected_reward(repository: Node) -> void:
+func _render_selected_reward(_repository: Node) -> void:
 	_selected_reward_label.text = ""
 	_selected_reward_label.visible = false
 

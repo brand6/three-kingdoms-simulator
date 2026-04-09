@@ -26,13 +26,13 @@ func show_faction(payload: Dictionary, repository: Node) -> void:
 
 func _build_body(payload: Dictionary) -> String:
 	var overview := Dictionary(payload.get("overview", {}))
-	var position := Dictionary(overview.get("player_position", {}))
+	var player_position := Dictionary(overview.get("player_position", {}))
 	var bloc_rows: Array = Array(payload.get("bloc_rows", []))
 	var resource_summary := Dictionary(payload.get("resource_summary", {}))
 	var city_names: Array = Array(payload.get("city_names", []))
 	var lines: Array[String] = []
-	lines.append("玩家位置：%s｜%s" % [str(position.get("office_name", "—")), str(position.get("faction_name", "—"))])
-	lines.append("推荐权重：%s｜政治风险：%s" % [str(position.get("recommendation_power", 0)), str(position.get("political_risk_level", "low"))])
+	lines.append("玩家位置：%s｜%s" % [str(player_position.get("office_name", "—")), str(player_position.get("faction_name", "—"))])
+	lines.append("推荐权重：%s｜政治风险：%s" % [str(player_position.get("recommendation_power", 0)), str(player_position.get("political_risk_level", "low"))])
 	lines.append("派系块：")
 	if bloc_rows.is_empty():
 		lines.append("- 暂无可见派系块")
