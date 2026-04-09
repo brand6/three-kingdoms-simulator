@@ -15,6 +15,8 @@ const CARD_BORDER_NORMAL := Color(0.812, 0.765, 0.690, 1.0)
 const CARD_BORDER_SELECTED := Color(0.620, 0.451, 0.247, 1.0)
 const CARD_TEXT_NORMAL := Color(0.200, 0.180, 0.160, 1.0)
 const CARD_TEXT_SELECTED := Color(0.258, 0.149, 0.055, 1.0)
+const TAG_OPPORTUNITY := Color(0.239, 0.467, 0.286, 1.0)
+const TAG_RISK := Color(0.659, 0.212, 0.180, 1.0)
 
 @onready var _title_label: Label = get_node("PanelMargin/PanelContent/TitleLabel")
 @onready var _gate_label: Label = get_node("PanelMargin/PanelContent/GateLabel")
@@ -68,43 +70,105 @@ func _render_cards(repository: Node) -> void:
 	for index in range(_candidates.size()):
 		var button := Button.new()
 		button.name = "TaskCard%d" % index
-		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.custom_minimum_size = Vector2(0, 108)
-		button.text = _card_text(Dictionary(_candidates[index]), repository)
+		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.custom_minimum_size = Vector2(0, 132)
+		button.text = ""
+		button.focus_mode = Control.FOCUS_NONE
+		button.add_child(_build_card_content(Dictionary(_candidates[index]), repository, index == _selected_index))
 		button.pressed.connect(_on_card_pressed.bind(index, repository))
 		_apply_card_style(button, index == _selected_index)
 		_card_list.add_child(button)
 
 
 func _render_selected_reward(repository: Node) -> void:
-	if _selected_index < 0 or _selected_index >= _candidates.size():
-		_selected_reward_label.text = ""
-		_selected_reward_label.visible = false
-		return
-	var candidate := Dictionary(_candidates[_selected_index])
-	var template = repository.call("get_task_template", str(candidate.get("task_template_id", "")))
-	var objective_summary := str(template.objective_summary if template != null else "")
-	_selected_reward_label.text = "已选任务预期：%s\n预计奖励：%s" % [
-		objective_summary if not objective_summary.is_empty() else str(candidate.get("description", "")),
-		_reward_text(Dictionary(candidate.get("base_rewards", {})))
-	]
+	_selected_reward_label.text = ""
 	_selected_reward_label.visible = false
 
 
-func _card_text(candidate: Dictionary, repository: Node) -> String:
-	var issuer_name := "—"
+func _build_card_content(candidate: Dictionary, repository: Node, selected: bool) -> VBoxContainer:
+	var content := VBoxContainer.new()
+	content.name = "CardContent"
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content.offset_left = 0
+	content.offset_top = 0
+	content.offset_right = 0
+	content.offset_bottom = 0
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+	var header := Label.new()
+	header.name = "HeaderLabel"
+	header.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	header.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	header.text = _card_header_text(candidate, repository)
+	header.add_theme_color_override("font_color", CARD_TEXT_SELECTED if selected else CARD_TEXT_NORMAL)
+	content.add_child(header)
+
+	var body := RichTextLabel.new()
+	body.name = "BodyLabel"
+	body.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	body.bbcode_enabled = true
+	body.fit_content = true
+	body.scroll_active = false
+	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	body.add_theme_color_override("default_color", CARD_TEXT_SELECTED if selected else CARD_TEXT_NORMAL)
+	body.text = _card_body_text(candidate)
+	content.add_child(body)
+	return content
+
+
+func _card_header_text(candidate: Dictionary, repository: Node) -> String:
+	var task_name := str(candidate.get("name", "—"))
+	var requester_name := _resolve_character_name(repository, str(candidate.get("request_character_id", "")))
+	var source_type := _localized_source_type(str(candidate.get("task_source_type", "faction_order")))
+	var source_target := _source_target_text(candidate, repository)
+	return "%s｜来源：%s · %s｜请求方：%s" % [task_name, source_type, source_target, requester_name]
+
+
+func _card_body_text(candidate: Dictionary) -> String:
+	var lines: Array[String] = []
+	lines.append("目标：%s" % str(candidate.get("description", "")))
+	lines.append("预计奖励：%s" % _reward_text(Dictionary(candidate.get("base_rewards", {}))))
+	lines.append(_political_tags_text(candidate))
+	return "\n".join(lines)
+
+
+func _resolve_character_name(repository: Node, character_id: String) -> String:
+	if character_id.is_empty():
+		return "幕府中枢"
+	var character = repository.call("get_character", character_id)
+	return str(character.name if character != null else character_id)
+
+
+func _source_target_text(candidate: Dictionary, repository: Node) -> String:
+	var requester_id := str(candidate.get("request_character_id", ""))
+	if not requester_id.is_empty():
+		return _resolve_character_name(repository, requester_id)
 	var issuer_id := str(candidate.get("issuer_character_id", ""))
 	if not issuer_id.is_empty():
-		var issuer = repository.call("get_character", issuer_id)
-		issuer_name = str(issuer.name if issuer != null else issuer_id)
-	return "%s\n发布人：%s\n任务描述：%s\n预计奖励：%s" % [
-		str(candidate.get("name", "—")),
-		issuer_name,
-		str(candidate.get("description", "")),
-		_reward_text(Dictionary(candidate.get("base_rewards", {})))
-	]
+		return _resolve_character_name(repository, issuer_id)
+	return str(candidate.get("source_summary", "幕府中枢"))
+
+
+func _localized_source_type(source_type: String) -> String:
+	match source_type:
+		"relation_request":
+			return "关系请求"
+		_:
+			return "势力指令"
+
+
+func _political_tags_text(candidate: Dictionary) -> String:
+	var segments: Array[String] = []
+	for tag in Array(candidate.get("political_reward_tags", [])):
+		segments.append("[color=%s]%s[/color]" % [TAG_OPPORTUNITY.to_html(), str(tag)])
+	for tag in Array(candidate.get("political_risk_tags", [])):
+		segments.append("[color=%s]%s[/color]" % [TAG_RISK.to_html(), str(tag)])
+	if segments.is_empty():
+		segments.append("暂无明显政治波动")
+	return "机遇和风险：%s" % "  ·  ".join(segments.slice(0, 4))
 
 
 func _reward_text(rewards: Dictionary) -> String:
