@@ -44,7 +44,7 @@
 
 ### Career
 
-- [ ] **CARE-01**: Player can receive at least two task sources in the prototype, including ruler-assigned or family-related requests.
+- [x] **CARE-01**: Player can receive at least two task sources in the prototype, including ruler-assigned or family-related requests.
 - [x] **CARE-02**: Completing actions or tasks can change merit and fame values.
 - [x] **CARE-03**: Game performs a month-end evaluation that can produce appointment, promotion, rejection, or missed-opportunity feedback.
 - [x] **CARE-04**: Month-end results explain the main reasons for the outcome, including support, opposition, merit level, trust, or status blockers.
@@ -66,7 +66,7 @@
 
 - [ ] **POLI-01**: Game tracks internal political groups or factional alignments with visible stances toward the player.
 - [ ] **POLI-02**: Political groups can support, oppose, or stay neutral toward appointments or proposals.
-- [ ] **POLI-03**: Player-facing feedback identifies which political forces helped or blocked an outcome when relevant.
+- [x] **POLI-03**: Player-facing feedback identifies which political forces helped or blocked an outcome when relevant.
 
 ### Marriage
 
@@ -162,7 +162,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RELA-02 | Phase 2 | Complete |
 | RELA-03 | Phase 2 | Complete |
 | RELA-04 | Phase 3 | Pending |
-| CARE-01 | Phase 3 | Pending |
+| CARE-01 | Phase 3 | Complete |
 | CARE-02 | Phase 3 | Complete |
 | CARE-03 | Phase 3 | Complete |
 | CARE-04 | Phase 3 | Complete |
@@ -175,7 +175,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CLAN-03 | Phase 4 | Pending |
 | POLI-01 | Phase 3 | Pending |
 | POLI-02 | Phase 3 | Pending |
-| POLI-03 | Phase 3 | Pending |
+| POLI-03 | Phase 3 | Complete |
 | MARR-01 | Phase 4 | Pending |
 | MARR-02 | Phase 4 | Pending |
 | MARR-03 | Phase 4 | Pending |
