@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 03-10-PLAN.md
-last_updated: "2026-04-09T01:43:36.275Z"
+stopped_at: Completed quick task 260409-ef2
+last_updated: "2026-04-09T02:29:19Z"
 last_activity: 2026-04-09
 progress:
   total_phases: 6
@@ -108,8 +108,9 @@ Recent decisions affecting current work:
 - [Phase 03]: 来源类型不再独立成行，而是内联到首行的 来源：{来源类型} · {来源对象}。
 - [Phase 03]: 机遇和风险保留单标题，用颜色区分标签，不再输出 机会:/风险: 前缀。
 - [Phase 03]: authority_institution_name 成为来源机构唯一字段，独立于 request_character_id。
-- [Phase 03]: 任务卡首行固定为 任务名｜来源：机构名｜请求方：具体人物，请求方优先使用 request_character_id，缺失时回退 issuer_character_id。
+- [Phase 03]: 任务卡首行固定为任务名、来源、请求方三块信息，请求方优先使用 request_character_id，缺失时回退 issuer_character_id。
 - [Phase 03]: 任务卡通过更高的最小高度与更强的 content margin 提升可读性，同时保持确认按钮门控不变。
+- [Phase 03]: 月初任务卡标题行改为分段排版而非竖线拼接，正文描述在渲染前会压平多余空白行。
 
 ### Roadmap Evolution
 
@@ -134,9 +135,10 @@ None yet.
 | 260408-lbn | 把行动 / 任务 / 官职接到现有 Phase 1 Excel→Luban→JSON 管线，并让 Godot 运行时从生成 JSON 读取这三类最小样本数据。 | 2026-04-08 | cae3882 | [260408-lbn-excel-luban-json-pipeline](./quick/260408-lbn-excel-luban-json-pipeline/) |
 | 260408-rjt | 根据文档"design/UIUX/中部三摘要修改方案 v1.md"修改一下中间面板的显示内容 | 2026-04-08 | f5a1e97 | [260408-rjt-design-uiux-v1-md](./quick/260408-rjt-design-uiux-v1-md/) |
 | 260409-bgu | 文案的描述还需要修改一下,参考这个文档"中部三摘要文案模板 v1.md"修改一下 | 2026-04-09 | b679bed | [260409-bgu-v1-md](./quick/260409-bgu-v1-md/) |
+| 260409-ef2 | 微调月初任务领取卡片排版，移除描述双空行并重排任务名/来源/请求方首行 | 2026-04-09 | a4d9cc3 | [260409-ef2-1-2](./quick/260409-ef2-1-2/) |
 
 ## Session Continuity
 
-Last session: 2026-04-09T01:43:36.269Z
-Stopped at: Completed 03-10-PLAN.md
+Last session: 2026-04-09T02:29:19Z
+Stopped at: Completed quick task 260409-ef2
 Resume file: None
