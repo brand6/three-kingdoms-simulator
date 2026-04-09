@@ -52,9 +52,9 @@
 
 ### Factions
 
-- [ ] **FACT-01**: Player can view the current faction's ruler, cities, major officers, resources, and broad strategic posture.
+- [x] **FACT-01**: Player can view the current faction's ruler, cities, major officers, resources, and broad strategic posture.
 - [ ] **FACT-02**: Game tracks faction-level resources needed for prototype political and military feedback.
-- [ ] **FACT-03**: Player can see the main factions or internal groups influencing current political outcomes.
+- [x] **FACT-03**: Player can see the main factions or internal groups influencing current political outcomes.
 
 ### Clans And Families
 
@@ -167,9 +167,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CARE-03 | Phase 3 | Complete |
 | CARE-04 | Phase 3 | Complete |
 | CARE-05 | Phase 3 | Complete |
-| FACT-01 | Phase 3 | Pending |
+| FACT-01 | Phase 3 | Complete |
 | FACT-02 | Phase 3 | Pending |
-| FACT-03 | Phase 3 | Pending |
+| FACT-03 | Phase 3 | Complete |
 | CLAN-01 | Phase 4 | Pending |
 | CLAN-02 | Phase 4 | Pending |
 | CLAN-03 | Phase 4 | Pending |
